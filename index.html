@@ -8,8 +8,8 @@
 <style>
 :root{
   --bg:#07060400;--s1:#0d0b08;--s2:#111008;--s3:#161410;--s4:#1c1a14;
-  --border:rgba(255,220,120,0.06);--border2:rgba(255,220,120,0.12);
-  --text:#e8dfc8;--soft:#7a7060;--dim:#3a3428;
+  --border:rgba(255,220,120,0.07);--border2:rgba(255,220,120,0.15);
+  --text:#f5eedc;--soft:#b8aa90;--dim:#6a6050;
   --gold:#d4a830;--gold-d:rgba(212,168,48,0.1);--gold-b:rgba(212,168,48,0.28);
   --green:#6aaa5e;--green-d:rgba(106,170,94,0.08);
   --red:#b06050;--red-d:rgba(176,96,80,0.1);
@@ -78,6 +78,7 @@ body{background:#070604;}
   font-size:clamp(32px,5vw,52px);font-weight:400;
   color:var(--text);letter-spacing:0.04em;
   line-height:1.15;margin-bottom:10px;
+  text-shadow:0 2px 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.6);
 }
 .header-title em{font-style:italic;color:var(--gold);}
 .header-subtitle{
@@ -137,7 +138,7 @@ body{background:#070604;}
 
 /* ── PANEL ───────────────────────────────────────── */
 .panel{
-  background:var(--s1);border:1px solid var(--border);
+  background:rgba(12,10,7,0.96);border:1px solid var(--border);
   border-radius:4px;margin-bottom:12px;overflow:hidden;
   position:relative;
 }
@@ -255,22 +256,23 @@ body{background:#070604;}
 .card-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:9px 16px;border-bottom:1px solid var(--border);
-  background:var(--s2);
+  background:rgba(10,8,6,0.95);
 }
 .card-num{
   font-family:var(--mono);font-size:8px;font-weight:300;
-  color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--soft);letter-spacing:0.12em;text-transform:uppercase;
 }
 .card-tag{
   font-family:var(--mono);font-size:8px;font-weight:300;
   color:var(--gold);padding:2px 8px;background:var(--gold-d);
   letter-spacing:0.1em;text-transform:uppercase;
 }
-.card-body{padding:20px 18px 16px;}
+.card-body{padding:20px 18px 16px;background:rgba(12,10,7,0.96);}
 .question-text{
   font-family:var(--serif);
   font-size:17px;font-weight:400;line-height:1.85;
   color:var(--text);margin-bottom:18px;
+  text-shadow:0 1px 8px rgba(0,0,0,0.8);
 }
 
 /* ── OPTIONS ──────────────────────────────────────── */
@@ -278,16 +280,17 @@ body{background:#070604;}
 .option{
   display:flex;align-items:flex-start;gap:12px;
   padding:11px 16px;text-align:left;
-  background:transparent;border:none;border-top:1px solid var(--border);
+  background:rgba(12,10,7,0.95);border:none;border-top:1px solid var(--border);
   font-family:var(--body);
   font-size:14px;line-height:1.65;color:var(--soft);
   cursor:pointer;transition:all 0.12s;width:100%;
+  text-shadow:0 1px 6px rgba(0,0,0,0.7);
 }
 .option:first-child{border-top:none;}
-.option:hover:not(:disabled){color:var(--text);background:rgba(212,168,48,0.04);}
-.option.correct{background:var(--green-d);color:#7aaa60;}
-.option.wrong{background:var(--red-d);color:#a06050;}
-.option.reveal{background:var(--green-d);color:#7aaa60;}
+.option:hover:not(:disabled){color:var(--text);background:rgba(20,16,10,0.97);}
+.option.correct{background:rgba(20,40,16,0.96);color:#8acc70;}
+.option.wrong{background:rgba(40,16,12,0.96);color:#c07060;}
+.option.reveal{background:rgba(20,40,16,0.96);color:#8acc70;}
 .option:disabled{cursor:default;}
 .option-letter{
   font-family:var(--mono);font-size:8px;font-weight:300;
@@ -304,8 +307,9 @@ body{background:#070604;}
 .feedback.ko .feedback-header{background:var(--red-d);color:var(--red);border-left:2px solid var(--red);}
 .feedback-body{
   padding:14px 16px;font-size:14px;line-height:1.85;
-  color:var(--soft);background:var(--s2);font-family:var(--body);font-style:italic;
+  color:var(--soft);background:rgba(12,10,7,0.96);font-family:var(--body);font-style:italic;
   border-left:2px solid var(--border2);
+  text-shadow:0 1px 5px rgba(0,0,0,0.7);
 }
 .feedback-body strong{color:var(--text);font-weight:500;font-style:normal;}
 .feedback-body em{color:var(--gold);font-style:italic;}
@@ -337,7 +341,7 @@ body{background:#070604;}
 .fiche-content{padding:22px 20px;}
 .fiche-section{margin-bottom:20px;}
 .fiche-section-title{font-family:var(--serif);font-size:15px;font-weight:400;font-style:italic;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(212,168,48,0.14);}
-.fiche-block{font-family:var(--body);font-size:14px;line-height:1.85;color:var(--soft);padding:10px 14px;background:var(--s2);border-left:2px solid var(--border2);margin-bottom:6px;}
+.fiche-block{font-family:var(--body);font-size:14px;line-height:1.85;color:var(--soft);padding:10px 14px;background:rgba(12,10,7,0.96);border-left:2px solid var(--border2);margin-bottom:6px;text-shadow:0 1px 5px rgba(0,0,0,0.7);}
 .fiche-block strong{color:var(--text);font-weight:500;font-style:normal;}
 .fiche-block em{color:var(--gold);font-style:italic;}
 .fiche-block .auteur{display:inline-block;font-family:var(--mono);font-size:8px;font-weight:300;letter-spacing:0.1em;color:var(--gold);background:var(--gold-d);border:1px solid var(--gold-b);padding:1px 6px;margin-right:6px;}
@@ -1938,7 +1942,17 @@ renderIntro();
 
   function noise(t,f,a){return Math.sin(t*f)*a+Math.sin(t*f*2.3+1.4)*a*0.28+Math.sin(t*f*0.5+2.9)*a*0.14;}
   function getSway(t){return noise(t,0.22,0.16)+noise(t,0.09,0.04);}
-  function getPulse(t,ph){return 0.5+0.35*Math.sin(t*0.28+ph)+0.1*Math.sin(t*0.11+ph*2);}
+  // Pulse très lent, multi-fréquences, sans pic brutal — fondu entre phases
+  function getPulse(t,ph){
+    const raw = 0.5
+      + 0.28*Math.sin(t*0.18+ph)
+      + 0.12*Math.sin(t*0.07+ph*1.8+1.1)
+      + 0.06*Math.sin(t*0.31+ph*0.6+2.3)
+      + 0.04*Math.sin(t*0.55+ph*1.2+0.7);
+    // Lissage supplémentaire : smoothstep pour adoucir les extremes
+    const clamped = Math.max(0, Math.min(1, raw));
+    return clamped*clamped*(3-2*clamped);
+  }
 
   function getLamp(side,sway){
     const px=side==='L'?W*0.12:W*0.88, py=5;
@@ -1982,53 +1996,73 @@ renderIntro();
     lc.restore();lc.restore();lc.restore();
   }
 
-  // Faisceau : pur halo diffus, pas de cône géométrique
+  // Faisceau : halo puissant et diffus, dirigé selon la lampe
   function drawBeam(lamp,pulse){
     const{hx:ox,hy:oy,beam}=lamp;
     const cosB=Math.cos(beam),sinB=Math.sin(beam);
     bc.save();
 
-    const a=0.012+pulse*0.004;
+    const a=0.018+pulse*0.008;
 
-    // Halo large depuis la tête de lampe (ox,oy) — demi-espace vers le bas
-    const g0=bc.createRadialGradient(ox,oy,0,ox,oy,H*0.9);
-    g0.addColorStop(0,  `rgba(255,225,75,${a*5})`);
-    g0.addColorStop(0.06,`rgba(255,212,58,${a*3.2})`);
-    g0.addColorStop(0.18,`rgba(255,198,42,${a*1.8})`);
-    g0.addColorStop(0.4, `rgba(255,180,28,${a*0.7})`);
-    g0.addColorStop(0.7, `rgba(255,158,12,${a*0.18})`);
-    g0.addColorStop(1,   'rgba(255,135,0,0)');
-    bc.beginPath();
-    bc.moveTo(ox,oy);
-    bc.arc(ox,oy,H*0.9,beam-Math.PI*0.65,beam+Math.PI*0.65);
-    bc.closePath();
-    bc.fillStyle=g0;bc.fill();
+    // On abandonne les arcs (qui créent des bords durs) — que des gradients radiaux purs
+    // Le caractère directionnel vient du décentrage des sources, pas d'un masque
 
-    // Source secondaire le long de l'axe
-    const m1x=ox+cosB*H*0.2,m1y=oy+sinB*H*0.2;
-    const g1=bc.createRadialGradient(m1x,m1y,0,m1x,m1y,H*0.6);
-    g1.addColorStop(0,  `rgba(255,220,70,${a*2.8})`);
-    g1.addColorStop(0.2,`rgba(255,202,50,${a*1.2})`);
-    g1.addColorStop(0.55,`rgba(255,182,28,${a*0.3})`);
-    g1.addColorStop(1,  'rgba(255,150,0,0)');
-    bc.beginPath();bc.arc(m1x,m1y,H*0.6,0,Math.PI*2);bc.fillStyle=g1;bc.fill();
+    // Couche 1 : source principale décentrée vers le bas pour orienter la lumière
+    // Centre du gradient décalé dans la direction du faisceau = lumière plus forte devant
+    const cx0=ox+cosB*H*0.08, cy0=oy+sinB*H*0.08;
+    const g0=bc.createRadialGradient(cx0,cy0,0,cx0,cy0,H*1.05);
+    g0.addColorStop(0,   `rgba(255,228,80,${a*5.5})`);
+    g0.addColorStop(0.04,`rgba(255,218,65,${a*4.0})`);
+    g0.addColorStop(0.10,`rgba(255,205,50,${a*2.8})`);
+    g0.addColorStop(0.20,`rgba(255,190,38,${a*1.8})`);
+    g0.addColorStop(0.35,`rgba(255,172,26,${a*0.9})`);
+    g0.addColorStop(0.52,`rgba(255,150,14,${a*0.35})`);
+    g0.addColorStop(0.70,`rgba(255,128,5, ${a*0.09})`);
+    g0.addColorStop(0.85,`rgba(255,108,0, ${a*0.02})`);
+    g0.addColorStop(1,   'rgba(255,90,0,0)');
+    bc.beginPath(); bc.arc(cx0,cy0,H*1.05,0,Math.PI*2);
+    bc.fillStyle=g0; bc.fill();
 
-    // Troisième source
-    const m2x=ox+cosB*H*0.42,m2y=oy+sinB*H*0.42;
-    const g2=bc.createRadialGradient(m2x,m2y,0,m2x,m2y,H*0.42);
-    g2.addColorStop(0,  `rgba(255,212,62,${a*1.8})`);
-    g2.addColorStop(0.3,`rgba(255,192,40,${a*0.6})`);
-    g2.addColorStop(0.7,`rgba(255,168,18,${a*0.12})`);
-    g2.addColorStop(1,  'rgba(255,140,0,0)');
-    bc.beginPath();bc.arc(m2x,m2y,H*0.42,0,Math.PI*2);bc.fillStyle=g2;bc.fill();
+    // Couche 2 : cœur chaud, encore plus décentré vers l'avant
+    const cx1=ox+cosB*H*0.18, cy1=oy+sinB*H*0.18;
+    const g1=bc.createRadialGradient(cx1,cy1,0,cx1,cy1,H*0.75);
+    g1.addColorStop(0,   `rgba(255,238,92,${a*4.5})`);
+    g1.addColorStop(0.06,`rgba(255,225,75,${a*3.2})`);
+    g1.addColorStop(0.16,`rgba(255,210,58,${a*2.0})`);
+    g1.addColorStop(0.32,`rgba(255,192,42,${a*0.9})`);
+    g1.addColorStop(0.52,`rgba(255,168,24,${a*0.28})`);
+    g1.addColorStop(0.72,`rgba(255,142,8, ${a*0.06})`);
+    g1.addColorStop(1,   'rgba(255,115,0,0)');
+    bc.beginPath(); bc.arc(cx1,cy1,H*0.75,0,Math.PI*2);
+    bc.fillStyle=g1; bc.fill();
 
-    // Halo immédiat centré exactement sur la tête de lampe
-    const hg=bc.createRadialGradient(ox,oy,0,ox,oy,100);
-    hg.addColorStop(0,  `rgba(255,252,130,${0.32+pulse*0.1})`);
-    hg.addColorStop(0.25,`rgba(255,235,85,${0.1+pulse*0.04})`);
-    hg.addColorStop(0.55,`rgba(255,210,50,0.025)`);
-    hg.addColorStop(1,  'rgba(255,180,20,0)');
-    bc.beginPath();bc.arc(ox,oy,100,0,Math.PI*2);bc.fillStyle=hg;bc.fill();
+    // Couche 3 : sources secondaires étalées — fondu progressif sur toute la longueur
+    [0.15, 0.32, 0.50, 0.65].forEach((frac, i)=>{
+      const mx=ox+cosB*H*frac, my=oy+sinB*H*frac;
+      const r=H*(0.60-i*0.09);
+      const alpha=a*(1.8-i*0.38);
+      const g=bc.createRadialGradient(mx,my,0,mx,my,r);
+      g.addColorStop(0,   `rgba(255,218,68,${alpha})`);
+      g.addColorStop(0.12,`rgba(255,208,56,${alpha*0.72})`);
+      g.addColorStop(0.30,`rgba(255,192,40,${alpha*0.38})`);
+      g.addColorStop(0.55,`rgba(255,170,20,${alpha*0.10})`);
+      g.addColorStop(0.78,`rgba(255,145,5, ${alpha*0.02})`);
+      g.addColorStop(1,   'rgba(255,120,0,0)');
+      bc.beginPath(); bc.arc(mx,my,r,0,Math.PI*2);
+      bc.fillStyle=g; bc.fill();
+    });
+
+    // Halo immédiat centré sur la tête — très progressif
+    const hg=bc.createRadialGradient(ox,oy,0,ox,oy,125);
+    hg.addColorStop(0,   `rgba(255,255,148,${0.32+pulse*0.10})`);
+    hg.addColorStop(0.10,`rgba(255,248,112,${0.16+pulse*0.06})`);
+    hg.addColorStop(0.25,`rgba(255,235,88, ${0.07+pulse*0.025})`);
+    hg.addColorStop(0.45,`rgba(255,215,60, 0.022)`);
+    hg.addColorStop(0.65,`rgba(255,192,38, 0.006)`);
+    hg.addColorStop(0.85,`rgba(255,170,18, 0.001)`);
+    hg.addColorStop(1,   'rgba(255,150,5,0)');
+    bc.beginPath(); bc.arc(ox,oy,125,0,Math.PI*2);
+    bc.fillStyle=hg; bc.fill();
 
     bc.restore();
   }
