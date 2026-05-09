@@ -26,7 +26,40 @@ body{
   min-height:100vh;font-size:15px;line-height:1.7;
 }
 
-/* ── CANVASES ─────────────────────────────────────────── */
+/* ── CURSEUR PERSONNALISÉ ─────────────────────────── */
+*{cursor:none!important;}
+#cursor{
+  position:fixed;top:0;left:0;
+  width:12px;height:12px;
+  border-radius:50%;
+  background:rgba(255,230,100,0.9);
+  box-shadow:
+    0 0 6px 2px rgba(255,220,80,0.8),
+    0 0 18px 6px rgba(255,200,50,0.4),
+    0 0 40px 14px rgba(255,180,20,0.15);
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.08s ease, width 0.15s ease, height 0.15s ease, box-shadow 0.15s ease;
+  mix-blend-mode:screen;
+}
+#cursor.clicking{
+  width:8px;height:8px;
+  box-shadow:
+    0 0 10px 4px rgba(255,230,80,1),
+    0 0 30px 12px rgba(255,200,50,0.6),
+    0 0 60px 24px rgba(255,180,20,0.25);
+}
+#cursor-trail{
+  position:fixed;top:0;left:0;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,210,60,0.12) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:left 0.12s ease, top 0.12s ease;
+}
 #beam-canvas{
   position:fixed;top:0;left:0;width:100%;height:100%;
   z-index:200;pointer-events:none;
@@ -432,6 +465,10 @@ body{background:#070604;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
+<!-- Curseur personnalisé -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
 <!-- Faisceau lumineux -->
 <canvas id="beam-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;pointer-events:none;"></canvas>
 <canvas id="particles-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:201;pointer-events:none;"></canvas>
@@ -564,7 +601,16 @@ async function initAuth(){
   try {
     const {data:{session}} = await supa.auth.getSession();
     if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||'';}
-    supa.auth.onAuthStateChange((_,s)=>{supaUser=s?.user||null;});
+    supa.auth.onAuthStateChange(async(_,s)=>{
+      const wasNull = !supaUser;
+      supaUser=s?.user||null;
+      if(supaUser && wasNull){
+        // Utilisateur vient de se connecter — recharger les données SR et rafraîchir
+        await loadSRData();
+        const dashEl=document.getElementById('dashboard-area');
+        if(dashEl) dashEl.innerHTML=renderDashboard();
+      }
+    });
   } catch(e){ console.warn('Auth init failed', e); supaUser=null; }
 }
 
@@ -625,13 +671,14 @@ async function loadSRData(){
 async function saveSREntry(key, r){
   if(supa && supaUser){
     try {
-      await supa.from('sr_data').upsert({
+      const {error} = await supa.from('sr_data').upsert({
         user_id:supaUser.id,
         question_key:key,
         easiness:r.e, interval_days:r.i, repetitions:r.n,
         next_due:r.due, correct_count:r.ok, fail_count:r.fail,
         updated_at:new Date().toISOString()
       },{onConflict:'user_id,question_key'});
+      if(error) console.warn('SR save error:', error);
       return;
     } catch(e){ console.warn('SR save failed', e); }
   }
@@ -889,6 +936,9 @@ function startSRQuiz(){
 
 function renderSRQ(){
   if(srCurrent>=srQuestions.length){
+    // Rafraîchir le dashboard sur la page d'accueil
+    const dashEl=document.getElementById('dashboard-area');
+    if(dashEl) dashEl.innerHTML=renderDashboard();
     document.getElementById('training-area').innerHTML=`
       <div class="panel" style="text-align:center;padding:28px 20px;">
         <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Révision terminée</div>
@@ -1692,7 +1742,7 @@ async function renderIntro(){
         </button>
       </div>
     </div>
-    ${renderDashboard()}
+    <div id="dashboard-area">${renderDashboard()}</div>
     <div class="panel" style="margin-top:0;">
       <div class="lb-preview" style="padding:16px 18px;">
         <div class="lb-preview-title">Classement</div>
@@ -2514,6 +2564,42 @@ function renderRessources(){
 (async()=>{
   await initAuth();
   renderIntro();
+})();
+</script>
+
+<script>
+// ── CURSEUR LUMINEUX ─────────────────────────────────
+(function(){
+  const cur=document.getElementById('cursor');
+  const trail=document.getElementById('cursor-trail');
+  if(!cur||!trail)return;
+
+  let mx=0,my=0,tx=0,ty=0;
+
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px';
+    cur.style.top=my+'px';
+  });
+
+  // Trail avec léger délai
+  function animateTrail(){
+    tx+=(mx-tx)*0.18;
+    ty+=(my-ty)*0.18;
+    trail.style.left=tx+'px';
+    trail.style.top=ty+'px';
+    requestAnimationFrame(animateTrail);
+  }
+  animateTrail();
+
+  document.addEventListener('mousedown',()=>cur.classList.add('clicking'));
+  document.addEventListener('mouseup',()=>cur.classList.remove('clicking'));
+
+  // Masquer sur mobile
+  document.addEventListener('touchstart',()=>{
+    cur.style.display='none';
+    trail.style.display='none';
+  },{once:true});
 })();
 </script>
 
