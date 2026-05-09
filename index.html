@@ -63,7 +63,8 @@ body{background:#070604;}
 .header-eyebrow{
   font-family:var(--mono);
   font-size:9px;letter-spacing:0.28em;text-transform:uppercase;
-  font-weight:200;color:var(--dim);margin-bottom:18px;
+  font-weight:300;color:#8a7a58;margin-bottom:18px;
+  text-shadow:0 0 12px rgba(212,168,48,0.3);
 }
 .header-ornament{
   display:flex;align-items:center;justify-content:center;gap:10px;
@@ -72,39 +73,44 @@ body{background:#070604;}
 .header-ornament-line{width:60px;height:1px;}
 .header-ornament-line.l{background:linear-gradient(90deg,transparent,var(--gold-b));}
 .header-ornament-line.r{background:linear-gradient(90deg,var(--gold-b),transparent);}
-.header-ornament-sym{font-family:var(--body);font-size:14px;color:var(--gold);opacity:0.45;letter-spacing:6px;}
+.header-ornament-sym{font-family:var(--body);font-size:14px;color:var(--gold);opacity:0.6;letter-spacing:6px;text-shadow:0 0 10px rgba(212,168,48,0.5);}
 .header-title{
   font-family:var(--serif);
   font-size:clamp(32px,5vw,52px);font-weight:400;
-  color:var(--text);letter-spacing:0.04em;
+  color:#f8f0dc;letter-spacing:0.04em;
   line-height:1.15;margin-bottom:10px;
-  text-shadow:0 2px 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.6);
+  text-shadow:
+    0 0 18px rgba(255,220,100,0.35),
+    0 0 40px rgba(255,200,60,0.15),
+    0 2px 12px rgba(0,0,0,0.9);
 }
-.header-title em{font-style:italic;color:var(--gold);}
+.header-title em{font-style:italic;color:#e8b840;text-shadow:0 0 20px rgba(240,180,50,0.6),0 0 40px rgba(220,160,30,0.3);}
 .header-subtitle{
   font-family:var(--body);
   font-size:17px;font-weight:400;font-style:italic;
-  color:var(--soft);margin-bottom:24px;
+  color:#c8b888;margin-bottom:24px;
+  text-shadow:0 1px 8px rgba(0,0,0,0.8);
 }
 .header-tags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
 .header-tag{
   padding:3px 10px;
-  background:transparent;border:1px solid #1a1810;
+  background:rgba(10,8,5,0.7);border:1px solid rgba(212,168,48,0.2);
   font-family:var(--mono);font-size:8px;font-weight:300;
-  color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;
+  color:#7a6a48;letter-spacing:0.12em;text-transform:uppercase;
 }
 .header-quote{
   max-width:460px;margin:24px auto 0;
   padding:14px 18px;
-  border-left:1px solid #2a2010;
+  border-left:1px solid rgba(212,168,48,0.2);
   font-family:var(--body);
   font-size:14px;font-style:italic;font-weight:400;
-  color:#3a3020;line-height:1.85;text-align:left;
+  color:#8a7a58;line-height:1.85;text-align:left;
+  text-shadow:0 1px 6px rgba(0,0,0,0.8);
 }
 .header-quote cite{
   display:block;margin-top:7px;
   font-family:var(--mono);font-size:8px;font-weight:200;
-  font-style:normal;letter-spacing:0.14em;color:#2a2018;
+  font-style:normal;letter-spacing:0.14em;color:#5a4e35;
   text-transform:uppercase;
 }
 
@@ -1861,7 +1867,7 @@ Pistes : ${s.pistes}`;
 
   try{
     const messages=dissertConv.map(m=>({role:m.role,content:m.content}));
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('https://claude-proxy.chevallierfabio.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -1941,7 +1947,7 @@ renderIntro();
   window.addEventListener('resize',resize);
 
   function noise(t,f,a){return Math.sin(t*f)*a+Math.sin(t*f*2.3+1.4)*a*0.28+Math.sin(t*f*0.5+2.9)*a*0.14;}
-  function getSway(t){return noise(t,0.22,0.16)+noise(t,0.09,0.04);}
+  function getSway(t){return noise(t,0.28,0.22)+noise(t,0.11,0.06);}
   // Pulse très lent, multi-fréquences, sans pic brutal — fondu entre phases
   function getPulse(t,ph){
     const raw = 0.5
