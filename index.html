@@ -900,7 +900,7 @@ function renderSRQ(){
   }
   const q=srQuestions[srCurrent];
   const mastery=getSRScore(q);
-  const interval=getSRData()[getSRKey(q)]?.i||0;
+  const interval=srCache[getSRKey(q)]?.i||0;
   document.getElementById('training-area').innerHTML=`
     <div class="card panel">
       <div class="card-header">
@@ -920,13 +920,12 @@ function renderSRQ(){
     </div>`;
 }
 
-function srChoose(idx){
+async function srChoose(idx){
   if(srAnswered)return; srAnswered=true;
   const q=srQuestions[srCurrent];
   const ok=idx===q.newCorrect;
   if(ok)srScore++;
-  // Mettre à jour SM-2 : 5 si correct rapide, 2 si incorrect
-  updateSR(q, ok?5:2);
+  await updateSR(q, ok?5:2);
   for(let i=0;i<4;i++){
     const b=document.getElementById(`sropt-${i}`);if(!b)continue;
     b.disabled=true;
@@ -934,7 +933,7 @@ function srChoose(idx){
     if(i===idx&&!ok)b.classList.add('wrong');
     if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}
   }
-  const nextInterval=getSRData()[getSRKey(q)]?.i||1;
+  const nextInterval=srCache[getSRKey(q)]?.i||1;
   document.getElementById('sr-feedback').innerHTML=`
     <div class="feedback ${ok?'ok':'ko'}">
       <div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'} — prochaine révision dans ${nextInterval}j</div>
@@ -1821,11 +1820,11 @@ function timeExpired(){
   document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
 }
 
-function choose(idx){
+async function choose(idx){
   if(answered)return;answered=true;clearInterval(timerInt);
   const q=questions[current];const ok=idx===q.newCorrect;
   if(ok)score++;else q._wasWrong=true;
-  updateSR(q, ok?5:2);
+  await updateSR(q, ok?5:2);
   for(let i=0;i<4;i++){const b=document.getElementById(`opt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
   document.getElementById('feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
   document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
