@@ -1760,6 +1760,7 @@ async function doSignUp(){
 }
 
 function startQuiz(){
+  const inp=document.getElementById('name-input');
   const name=inp?inp.value.trim():playerName;
   if(!name){if(inp)inp.style.borderColor='var(--red)';return;}
   playerName=name;
