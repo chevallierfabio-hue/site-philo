@@ -1,31 +1,31 @@
-export default async (req, context) => {
-  // Autoriser seulement les POST
-  if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+exports.handler = async function(event, context) {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const body = await req.json();
+    const body = JSON.parse(event.body);
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': Netlify.env.get('ANTHROPIC_API_KEY'),
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify(body),
     });
 
     const data = await response.json();
-    return Response.json(data, { status: response.status });
+    return {
+      statusCode: response.status,
+      body: JSON.stringify(data),
+    };
 
   } catch (error) {
-    return Response.json(
-      { error: 'Erreur serveur', detail: error.message },
-      { status: 500 }
-    );
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
   }
 };
-
-export const config = { path: '/api/claude' };
