@@ -428,6 +428,9 @@ body{background:#070604;}
 </head>
 <body>
 
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <!-- Faisceau lumineux -->
 <canvas id="beam-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;pointer-events:none;"></canvas>
 <canvas id="particles-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:201;pointer-events:none;"></canvas>
@@ -540,6 +543,381 @@ const BASE="https://api.jsonbin.io/v3/b/"+BIN_ID;
 const JH={"Content-Type":"application/json","X-Master-Key":API_KEY};
 const TOTAL=20,TIMER_SEC=30;
 function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('machine2_uid',u);}return u;}catch{return'g_'+Date.now();}}
+
+// ── SUPABASE ──────────────────────────────────────────
+const SUPA_URL='https://lmngoemfxodfjztydvuu.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbmdvZW1meG9kZmp6dHlkdnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzY2MjEsImV4cCI6MjA5MzkxMjYyMX0.0Jt1E1vKvqCjB2uJ2MAAtjpmDACkuUxPeGZCpjhKEhQ';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+let supaUser = null;
+
+async function initAuth(){
+  const {data:{session}} = await supa.auth.getSession();
+  if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||'';}
+  supa.auth.onAuthStateChange((_,s)=>{supaUser=s?.user||null;});
+}
+
+async function signUp(email,password,name){
+  const {data,error}=await supa.auth.signUp({
+    email,password,
+    options:{data:{name}}
+  });
+  if(error)throw error;
+  if(data.user){
+    await supa.from('profiles').upsert({id:data.user.id,name});
+    supaUser=data.user; playerName=name;
+  }
+  return data;
+}
+
+async function signIn(email,password){
+  const {data,error}=await supa.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  supaUser=data.user; playerName=data.user.user_metadata?.name||'';
+  return data;
+}
+
+async function signOut(){
+  await supa.auth.signOut(); supaUser=null; playerName='';
+  renderIntro();
+}
+
+// ── RÉPÉTITION ESPACÉE (SM-2) — cloud si connecté, localStorage sinon ──
+function getSRKey(q){return q.cat.slice(0,6)+'_'+q.q.slice(0,20);}
+
+// Cache local pour éviter trop de requêtes
+let srCache={};
+let srCacheDirty=false;
+
+function getSRData(){
+  // Retourne le cache (chargé depuis Supabase ou localStorage)
+  return srCache;
+}
+
+async function loadSRData(){
+  if(supaUser){
+    const {data}=await supa.from('sr_data').select('*').eq('user_id',supaUser.id);
+    srCache={};
+    (data||[]).forEach(r=>{
+      srCache[r.question_key]={e:r.easiness,i:r.interval_days,n:r.repetitions,due:r.next_due,ok:r.correct_count,fail:r.fail_count};
+    });
+  } else {
+    try{srCache=JSON.parse(localStorage.getItem('machine2_sr')||'{}');}catch{srCache={};}
+  }
+}
+
+async function saveSREntry(key, r){
+  if(supaUser){
+    await supa.from('sr_data').upsert({
+      user_id:supaUser.id,
+      question_key:key,
+      easiness:r.e, interval_days:r.i, repetitions:r.n,
+      next_due:r.due, correct_count:r.ok, fail_count:r.fail,
+      updated_at:new Date().toISOString()
+    },{onConflict:'user_id,question_key'});
+  } else {
+    try{localStorage.setItem('machine2_sr',JSON.stringify(srCache));}catch{}
+  }
+}
+
+function getSRScore(q){
+  const k=getSRKey(q), r=srCache[k];
+  if(!r)return 0;
+  const total=r.ok+r.fail;
+  if(!total)return 0;
+  return Math.round((r.ok/total)*100);
+}
+
+function isDue(q){
+  const k=getSRKey(q), r=srCache[k];
+  if(!r)return true;
+  return Date.now()>=r.due;
+}
+
+async function updateSR(q, quality){
+  const k=getSRKey(q);
+  let r=srCache[k]||{e:2.5,i:1,n:0,due:0,ok:0,fail:0};
+  if(quality>=3){
+    if(r.n===0)r.i=1;
+    else if(r.n===1)r.i=6;
+    else r.i=Math.round(r.i*r.e);
+    r.n++;
+    r.e=Math.max(1.3,r.e+0.1-(5-quality)*(0.08+(5-quality)*0.02));
+    r.ok++;
+  } else {
+    r.n=0; r.i=1; r.fail++;
+  }
+  r.due=Date.now()+r.i*86400000;
+  srCache[k]=r;
+  await saveSREntry(k,r);
+}
+
+function srSort(bank){
+  return [...bank].sort((a,b)=>{
+    const aD=srCache[getSRKey(a)], bD=srCache[getSRKey(b)];
+    if(!aD&&!bD)return 0; if(!aD)return -1; if(!bD)return 1;
+    const aDue=Date.now()>=aD.due, bDue=Date.now()>=bD.due;
+    if(aDue&&!bDue)return -1; if(!aDue&&bDue)return 1;
+    return getSRScore(a)-getSRScore(b);
+  });
+}
+
+// ── TABLEAU DE BORD ───────────────────────────────────
+function getCatStats(){
+  const cats=[...new Set(BANK.map(q=>q.cat))];
+  return cats.map(cat=>{
+    const qs=BANK.filter(q=>q.cat===cat);
+    const scores=qs.map(q=>getSRScore(q));
+    const seen=scores.filter(s=>s>0).length;
+    const avg=seen?Math.round(scores.filter(s=>s>0).reduce((a,b)=>a+b,0)/seen):0;
+    const due=qs.filter(q=>isDue(q)).length;
+    return {cat,total:qs.length,seen,avg,due};
+  });
+}
+
+function renderDashboard(){
+  const stats=getCatStats();
+  const totalSeen=stats.reduce((a,s)=>a+s.seen,0);
+  const totalQ=BANK.length;
+  const globalAvg=totalSeen?Math.round(stats.reduce((a,s)=>a+(s.avg*s.seen),0)/totalSeen):0;
+  const totalDue=stats.reduce((a,s)=>a+s.due,0);
+
+  return `
+  <div class="panel" style="padding:20px 18px;margin-bottom:12px;">
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif);font-size:36px;color:var(--gold);line-height:1;">${totalSeen}</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;">questions vues</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif);font-size:36px;color:var(--text);line-height:1;">${globalAvg}%</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;">maîtrise globale</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif);font-size:36px;color:${totalDue>5?'var(--red)':'var(--green)'};line-height:1;">${totalDue}</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;">à réviser</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      ${stats.map(s=>{
+        const pct=s.seen?s.avg:0;
+        const color=pct>=80?'var(--green)':pct>=50?'var(--gold)':'var(--red)';
+        return `<div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">${s.cat}</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              ${s.due>0?`<span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">${s.due} à revoir</span>`:''}
+              <span style="font-family:var(--mono);font-size:10px;color:${color};">${s.seen?s.avg+'%':'—'}</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${color};border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    ${totalDue>0?`<button onclick="startSRQuiz()" style="width:100%;margin-top:16px;padding:10px;background:var(--gold-d);border:1px solid var(--gold-b);font-family:var(--serif);font-size:17px;color:var(--gold);cursor:pointer;">
+      Réviser les ${totalDue} questions dues →
+    </button>`:`<div style="text-align:center;margin-top:14px;font-family:var(--body);font-size:14px;font-style:italic;color:var(--dim);">Aucune question à réviser pour l'instant.</div>`}
+  </div>`;
+}
+
+// ── MODE AUTEUR ───────────────────────────────────────
+const AUTHORS=[
+  {name:'Rosenblueth, Wiener & Bigelow',short:'RWB',clues:[
+    'Feedback négatif comme critère du comportement téléonomique',
+    'Distinction torpille / roulette',
+    'Téléonomie sans cause finale',
+    'Postulat d\'objectivité et comportement orienté vers un but'
+  ]},
+  {name:'Turing',short:'Turing',clues:[
+    'Jeu de l\'imitation — juge, humain, machine cachés',
+    'Réponse à l\'objection de Lovelace : conséquences non immédiates',
+    'Le test remplace la question "les machines pensent-elles ?"',
+    'Argument du solipsisme contre Jefferson'
+  ]},
+  {name:'Searle',short:'Searle',clues:[
+    'Chambre chinoise — syntaxe sans sémantique',
+    'Intentionnalité intrinsèque vs dérivée',
+    'L\'esprit est causé par et réalisé dans le cerveau',
+    'La simulation de l\'esprit n\'est pas l\'esprit'
+  ]},
+  {name:'Fodor',short:'Fodor',clues:[
+    'RTM — Théorie représentationnelle de l\'esprit',
+    'Le test de Turing ne suffit pas : "Veille sur le bébé"',
+    'Computationnalisme — les états mentaux sont fonctionnels',
+    'Langage de la pensée — Mentalese'
+  ]},
+  {name:'Bennett & Hacker',short:'B&H',clues:[
+    'Erreur méréologique — attribuer au cerveau des propriétés de la personne',
+    'Wittgenstein : "c\'est seulement d\'un être humain qu\'on peut dire il voit"',
+    'Le cerveau ne calcule pas — les êtres humains calculent',
+    'Critique des neurosciences computationnelles'
+  ]},
+  {name:'Putnam',short:'Putnam',clues:[
+    'Externalisme sémantique — le sens est dans la tête ET dans le monde',
+    'Terre-Jumelle — deux locutrices qui disent "eau" pensent des choses différentes',
+    'L\'eau est H₂O même si personne ne le sait',
+    'Les états mentaux ne déterminent pas seuls les contenus'
+  ]},
+  {name:'Wittgenstein / Kenny / Hacker',short:'Wittg.',clues:[
+    'Seules les créatures langagières peuvent agir pour des raisons',
+    'Critères de comportement — pas de processus internes cachés',
+    'Suivre une règle — pratique sociale, pas état mental',
+    'La grammaire comme lieu de l\'intentionnalité'
+  ]}
+];
+
+let authorIdx=0,authorScore=0,authorTotal=10,authorQ=[],authorAnswered=false;
+
+function buildAuthorQuestion(){
+  const a=AUTHORS[Math.floor(Math.random()*AUTHORS.length)];
+  const clue=a.clues[Math.floor(Math.random()*a.clues.length)];
+  // 3 autres auteurs comme distracteurs
+  const others=shuffle(AUTHORS.filter(x=>x.name!==a.name)).slice(0,3);
+  const opts=shuffle([a,...others]);
+  return {clue,correct:a.name,opts:opts.map(x=>x.name),author:a};
+}
+
+function startAuthorMode(){
+  authorIdx=0;authorScore=0;authorAnswered=false;
+  authorQ=Array.from({length:authorTotal},buildAuthorQuestion);
+  renderAuthorQ();
+}
+
+function renderAuthorQ(){
+  const q=authorQ[authorIdx];
+  document.getElementById('training-area').innerHTML=`
+    <div class="card panel">
+      <div class="card-header">
+        <span class="card-num">Auteur · ${authorIdx+1}/${authorTotal}</span>
+        <span class="card-tag">${authorScore} pts</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;">Qui a dit / défendu :</div>
+        <div class="question-text" style="font-style:italic;">"${q.clue}"</div>
+        <div class="options">${q.opts.map((opt,i)=>`
+          <button class="option" id="aopt-${i}" onclick="authorChoose(${i})">
+            <span class="option-letter">${['A','B','C','D'][i]}</span>
+            <span class="option-text">${opt}</span>
+          </button>`).join('')}
+        </div>
+        <div id="author-feedback"></div>
+        <div id="author-next"></div>
+      </div>
+    </div>`;
+}
+
+function authorChoose(idx){
+  if(authorAnswered)return; authorAnswered=true;
+  const q=authorQ[authorIdx];
+  const ok=q.opts[idx]===q.correct;
+  if(ok)authorScore++;
+  const ci=q.opts.indexOf(q.correct);
+  for(let i=0;i<4;i++){
+    const b=document.getElementById(`aopt-${i}`);if(!b)continue;
+    b.disabled=true;
+    if(i===ci)b.classList.add('reveal');
+    if(i===idx&&!ok)b.classList.add('wrong');
+    if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}
+  }
+  document.getElementById('author-feedback').innerHTML=`
+    <div class="feedback ${ok?'ok':'ko'}">
+      <div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect — c\'était '+q.correct}</div>
+    </div>`;
+  document.getElementById('author-next').innerHTML=`
+    <button class="btn-next" onclick="authorNext()">${authorIdx+1<authorTotal?'Suivant →':'Résultats →'}</button>`;
+}
+
+function authorNext(){
+  authorIdx++;
+  if(authorIdx>=authorTotal){
+    const pct=Math.round(authorScore/authorTotal*100);
+    document.getElementById('training-area').innerHTML=`
+      <div class="panel" style="text-align:center;padding:28px 20px;">
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Mode auteur — résultat</div>
+        <div style="font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin-bottom:6px;">${pct}%</div>
+        <div style="font-size:13px;color:var(--dim);margin-bottom:20px;">${authorScore} / ${authorTotal}</div>
+        <div style="display:flex;gap:8px;justify-content:center;">
+          <button onclick="startAuthorMode()" style="padding:8px 20px;background:var(--gold-d);border:1px solid var(--gold-b);font-family:var(--serif);font-size:17px;color:var(--gold);cursor:pointer;">Recommencer</button>
+          <button onclick="renderTraining()" style="padding:8px 20px;background:transparent;border:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.08em;">← Modes</button>
+        </div>
+      </div>`;
+  } else {
+    authorAnswered=false;renderAuthorQ();
+  }
+}
+
+// ── QCM SR ────────────────────────────────────────────
+let srQuestions=[],srCurrent=0,srScore=0,srAnswered=false;
+
+function startSRQuiz(){
+  const due=BANK.filter(q=>isDue(q));
+  srQuestions=srSort(due).slice(0,Math.min(20,due.length)).map(buildQ);
+  srCurrent=0;srScore=0;srAnswered=false;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-training').classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{t.classList.remove('active');if(t.dataset.page==='training')t.classList.add('active');});
+  renderSRQ();
+}
+
+function renderSRQ(){
+  if(srCurrent>=srQuestions.length){
+    document.getElementById('training-area').innerHTML=`
+      <div class="panel" style="text-align:center;padding:28px 20px;">
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Révision terminée</div>
+        <div style="font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin-bottom:6px;">${srScore}</div>
+        <div style="font-size:13px;color:var(--dim);margin-bottom:20px;">/ ${srQuestions.length} correctes</div>
+        <button onclick="renderTraining()" style="padding:8px 20px;background:transparent;border:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.08em;">← Retour</button>
+      </div>`;
+    return;
+  }
+  const q=srQuestions[srCurrent];
+  const mastery=getSRScore(q);
+  const interval=getSRData()[getSRKey(q)]?.i||0;
+  document.getElementById('training-area').innerHTML=`
+    <div class="card panel">
+      <div class="card-header">
+        <span class="card-num">SR · ${srCurrent+1}/${srQuestions.length}</span>
+        <span class="card-tag" style="color:${mastery>=70?'var(--green)':mastery>=40?'var(--gold)':'var(--red)'};">${mastery?mastery+'% maîtrise':'nouvelle'}</span>
+      </div>
+      <div class="card-body">
+        <div class="question-text">${q.q}</div>
+        <div class="options">${q.shuffledOpts.map((opt,i)=>`
+          <button class="option" id="sropt-${i}" onclick="srChoose(${i})">
+            <span class="option-letter">${['A','B','C','D'][i]}</span>
+            <span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span>
+          </button>`).join('')}
+        </div>
+        <div id="sr-feedback"></div><div id="sr-next"></div>
+      </div>
+    </div>`;
+}
+
+function srChoose(idx){
+  if(srAnswered)return; srAnswered=true;
+  const q=srQuestions[srCurrent];
+  const ok=idx===q.newCorrect;
+  if(ok)srScore++;
+  // Mettre à jour SM-2 : 5 si correct rapide, 2 si incorrect
+  updateSR(q, ok?5:2);
+  for(let i=0;i<4;i++){
+    const b=document.getElementById(`sropt-${i}`);if(!b)continue;
+    b.disabled=true;
+    if(i===q.newCorrect)b.classList.add('reveal');
+    if(i===idx&&!ok)b.classList.add('wrong');
+    if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}
+  }
+  const nextInterval=getSRData()[getSRKey(q)]?.i||1;
+  document.getElementById('sr-feedback').innerHTML=`
+    <div class="feedback ${ok?'ok':'ko'}">
+      <div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'} — prochaine révision dans ${nextInterval}j</div>
+      <div class="feedback-body">${q.exp}</div>
+    </div>`;
+  document.getElementById('sr-next').innerHTML=`
+    <button class="btn-next" onclick="srNext()">${srCurrent+1<srQuestions.length?'Suivant →':'Terminé →'}</button>`;
+}
+
+function srNext(){srCurrent++;srAnswered=false;renderSRQ();}
 async function fetchScores(){try{const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});const d=await r.json();return d.record?.scores||[];}catch{return[];}}
 async function saveScore(name,pts){try{const uid=getUID();const sc=await fetchScores();let ex=sc.findIndex(s=>s.uid===uid);if(ex<0)ex=sc.findIndex(s=>s.name.toLowerCase()===name.toLowerCase());if(ex>=0){const p=sc[ex];sc[ex]={uid,name,pts:pts>p.pts?pts:p.pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")};}else sc.push({uid,name,pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")});sc.sort((a,b)=>b.pts-a.pts);await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:sc})});return sc;}catch(e){console.error(e);return[];}}
 
@@ -1216,12 +1594,36 @@ function renderCartes(){
 let playerName='',questions=[],current=0,score=0,answered=false,timerInt=null,timeLeft=TIMER_SEC;
 
 async function renderIntro(){
+  // Charger les données SR depuis Supabase ou localStorage
+  await loadSRData();
+
+  if(!supaUser){
+    // Afficher écran de connexion
+    document.getElementById('root').innerHTML=`
+      <div class="panel intro-box">
+        <h2>Philosophie de l'esprit et la machine</h2>
+        <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
+        <div id="auth-msg" class="prev-score-msg" style="min-height:18px;"></div>
+        <div id="auth-form">
+          <div class="input-group"><label>Email</label><input id="auth-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
+          <div class="input-group"><label>Mot de passe</label><input id="auth-pwd" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+          <div id="auth-name-wrap" class="input-group" style="display:none;"><label>Prénom</label><input id="auth-name" type="text" placeholder="Ex : Sophie…"></div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn-primary" style="flex:1;" onclick="doSignIn()">Se connecter</button>
+            <button class="btn-primary" style="flex:1;background:transparent;" onclick="toggleSignUp()">Créer un compte</button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Connecté — afficher l'interface normale
   const uid=getUID();
   document.getElementById('root').innerHTML=`
     <div class="panel intro-box">
       <h2>Philosophie de l'esprit et la machine</h2>
       <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
-      <div class="input-group"><label>Prénom</label><input id="name-input" type="text" placeholder="Ex : Sophie…" disabled autocomplete="off"></div>
+      <div class="input-group"><label>Prénom</label><input id="name-input" type="text" placeholder="Ex : Sophie…" value="${playerName}" autocomplete="off"></div>
       <div id="prev-score-msg" class="prev-score-msg">Chargement…</div>
       <div class="intro-stats">
         <span class="intro-stat">${BANK.length} questions</span>
@@ -1229,27 +1631,31 @@ async function renderIntro(){
         <span class="intro-stat">${TIMER_SEC}s / question</span>
         <span class="intro-stat">Mélangées</span>
       </div>
-      <button class="btn-primary" id="btn-start" onclick="startQuiz()" disabled>Chargement…</button>
-      <div class="lb-preview">
+      <button class="btn-primary" id="btn-start" onclick="startQuiz()">Commencer →</button>
+      <div style="margin-top:10px;text-align:center;">
+        <button onclick="signOut()" style="background:transparent;border:none;font-family:var(--mono);font-size:8px;color:var(--dim);cursor:pointer;letter-spacing:.1em;">
+          Connecté : ${supaUser.email} · Se déconnecter
+        </button>
+      </div>
+    </div>
+    ${renderDashboard()}
+    <div class="panel" style="margin-top:0;">
+      <div class="lb-preview" style="padding:16px 18px;">
         <div class="lb-preview-title">Classement</div>
         <div id="lb-intro-body"><div class="lb-loading">Chargement…</div></div>
       </div>
     </div>
   `;
   const scores=await fetchScores();
-  const entry=(scores||[]).find(s=>s.uid===getUID());
-  const inp=document.getElementById('name-input');
-  const btn=document.getElementById('btn-start');
+  const entry=(scores||[]).find(s=>s.uid===getUID()||s.name.toLowerCase()===playerName.toLowerCase());
   const msg=document.getElementById('prev-score-msg');
-  if(inp){inp.value=entry?entry.name:'';inp.disabled=false;inp.addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});}
-  if(btn){btn.textContent='Commencer →';btn.disabled=false;}
   if(msg){
-    if(entry){const pct=Math.round(entry.pts/(entry.total||TOTAL)*100);msg.innerHTML=`Bienvenue ${entry.name} — meilleur score : <strong style="color:var(--gold)">${entry.pts}/${entry.total||TOTAL} (${pct}%)</strong>`;}
-    else{msg.textContent='Première visite — entre ton prénom.';}
+    if(entry){const pct=Math.round(entry.pts/(entry.total||TOTAL)*100);msg.innerHTML=`Bienvenue ${playerName} — meilleur score : <strong style="color:var(--gold)">${entry.pts}/${entry.total||TOTAL} (${pct}%)</strong>`;}
+    else{msg.textContent='Prêt à commencer !';}
   }
   const lb=document.getElementById('lb-intro-body');
   if(lb){const uid2=getUID();lb.innerHTML=(scores||[]).slice(0,8).map((s,i)=>`
-    <div class="lb-row ${s.uid===uid2?'me':''}">
+    <div class="lb-row ${s.uid===uid2||s.name.toLowerCase()===playerName.toLowerCase()?'me':''}">
       <span class="lb-rank ${i<3?'top':''}">${i===0?'#1':i===1?'#2':i===2?'#3':'#'+(i+1)}</span>
       <span class="lb-name">${s.name}</span>
       <span class="lb-pts">${s.pts}</span>
@@ -1257,7 +1663,53 @@ async function renderIntro(){
     </div>`).join('')||'<div class="lb-loading">Aucun score.</div>';}
 }
 
-function startQuiz(){
+let signUpMode=false;
+function toggleSignUp(){
+  signUpMode=!signUpMode;
+  const wrap=document.getElementById('auth-name-wrap');
+  if(wrap)wrap.style.display=signUpMode?'block':'none';
+  document.querySelectorAll('#auth-form .btn-primary')[1].textContent=signUpMode?'← Se connecter':'Créer un compte';
+}
+
+async function doSignIn(){
+  const email=document.getElementById('auth-email')?.value?.trim();
+  const pwd=document.getElementById('auth-pwd')?.value;
+  const msg=document.getElementById('auth-msg');
+  if(!email||!pwd){if(msg)msg.textContent='Email et mot de passe requis.';return;}
+  if(msg)msg.textContent='Connexion…';
+  try{
+    await signIn(email,pwd);
+    renderIntro();
+  }catch(e){
+    if(msg)msg.textContent='Erreur : '+e.message;
+  }
+}
+
+async function doSignUp(){
+  const email=document.getElementById('auth-email')?.value?.trim();
+  const pwd=document.getElementById('auth-pwd')?.value;
+  const name=document.getElementById('auth-name')?.value?.trim();
+  const msg=document.getElementById('auth-msg');
+  if(!email||!pwd||!name){if(msg)msg.textContent='Tous les champs sont requis.';return;}
+  if(msg)msg.textContent='Création du compte…';
+  try{
+    await signUp(email,pwd,name);
+    if(msg)msg.textContent='Compte créé ! Vérifie ton email pour confirmer.';
+  }catch(e){
+    if(msg)msg.textContent='Erreur : '+e.message;
+  }
+}
+
+// Surcharge toggleSignUp pour gérer création/connexion
+window.toggleSignUp=function(){
+  signUpMode=!signUpMode;
+  const wrap=document.getElementById('auth-name-wrap');
+  if(wrap)wrap.style.display=signUpMode?'block':'none';
+  const btns=document.querySelectorAll('#auth-form .btn-primary');
+  if(btns[0])btns[0].textContent=signUpMode?'Créer le compte':'Se connecter';
+  if(btns[0])btns[0].setAttribute('onclick',signUpMode?'doSignUp()':'doSignIn()');
+  if(btns[1])btns[1].textContent=signUpMode?'← Se connecter':'Créer un compte';
+};
   const inp=document.getElementById('name-input');
   const name=inp?inp.value.trim():playerName;
   if(!name){if(inp)inp.style.borderColor='var(--red)';return;}
@@ -1323,6 +1775,7 @@ function choose(idx){
   if(answered)return;answered=true;clearInterval(timerInt);
   const q=questions[current];const ok=idx===q.newCorrect;
   if(ok)score++;else q._wasWrong=true;
+  updateSR(q, ok?5:2);
   for(let i=0;i<4;i++){const b=document.getElementById(`opt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
   document.getElementById('feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
   document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
@@ -1481,6 +1934,12 @@ function renderTraining(){
         <div class="training-card-count">6 thèmes</div>
         <div class="training-card-desc">S'entraîner par auteur ou notion</div>
       </div>
+      <div class="training-card" onclick="startAuthorMode()">
+        <div class="training-card-icon">✒️</div>
+        <div class="training-card-title">Mode auteur</div>
+        <div class="training-card-count">${AUTHORS.length} auteurs</div>
+        <div class="training-card-desc">Associe une thèse à son auteur</div>
+      </div>
       <div class="training-card" onclick="showSpeedRound()">
         <div class="training-card-icon">⚡</div>
         <div class="training-card-title">Speed round</div>
@@ -1492,6 +1951,12 @@ function renderTraining(){
         <div class="training-card-title">Points difficiles</div>
         <div class="training-card-count">Concepts subtils</div>
         <div class="training-card-desc">Searle, B&H, Wittgenstein, synthèse</div>
+      </div>
+      <div class="training-card" onclick="startSRQuiz()" style="${BANK.filter(q=>isDue(q)).length===0?'opacity:0.5;':''}" >
+        <div class="training-card-icon">🔁</div>
+        <div class="training-card-title">Répétition espacée</div>
+        <div class="training-card-count">${BANK.filter(q=>isDue(q)).length} dues</div>
+        <div class="training-card-desc">Algorithme SM-2 — révise au bon moment</div>
       </div>
     </div>
     <div id="training-area"></div>
@@ -1927,7 +2392,10 @@ function renderRessources(){
 }
 
 // ── INIT ─────────────────────────────────────────────
-renderIntro();
+(async()=>{
+  await initAuth();
+  renderIntro();
+})();
 </script>
 
 <script>
