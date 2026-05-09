@@ -1936,7 +1936,7 @@ Pistes : ${s.pistes}`;
 
   try{
     const messages=dissertConv.map(m=>({role:m.role,content:m.content}));
-    const r=await fetch('/api/claude',{
+    const r=await fetch('https://claude-proxy.chevallierfabio.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
