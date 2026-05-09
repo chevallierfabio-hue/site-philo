@@ -429,7 +429,8 @@ body{background:#070604;}
 <body>
 
 <!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <!-- Faisceau lumineux -->
 <canvas id="beam-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;pointer-events:none;"></canvas>
@@ -547,16 +548,28 @@ function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+M
 // ── SUPABASE ──────────────────────────────────────────
 const SUPA_URL='https://lmngoemfxodfjztydvuu.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbmdvZW1meG9kZmp6dHlkdnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzY2MjEsImV4cCI6MjA5MzkxMjYyMX0.0Jt1E1vKvqCjB2uJ2MAAtjpmDACkuUxPeGZCpjhKEhQ';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// Initialisation sécurisée — fonctionne même si le SDK ne charge pas
+let supa = null;
+try {
+  if(typeof supabase !== 'undefined' && supabase.createClient) {
+    supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+  }
+} catch(e) { console.warn('Supabase SDK non disponible, mode local activé', e); }
+
 let supaUser = null;
 
 async function initAuth(){
-  const {data:{session}} = await supa.auth.getSession();
-  if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||'';}
-  supa.auth.onAuthStateChange((_,s)=>{supaUser=s?.user||null;});
+  if(!supa){ supaUser=null; return; }
+  try {
+    const {data:{session}} = await supa.auth.getSession();
+    if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||'';}
+    supa.auth.onAuthStateChange((_,s)=>{supaUser=s?.user||null;});
+  } catch(e){ console.warn('Auth init failed', e); supaUser=null; }
 }
 
 async function signUp(email,password,name){
+  if(!supa) throw new Error('Service non disponible');
   const {data,error}=await supa.auth.signUp({
     email,password,
     options:{data:{name}}
@@ -570,6 +583,7 @@ async function signUp(email,password,name){
 }
 
 async function signIn(email,password){
+  if(!supa) throw new Error('Service non disponible');
   const {data,error}=await supa.auth.signInWithPassword({email,password});
   if(error)throw error;
   supaUser=data.user; playerName=data.user.user_metadata?.name||'';
@@ -577,7 +591,8 @@ async function signIn(email,password){
 }
 
 async function signOut(){
-  await supa.auth.signOut(); supaUser=null; playerName='';
+  if(supa) await supa.auth.signOut();
+  supaUser=null; playerName='';
   renderIntro();
 }
 
@@ -594,29 +609,33 @@ function getSRData(){
 }
 
 async function loadSRData(){
-  if(supaUser){
-    const {data}=await supa.from('sr_data').select('*').eq('user_id',supaUser.id);
-    srCache={};
-    (data||[]).forEach(r=>{
-      srCache[r.question_key]={e:r.easiness,i:r.interval_days,n:r.repetitions,due:r.next_due,ok:r.correct_count,fail:r.fail_count};
-    });
-  } else {
-    try{srCache=JSON.parse(localStorage.getItem('machine2_sr')||'{}');}catch{srCache={};}
+  if(supa && supaUser){
+    try {
+      const {data}=await supa.from('sr_data').select('*').eq('user_id',supaUser.id);
+      srCache={};
+      (data||[]).forEach(r=>{
+        srCache[r.question_key]={e:r.easiness,i:r.interval_days,n:r.repetitions,due:r.next_due,ok:r.correct_count,fail:r.fail_count};
+      });
+      return;
+    } catch(e){ console.warn('SR load failed', e); }
   }
+  try{srCache=JSON.parse(localStorage.getItem('machine2_sr')||'{}');}catch{srCache={};}
 }
 
 async function saveSREntry(key, r){
-  if(supaUser){
-    await supa.from('sr_data').upsert({
-      user_id:supaUser.id,
-      question_key:key,
-      easiness:r.e, interval_days:r.i, repetitions:r.n,
-      next_due:r.due, correct_count:r.ok, fail_count:r.fail,
-      updated_at:new Date().toISOString()
-    },{onConflict:'user_id,question_key'});
-  } else {
-    try{localStorage.setItem('machine2_sr',JSON.stringify(srCache));}catch{}
+  if(supa && supaUser){
+    try {
+      await supa.from('sr_data').upsert({
+        user_id:supaUser.id,
+        question_key:key,
+        easiness:r.e, interval_days:r.i, repetitions:r.n,
+        next_due:r.due, correct_count:r.ok, fail_count:r.fail,
+        updated_at:new Date().toISOString()
+      },{onConflict:'user_id,question_key'});
+      return;
+    } catch(e){ console.warn('SR save failed', e); }
   }
+  try{localStorage.setItem('machine2_sr',JSON.stringify(srCache));}catch{}
 }
 
 function getSRScore(q){
@@ -1710,7 +1729,8 @@ window.toggleSignUp=function(){
   if(btns[0])btns[0].setAttribute('onclick',signUpMode?'doSignUp()':'doSignIn()');
   if(btns[1])btns[1].textContent=signUpMode?'← Se connecter':'Créer un compte';
 };
-  const inp=document.getElementById('name-input');
+
+function startQuiz(){
   const name=inp?inp.value.trim():playerName;
   if(!name){if(inp)inp.style.borderColor='var(--red)';return;}
   playerName=name;
