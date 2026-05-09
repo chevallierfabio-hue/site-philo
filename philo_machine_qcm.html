@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philosophie de l'esprit et la machine</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0b;--s1:#111114;--s2:#17171b;--s3:#1e1e24;--s4:#26262e;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#e4e0d8;--soft:#8a8680;--dim:#44423e;
+  --gold:#c9a96e;--gold-d:rgba(201,169,110,0.12);--gold-b:rgba(201,169,110,0.3);
+  --green:#6aaa7e;--green-d:rgba(106,170,126,0.1);
+  --red:#c06860;--red-d:rgba(192,104,96,0.1);
+  --blue:#7a9ec2;--blue-d:rgba(122,158,194,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;font-size:14px;line-height:1.6;
+}
+
+/* ── HEADER ──────────────────────────────────────── */
+.site-header{
+  position:relative;overflow:hidden;
+  padding:64px 24px 48px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+.site-header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,169,110,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.site-header::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:200px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-b),transparent);
+}
+.header-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:20px;
+}
+.header-ornament{
+  width:1px;height:36px;background:linear-gradient(180deg,transparent,var(--gold-b),transparent);
+  margin:0 auto 20px;
+}
+.header-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,5vw,56px);font-weight:300;
+  color:var(--text);letter-spacing:0.04em;
+  line-height:1.15;margin-bottom:10px;
+}
+.header-title em{font-style:italic;color:var(--gold);}
+.header-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;font-style:italic;
+  color:var(--soft);margin-bottom:28px;
+}
+.header-tags{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+}
+.header-tag{
+  padding:4px 12px;
+  background:transparent;border:1px solid var(--border2);
+  border-radius:20px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:0.06em;
+}
+.header-quote{
+  max-width:480px;margin:28px auto 0;
+  padding:16px 20px;
+  border-left:1px solid var(--gold-b);
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-style:italic;font-weight:300;
+  color:var(--soft);line-height:1.8;text-align:left;
+}
+.header-quote cite{
+  display:block;margin-top:8px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  font-style:normal;letter-spacing:0.1em;color:var(--dim);
+  text-transform:uppercase;
+}
+
+/* ── NAV ─────────────────────────────────────────── */
+.nav-wrap{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,11,0.92);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.nav-tabs{
+  display:flex;max-width:800px;margin:0 auto;
+  padding:0 16px;
+}
+.nav-tab{
+  flex:1;padding:14px 8px 12px;
+  background:transparent;border:none;border-bottom:2px solid transparent;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:500;
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--dim);cursor:pointer;transition:all 0.2s;
+}
+.nav-tab:hover{color:var(--soft);}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ── LAYOUT ──────────────────────────────────────── */
+.app{max-width:740px;margin:0 auto;padding:32px 16px 100px;}
+
+/* ── PAGE ─────────────────────────────────────────── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── PANEL ───────────────────────────────────────── */
+.panel{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:8px;margin-bottom:12px;overflow:hidden;
+}
+
+/* ── SECTION TITLE ────────────────────────────────── */
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;font-style:italic;
+  color:var(--soft);margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+}
+.section-title::before,.section-title::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* ── INTRO ────────────────────────────────────────── */
+.intro-box{padding:28px 24px;}
+.intro-box h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;
+  margin-bottom:4px;
+}
+.intro-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-style:italic;
+  color:var(--soft);margin-bottom:22px;
+}
+.input-group{margin-bottom:16px;}
+.input-group label{
+  display:block;font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--dim);margin-bottom:6px;
+  letter-spacing:0.14em;text-transform:uppercase;
+}
+.input-group input{
+  width:100%;padding:10px 14px;
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:6px;font-family:'Inter',sans-serif;
+  font-size:14px;color:var(--text);outline:none;
+  transition:border-color 0.15s;
+}
+.input-group input:focus{border-color:var(--gold);}
+.input-group input::placeholder{color:var(--dim);}
+.intro-stats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.intro-stat{
+  padding:3px 10px;background:var(--s2);border:1px solid var(--border);
+  border-radius:4px;font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--dim);letter-spacing:0.06em;
+}
+.btn-primary{
+  width:100%;padding:12px;
+  background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;
+  font-family:'Cormorant Garamond',serif;font-size:16px;
+  color:var(--gold);cursor:pointer;transition:all 0.15s;
+}
+.btn-primary:hover{background:rgba(201,169,110,0.2);}
+.btn-primary:disabled{opacity:0.4;cursor:default;}
+.prev-score-msg{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);text-align:center;margin-bottom:12px;
+  line-height:1.7;
+}
+.lb-preview{margin-top:24px;}
+.lb-preview-title{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:10px;
+}
+.lb-row{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 0;border-bottom:1px solid var(--border);
+}
+.lb-row:last-child{border-bottom:none;}
+.lb-row.me{
+  background:var(--gold-d);border-radius:4px;
+  padding:7px 8px;margin:0 -8px;
+}
+.lb-rank{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--dim);min-width:22px;
+}
+.lb-rank.top{color:var(--gold);}
+.lb-name{flex:1;font-size:13px;}
+.lb-pts{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);}
+.lb-pct{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);min-width:36px;text-align:right;}
+.lb-loading{text-align:center;color:var(--dim);font-size:13px;padding:12px;}
+
+/* ── PROGRESS + TIMER ─────────────────────────────── */
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.progress-track{flex:1;height:2px;background:var(--s3);border-radius:1px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);border-radius:1px;transition:width 0.4s;}
+.progress-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;}
+.score-badge{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:4px;padding:3px 8px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--soft);
+}
+.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.timer-track{flex:1;height:1px;background:var(--s3);overflow:hidden;}
+.timer-fill{height:100%;transition:width 0.25s linear;}
+.timer-label{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--soft);min-width:24px;text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ── CARD ─────────────────────────────────────────── */
+.card{animation:fadeUp 0.25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:1px solid var(--border);
+  background:var(--s2);
+}
+.card-num{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:0.08em;
+}
+.card-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--gold);padding:2px 7px;background:var(--gold-d);
+  border-radius:3px;
+}
+.card-body{padding:20px 18px 16px;}
+.question-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:400;line-height:1.8;
+  color:var(--text);margin-bottom:18px;
+}
+
+/* ── OPTIONS ──────────────────────────────────────── */
+.options{display:flex;flex-direction:column;gap:6px;}
+.option{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 14px;text-align:left;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:6px;font-family:'Inter',sans-serif;
+  font-size:13px;line-height:1.55;color:var(--soft);
+  cursor:pointer;transition:all 0.12s;width:100%;
+}
+.option:hover:not(:disabled){border-color:var(--border2);color:var(--text);background:var(--s3);}
+.option.correct{background:var(--green-d);border-color:rgba(106,170,126,0.35);color:#a3d4b0;}
+.option.wrong{background:var(--red-d);border-color:rgba(192,104,96,0.35);color:#d4938a;}
+.option.reveal{background:var(--green-d);border-color:rgba(106,170,126,0.25);color:#8ec49e;}
+.option:disabled{cursor:default;}
+.option-letter{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);min-width:16px;margin-top:2px;flex-shrink:0;
+}
+
+/* ── FEEDBACK ─────────────────────────────────────── */
+.feedback{margin-top:14px;border-radius:6px;overflow:hidden;}
+.feedback-header{
+  display:flex;align-items:center;gap:7px;padding:8px 12px;
+  font-size:11px;font-weight:500;
+}
+.feedback.ok .feedback-header{background:var(--green-d);color:var(--green);border-left:2px solid var(--green);}
+.feedback.ko .feedback-header{background:var(--red-d);color:var(--red);border-left:2px solid var(--red);}
+.feedback-body{
+  padding:12px 14px;font-size:13px;line-height:1.8;
+  color:var(--soft);background:var(--s2);
+  border:1px solid var(--border);border-top:none;border-left:2px solid var(--border2);
+}
+.feedback-body strong{color:var(--text);font-weight:500;}
+.feedback-body em{color:var(--gold);font-style:italic;}
+.btn-next{
+  margin-top:10px;width:100%;padding:10px;
+  background:transparent;border:1px solid var(--border);
+  border-radius:6px;font-family:'Inter',sans-serif;
+  font-size:12px;font-weight:500;color:var(--dim);
+  cursor:pointer;transition:all 0.15s;
+}
+.btn-next:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── RESULTS ──────────────────────────────────────── */
+.results-top{text-align:center;padding:32px 24px 24px;}
+.results-top h2{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:10px;
+}
+.results-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;color:var(--text);margin-bottom:8px;
+}
+.results-score{
+  font-family:'Cormorant Garamond',serif;
+  font-size:80px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:2px;
+}
+.results-total{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);margin-bottom:16px;
+}
+.results-msg{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;line-height:1.75;color:var(--soft);
+  padding:14px 16px;background:var(--s2);border:1px solid var(--border);
+  border-left:2px solid var(--gold-b);border-radius:6px;
+  text-align:left;max-width:400px;margin:0 auto 20px;
+}
+.saving-msg{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);margin-bottom:14px;
+}
+.btn-restart{
+  padding:10px 26px;background:var(--gold-d);
+  border:1px solid var(--gold-b);border-radius:6px;
+  font-family:'Cormorant Garamond',serif;font-size:16px;
+  color:var(--gold);cursor:pointer;transition:all 0.15s;
+}
+.btn-restart:hover{background:rgba(201,169,110,0.22);}
+
+/* ── FICHES ───────────────────────────────────────── */
+.fiche-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px;}
+.fiche-tab{
+  padding:5px 12px;background:var(--s1);border:1px solid var(--border);
+  border-radius:4px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--dim);cursor:pointer;transition:all 0.15s;
+  letter-spacing:0.04em;
+}
+.fiche-tab:hover{border-color:var(--border2);color:var(--soft);}
+.fiche-tab.active{background:var(--gold-d);border-color:var(--gold-b);color:var(--gold);}
+
+.fiche-content{padding:22px 20px;}
+.fiche-section{margin-bottom:20px;}
+.fiche-section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-weight:500;font-style:italic;
+  letter-spacing:0.06em;color:var(--gold);
+  margin-bottom:10px;padding-bottom:6px;
+  border-bottom:1px solid rgba(201,169,110,0.18);
+}
+.fiche-block{
+  font-family:'Inter',sans-serif;font-size:13px;line-height:1.85;
+  color:var(--soft);padding:10px 14px;background:var(--s2);
+  border-left:2px solid var(--border2);border-radius:0 4px 4px 0;
+  margin-bottom:6px;
+}
+.fiche-block strong{color:var(--text);font-weight:500;}
+.fiche-block em{color:var(--gold);font-style:italic;}
+.fiche-block .auteur{
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;color:var(--gold);
+  background:var(--gold-d);border:1px solid var(--gold-b);
+  border-radius:3px;padding:1px 6px;margin-right:6px;
+}
+.fiche-block .terme{
+  font-family:'Cormorant Garamond',serif;font-size:14px;
+  font-style:italic;font-weight:500;color:var(--text);
+}
+.fiche-accent{
+  padding:12px 16px;background:var(--s2);
+  border:1px solid var(--border2);border-left:2px solid var(--gold-b);
+  border-radius:0 6px 6px 0;margin-bottom:8px;
+  font-family:'Cormorant Garamond',serif;font-size:15px;
+  font-style:italic;color:var(--soft);line-height:1.8;
+}
+.fiche-accent .cite{
+  display:block;margin-top:6px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  font-style:normal;letter-spacing:0.08em;color:var(--dim);
+}
+.fiche-warning{
+  padding:10px 14px;background:rgba(201,169,110,0.05);
+  border:1px solid var(--gold-b);border-radius:6px;margin-bottom:8px;
+  font-size:12px;color:var(--soft);line-height:1.75;
+}
+.fiche-warning::before{content:'⚠ ';color:var(--gold);}
+
+/* ── TRAINING ─────────────────────────────────────── */
+.training-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.training-card{
+  padding:18px 16px;background:var(--s1);border:1px solid var(--border);
+  border-radius:6px;cursor:pointer;transition:all 0.15s;text-align:left;
+}
+.training-card:hover{border-color:var(--border2);background:var(--s2);}
+.training-card-icon{font-size:18px;margin-bottom:8px;}
+.training-card-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;}
+.training-card-count{
+  font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);
+}
+.training-card-desc{font-size:12px;color:var(--soft);margin-top:5px;line-height:1.5;}
+
+/* ── FLASHCARDS ───────────────────────────────────── */
+.flashcard-container{perspective:1000px;margin-bottom:12px;}
+.flashcard{
+  width:100%;height:190px;position:relative;
+  transform-style:preserve-3d;transition:transform 0.45s ease;cursor:pointer;
+}
+.flashcard.flipped{transform:rotateY(180deg);}
+.flashcard-face{
+  position:absolute;inset:0;border-radius:8px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;align-items:center;justify-content:center;padding:22px;text-align:center;
+}
+.flashcard-front{background:var(--s2);border:1px solid var(--border2);}
+.flashcard-back{
+  background:var(--s3);border:1px solid var(--gold-b);
+  transform:rotateY(180deg);
+}
+.flashcard-front-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:400;line-height:1.7;color:var(--text);
+}
+.flashcard-back-text{font-size:13px;line-height:1.75;color:var(--soft);}
+.flashcard-hint{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--dim);margin-top:8px;letter-spacing:0.12em;
+}
+.flashcard-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.flashcard-nav-btn{
+  padding:7px 16px;background:var(--s1);border:1px solid var(--border);
+  border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);cursor:pointer;transition:all 0.15s;
+}
+.flashcard-nav-btn:hover{border-color:var(--border2);color:var(--soft);}
+.flashcard-counter{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);}
+
+/* ── RESSOURCES ────────────────────────────────────── */
+.resource-card{
+  display:flex;align-items:flex-start;gap:14px;padding:16px 18px;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:6px;margin-bottom:8px;transition:border-color 0.15s;
+}
+.resource-card:hover{border-color:var(--border2);}
+.resource-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.resource-info{flex:1;}
+.resource-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.resource-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:3px;
+}
+.resource-desc{font-size:12px;color:var(--soft);line-height:1.5;}
+.resource-btn{
+  flex-shrink:0;padding:5px 10px;background:var(--s2);
+  border:1px solid var(--border);border-radius:4px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--dim);cursor:pointer;transition:all 0.15s;
+  white-space:nowrap;margin-top:2px;
+  text-decoration:none;display:inline-block;
+}
+.resource-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── CARTE MENTALE (canvas) ────────────────────────── */
+#cm-canvas{cursor:grab;touch-action:none;display:block;}
+.cm-detail{
+  padding:16px 18px;background:var(--s2);
+  border:1px solid var(--border2);border-radius:6px;
+  margin-top:10px;animation:fadeUp 0.2s ease;
+}
+.cm-detail-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:400;margin-bottom:8px;
+}
+.cm-detail-body{font-size:13px;line-height:1.85;color:var(--soft);}
+.cm-detail-body strong{color:var(--text);font-weight:500;}
+.cm-detail-body em{color:var(--gold);font-style:italic;}
+.cm-controls{
+  display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;
+}
+.cm-btn{
+  padding:4px 10px;background:var(--s2);border:1px solid var(--border);
+  border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);cursor:pointer;transition:all 0.15s;
+}
+.cm-btn:hover{border-color:var(--border2);color:var(--soft);}
+.cm-hint{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;
+}
+
+/* ── MISSED ────────────────────────────────────────── */
+.missed-block{padding:14px 16px;border-bottom:1px solid var(--border);}
+.missed-block:last-child{border-bottom:none;}
+.missed-q{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;color:var(--text);margin-bottom:8px;line-height:1.7;
+}
+.missed-cat{
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--red);background:var(--red-d);
+  border:1px solid rgba(192,104,96,0.25);border-radius:3px;
+  padding:2px 6px;margin-bottom:7px;
+}
+.missed-answer{
+  padding:8px 12px;border-left:2px solid var(--green);
+  background:var(--green-d);border-radius:0 4px 4px 0;
+  margin-bottom:6px;font-size:12px;color:var(--soft);line-height:1.65;
+}
+.missed-exp{
+  padding:8px 12px;border-left:2px solid var(--border2);
+  background:var(--s2);border-radius:0 4px 4px 0;
+  font-size:12px;color:var(--soft);line-height:1.75;
+}
+.missed-label{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;
+}
+.lb-full-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--border);
+}
+.lb-full-title{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--soft);
+}
+.lb-full-row{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px;border-bottom:1px solid var(--border);font-size:13px;
+}
+.lb-full-row:last-child{border-bottom:none;}
+.lb-full-row.mine{background:var(--gold-d);}
+.lb-full-rank{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--dim);min-width:22px;
+}
+.lb-full-rank.r1{color:#c8a96e;}
+.lb-full-rank.r2{color:#888;}
+.lb-full-rank.r3{color:#a07840;}
+.lb-full-name{flex:1;}
+.lb-full-pts{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+}
+.lb-full-pct{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--dim);min-width:36px;text-align:right;
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+      <div class="header-eyebrow">Philosophie · M2 · 2025–26</div>
+  <div class="header-ornament"></div>
+  <h1 class="header-title">L'esprit <em>et</em> la machine</h1>
+  <p class="header-subtitle">Cybernétique, Turing, Searle, Fodor, Wittgenstein</p>
+  <div class="header-tags">
+    <span class="header-tag">Cybernétique</span>
+    <span class="header-tag">Test de Turing</span>
+    <span class="header-tag">Chambre chinoise</span>
+    <span class="header-tag">Computationnalisme</span>
+    <span class="header-tag">Erreur méréologique</span>
+  </div>
+  <blockquote class="header-quote">
+    « Il n'y a pas d'esprit dans la machine, mais l'esprit n'est pas non plus une sorte de machine. »
+    <cite>— Wittgenstein · Ryle · Kenny · Hacker</cite>
+  </blockquote>
+</header>
+
+<!-- ── NAV ── -->
+<div class="nav-wrap">
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('quiz',this)">QCM</button>
+    <button class="nav-tab" onclick="showPage('fiches',this)">Fiches</button>
+    <button class="nav-tab" onclick="showPage('training',this)">Entraînement</button>
+    <button class="nav-tab" onclick="showPage('cartes',this)">Cartes mentales</button>
+    <button class="nav-tab" onclick="showPage('dissert',this)">Disserter</button>
+    <button class="nav-tab" onclick="showPage('ressources',this)">Ressources</button>
+  </nav>
+</div>
+
+<div class="app">
+  <div id="page-quiz"      class="page active"><div id="root"></div></div>
+  <div id="page-fiches"    class="page"><div id="fiches-root"></div></div>
+  <div id="page-training"  class="page"><div id="training-root"></div></div>
+  <div id="page-cartes"    class="page"><div id="cartes-root"></div></div>
+  <div id="page-dissert"   class="page"><div id="dissert-root"></div></div>
+  <div id="page-ressources"class="page"><div id="ressources-root"></div></div>
+</div>
+
+<script>
+// ── UTILS ────────────────────────────────────────────
+let fichesInited=false,trainingInited=false,cartesInited=false,dissertInited=false,ressourcesInited=false;
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(name==='fiches'&&!fichesInited)renderFiches();
+  if(name==='training'&&!trainingInited)renderTraining();
+  if(name==='cartes'&&!cartesInited)renderCartes();
+  if(name==='dissert'&&!dissertInited)renderDissert();
+  if(name==='ressources'&&!ressourcesInited)renderRessources();
+}
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function buildQ(q){const o=shuffle([...q.opts]);return{...q,shuffledOpts:o,newCorrect:o.indexOf(q.opts[q.correct])};}
+
+// ── JSONBIN ──────────────────────────────────────────
+const BIN_ID="69fe9453250b1311c323f5b9";
+const API_KEY="$2a$10$spcARoTIDS68iE/PlwGAd.GZczTQ3q52Y0ZzyBDCS9ys76m4XYkLW";
+const BASE="https://api.jsonbin.io/v3/b/"+BIN_ID;
+const JH={"Content-Type":"application/json","X-Master-Key":API_KEY};
+const TOTAL=20,TIMER_SEC=30;
+function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('machine2_uid',u);}return u;}catch{return'g_'+Date.now();}}
+async function fetchScores(){try{const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});const d=await r.json();return d.record?.scores||[];}catch{return[];}}
+async function saveScore(name,pts){try{const uid=getUID();const sc=await fetchScores();let ex=sc.findIndex(s=>s.uid===uid);if(ex<0)ex=sc.findIndex(s=>s.name.toLowerCase()===name.toLowerCase());if(ex>=0){const p=sc[ex];sc[ex]={uid,name,pts:pts>p.pts?pts:p.pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")};}else sc.push({uid,name,pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")});sc.sort((a,b)=>b.pts-a.pts);await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:sc})});return sc;}catch(e){console.error(e);return[];}}
+
+// ── BANQUE ───────────────────────────────────────────
+const BANK=[
+  {cat:"Cybernétique",q:"Selon Rosenblueth, Wiener et Bigelow (1943), qu'est-ce qui distingue une torpille d'une roulette ?",opts:["La torpille est intrinsèquement dirigée vers un but via un feedback négatif — la roulette est conçue précisément pour l'absence de but","La torpille est plus complexe mécaniquement que la roulette","La torpille a une intention — la roulette est purement mécanique","La torpille est artificielle — la roulette est un phénomène naturel"],correct:0,exp:"RWB distinguent les machines <strong>intrinsèquement</strong> dirigées vers un but (torpille, servomécanisme) des machines dont la performance est régulière sans but intrinsèque (roulette, horloge). Le critère : le <em>feedback négatif</em> — les signaux venant du but corrigent l'erreur en permanence."},
+  {cat:"Cybernétique",q:"Qu'est-ce que le feedback négatif dans la terminologie cybernétique ?",opts:["Les signaux venant du but sont utilisés pour réduire l'erreur — rétroaction correctrice","Un signal qui amplifie la perturbation d'entrée","L'absence de tout signal correcteur — comportement entièrement prédéterminé","Un signal qui informe la machine de son état initial"],correct:0,exp:"Le <strong>feedback négatif</strong> est la rétroaction correctrice : le signal venant du but réduit l'écart entre la position actuelle et l'objectif. Exemple : le thermostat. S'oppose au feedback positif (amplification, instabilité). Tout comportement dirigé vers un but <em>exige</em> un feedback négatif."},
+  {cat:"Cybernétique",q:"Quelle est l'objection de Shanker à l'usage du concept de 'but' par RWB ?",opts:["Ils introduisent un homonyme trompeur : leur 'but' coupe les liens internes entre but, conscience et volition","Leur concept de but est trop étroit — il ne s'applique qu'aux servomécanismes électroniques","Leur analyse est trop mentaliste — ils prêtent des intentions aux machines","Leur concept de feedback est logiquement incohérent"],correct:0,exp:"Shanker : RWB introduisent un <strong>homonyme trompeur</strong> de 'suivre un but'. Dans leur cadre, un système est 'orienté vers un but' même s'il n'effectue pas de choix, ne peut être dit <em>essayer</em> d'atteindre ce but, et n'en est pas conscient. Les relations internes entre but, conscience et volition deviennent externes — purement relationnelles et mécaniques."},
+  {cat:"Cybernétique",q:"Pourquoi un animal sans langage ne peut-il pas agir 'pour des raisons' selon Kenny ?",opts:["Seules les créatures capables de donner des raisons (= langagières) peuvent agir pour des raisons — le lien entre intention et motif est interne seulement pour des êtres langagiers","Les animaux n'ont pas de cerveau assez complexe pour représenter des raisons","Les animaux n'ont pas conscience d'eux-mêmes — donc pas d'intention véritable","Les animaux ont des raisons mais sont incapables de les formuler"],correct:0,exp:"Pour Kenny : même si un chimpanzé fait X en vue de Y (utilise un bâton pour attraper des bananes), il ne fait pas X <strong>pour une raison</strong>. Le lien entre intention et motif est <em>interne</em> (déductible réciproquement) seulement pour des êtres langagiers capables de raisonnement pratique. Une intention n'est pas une cause interne de l'action — c'est l'action elle-même qui est cause."},
+  {cat:"Cybernétique",q:"Qu'est-ce que la téléonomie et en quoi se distingue-t-elle de la téléologie classique ?",opts:["Téléonomie = but contrôlé par feedback, sans cause finale ni projet — la téléologie classique impliquait des causes subséquentes dans le temps","La téléonomie affirme que tout phénomène naturel est orienté vers un but","La téléonomie s'applique aux machines — la téléologie aux organismes vivants","La téléonomie est une science empirique — la téléologie est une métaphysique arbitraire"],correct:0,exp:"Monod : le <strong>postulat d'objectivité</strong> (Galilée/Descartes) interdit les causes finales. La téléonomie conserve la notion de but opératoire sans cause subséquente — le but est une condition finale vers laquelle le système est <em>contrôlé</em> par feedback. La téléologie classique avait été discréditée parce qu'elle supposait une cause postérieure à l'effet."},
+  {cat:"Test de Turing",q:"En quoi consiste le jeu de l'imitation (Turing, 1950) ?",opts:["Un juge communique par écrit avec un humain et une machine cachés — si la machine trompe le juge, Turing dit qu'il n'y a aucune raison de ne pas dire qu'elle pense","Un juge soumet une machine à des tests de QI standardisés","Une machine joue aux échecs contre un humain — la victoire prouve la pensée","Un jury de philosophes évalue si une machine peut résoudre des problèmes formels"],correct:0,exp:"Turing : les questions sont écrites (pour exclure les indices vocaux), le juge parle à deux interlocuteurs cachés (un humain, une machine). Si la machine passe le test, Turing suggère qu'il n'y aurait <strong>aucune raison de ne pas dire qu'elle pense</strong>. Il reprend le critère cartésien de pertinence : répondre <em>au sens</em> de ce qui est dit."},
+  {cat:"Test de Turing",q:"Pourquoi Haugeland préfère-t-il le test de Turing aux tests de QI pour évaluer l'intelligence des machines ?",opts:["Les tests de QI présupposent que le sujet a une intelligence mesurable — c'est précisément la question pour les machines ; et ils peuvent mesurer des corrélats contingents plutôt que l'intelligence","Les tests de QI sont trop difficiles pour les machines actuelles","Les tests de QI mesurent la vitesse de calcul — les machines les dépassent toujours","Les tests de QI sont culturellement biaisés — le test de Turing est neutre"],correct:0,exp:"Haugeland : les tests de QI (1) <strong>présupposent</strong> que le sujet a une intelligence mesurable — or c'est la question pour les machines ; (2) risquent de reposer sur des corrélats contingents — une calculatrice extrait des racines carrées mieux qu'un humain sans être intelligente. Le test de Turing évalue si une entité <em>est</em> intelligente, non son degré présupposé."},
+  {cat:"Test de Turing",q:"Comment Turing répond-il à l'argument de la conscience (Jefferson) ?",opts:["En montrant que pousser l'argument à l'extrême mène au solipsisme — la seule façon d'être sûr qu'un homme pense serait d'être cet homme, position que Jefferson n'accepterait pas","En affirmant que les machines ont effectivement des émotions","En acceptant l'argument : les machines ne peuvent pas ressentir de plaisir ou de peine","En proposant un test neurologique pour mesurer les émotions des machines"],correct:0,exp:"Jefferson : tant qu'une machine ne peut ressentir du plaisir pour ses succès, de la peine pour ses erreurs... Turing répond : pousser cet argument à l'extrême conduit au <strong>solipsisme</strong> — la seule façon d'être sûr qu'un homme pense serait d'être cet homme. Jefferson n'accepterait pas cette position ; il accepterait donc le test de Turing comme critère."},
+  {cat:"Test de Turing",q:"En quoi consiste l'objection de Lady Lovelace et la réponse de Turing ?",opts:["La machine ne fait que ce qu'on lui demande — Turing : cette objection repose sur la fausse supposition que toutes les conséquences d'un fait sautent immédiatement à l'esprit","La machine ne peut pas créer — Turing : créer n'est pas une propriété psychologique distinctive","La machine est entièrement déterministe — Turing : l'homme l'est aussi","La machine n'a pas de mémoire long terme — Turing : on peut en construire une"],correct:0,exp:"Lovelace : la machine analytique n'a aucune prétention à <em>créer</em>. Turing : cette objection repose sur l'erreur de croire que dès qu'on connaît un fait, <strong>toutes ses conséquences sautent simultanément à l'esprit</strong>. Ce n'est pas le cas — les machines peuvent produire des résultats genuinement surprenants, même pour leurs concepteurs."},
+  {cat:"Test de Turing",q:"Quelle est la critique de Fodor concernant le test de Turing comme condition suffisante ?",opts:["Une machine passant le test peut être incapable de suivre 'Veille sur le bébé' — le test ne mesure qu'une des innombrables capacités qui constituent la rationalité","Le test est trop facile — les machines actuelles le passent toutes","Le test ne mesure pas la conscience mais seulement la mémoire verbale","Le test est culturellement biaisé"],correct:0,exp:"Fodor : le test de Turing n'est pas une condition <em>suffisante</em>. Une machine passant le test peut néanmoins être incapable de nombreuses performances non verbales — <strong>'Veille sur le bébé pendant que je vais faire les courses'</strong>. Le test ne mesure qu'une capacité parmi toutes celles qui constituent la rationalité d'une personne : produire des réponses raisonnables à des questions verbales."},
+  {cat:"Machine de Turing",q:"Qu'est-ce qu'une machine de Turing et quel problème Turing cherchait-il à résoudre ?",opts:["Un modèle abstrait du calcul (ruban, tête, table d'états) — Turing montre qu'aucune méthode effective ne peut décider si une machine s'arrêtera sur une donnée","Un calculateur physique réel conçu pour accélérer les calculs mathématiques","Un programme simulant l'activité neuronale cerveau","Un automate destiné à construire d'autres automates"],correct:0,exp:"La machine de Turing est un <strong>objet mathématique</strong>, non une machine réelle. Ruban illimité, tête de lecture-écriture, table de règles. Elle répond par la négative à l'<em>Entscheidungsproblem</em> de Hilbert : il n'existe pas de méthode effective pour décider si une machine donnée s'arrêtera ou non sur une donnée donnée."},
+  {cat:"Machine de Turing",q:"Quel est le résultat de Gödel (1931) et en quoi prépare-t-il Turing ?",opts:["Quels que soient les axiomes choisis, il restera des énoncés indécidables — les systèmes sont nécessairement incomplets","Gödel prouve que les mathématiques sont cohérentes si et seulement si elles sont complètes","Gödel démontre que tout énoncé vrai est démontrable","Gödel montre que le cerveau humain ne peut pas être simulé par un automate fini"],correct:0,exp:"Gödel (1931) : quels que soient les axiomes, il existe toujours des <strong>énoncés indécidables</strong> — ni démontrables ni réfutables. Le programme de Hilbert (cohérence + complétude) est réfuté. Cela ouvre la question : peut-on au moins décider si un énoncé est <em>démontrable</em> ? C'est l'Entscheidungsproblem auquel Turing répondra par la négative."},
+  {cat:"Machine de Turing",q:"Qu'est-ce que la thèse de Church-Turing ?",opts:["Tout problème de calcul fondé sur une procédure algorithmique peut être résolu par une machine de Turing — définition formelle du calcul effectif","Toute machine de Turing peut simuler un cerveau humain","Les machines peuvent penser si et seulement si elles sont universelles","Les algorithmes sont équivalents aux raisonnements humains"],correct:0,exp:"La thèse de Church-Turing : pour toute procédure que l'esprit humain peut calculer <strong>concrètement et effectivement</strong>, il existe une machine de Turing capable de la calculer. Ce n'est pas une preuve — c'est une thèse définissant rigoureusement la notion intuitive de 'procédure effective'. Elle relie le concept mathématique de calculabilité à la pratique du calcul."},
+  {cat:"Chambre chinoise",q:"En quoi consiste l'expérience de la Chambre Chinoise (Searle, 1980) ?",opts:["Un homme suit des règles syntaxiques pour combiner des idéogrammes sans comprendre le chinois — preuve que la syntaxe seule ne génère pas la sémantique","Un programme d'IA traduit le chinois sans avoir été entraîné","Un test prouvant que les machines peuvent acquérir le sens par apprentissage","Un dispositif montrant qu'un humain peut imiter une machine"],correct:0,exp:"L'homme dans la Chambre suit un livret de règles syntaxiques (en anglais) pour combiner des idéogrammes — il produit des réponses correctes <strong>sans comprendre un seul mot de chinois</strong>. Il occupe la position de la machine dans le jeu de Turing. Morale : les machines ont une syntaxe mais pas de sémantique. L'intentionnalité dérivée des symboles présuppose l'intentionnalité intrinsèque d'un esprit."},
+  {cat:"Chambre chinoise",q:"Qu'est-ce que l'intentionnalité intrinsèque vs dérivée selon Searle ?",opts:["Intrinsèque = propriété originale de l'esprit d'être 'à propos de' / dérivée = intentionnalité imposée par un esprit à des objets physiques qui en seraient dépourvus","Intrinsèque = propre aux machines / dérivée = propre aux humains","Intrinsèque = consciente / dérivée = inconsciente","Intrinsèque = biologique / dérivée = culturelle"],correct:0,exp:"Searle : l'<strong>intentionnalité intrinsèque</strong> est une propriété originale de l'esprit — être directement <em>à propos de</em> quelque chose. L'<strong>intentionnalité dérivée</strong> est celle que l'esprit <em>impose</em> à des objets physiques (mots, symboles). Les ordinateurs n'ont que de l'intentionnalité dérivée — ils ne comprennent pas ce qu'ils manipulent."},
+  {cat:"Chambre chinoise",q:"Quel est le second argument de Searle concernant la syntaxe comme propriété intrinsèque ?",opts:["La computation n'est pas intrinsèque à la nature — elle n'existe que relativement à un observateur : 'avoir une syntaxe' n'est pas une propriété indépendante de l'observateur","Les machines ont une syntaxe intrinsèque mais pas de sémantique intrinsèque","La syntaxe est une propriété biologique exclusive aux organismes vivants","La syntaxe computationnelle est identique à la syntaxe neuronale"],correct:0,exp:"Searle : la syntaxe n'est pas dans la physique du système — elle est <strong>dans l'œil de l'observateur</strong>. La computation existe relativement à un agent qui l'interprète. Contrairement à la masse ou à la photosynthèse (propriétés indépendantes de l'observateur), 'avoir une syntaxe' est une propriété <em>dépendante</em>. Deep Blue ne joue pas aux échecs — nous interprétons ses sorties comme des mouvements."},
+  {cat:"Chambre chinoise",q:"Comment Hacker prolonge-t-il l'argument de Searle via l'exemple de la calculatrice ?",opts:["Si les sorties de la calculatrice étaient connectées à un piano, elle deviendrait une machine à musique — le calcul n'est pas intrinsèque à la machine mais dans notre interprétation","La calculatrice calcule au sens plein du terme comme un humain","La calculatrice a une syntaxe intrinsèque mais pas de sémantique","La calculatrice est consciente de ses opérations à un degré minimal"],correct:0,exp:"Hacker : si le panneau d'affichage était remplacé par un piano électrique, la calculatrice deviendrait une machine à produire de la musique. <strong>Le calcul n'est pas intrinsèque</strong> — il est dans notre interprétation de ses sorties. Dire qu'une calculatrice 'calcule' est un <em>usage secondaire</em> du terme. Bennett et Hacker : « les machines produisent les résultats du calcul sans que quiconque calcule effectivement. »"},
+  {cat:"Émergence (Searle)",q:"Qu'est-ce que la réduction causale sans réduction ontologique chez Searle ?",opts:["Les états mentaux sont causalement produits et réalisés par les microprocessus cérébraux, mais la conscience ne peut pas se redéfinir en termes de microstructure — 'ontologie de première personne'","La conscience est identique aux états cérébraux — pas de dualisme possible","La conscience est un épiphénomène sans causalité propre","La conscience émerge du cerveau et possède une causalité autonome"],correct:0,exp:"Searle : <strong>réduction causale oui, ontologique non</strong>. La conscience est causée par et réalisée dans les microprocessus cérébraux — comme la liquidité dans la structure moléculaire. Mais la conscience a une <em>ontologie de première personne</em> : 'je suis conscient indépendamment de ce que quiconque d'autre pense.' Contrairement à la chaleur, elle ne peut pas se redéfinir en termes de microstructure sous-jacente."},
+  {cat:"Émergence (Searle)",q:"Pourquoi Bennett et Hacker critiquent-ils l'ontologie à la première personne de Searle ?",opts:["Si un état de conscience est forcément celui de quelqu'un (= première personne), alors il faudrait attribuer la même ontologie au sourire — qui est forcément le sourire de quelqu'un","Searle a raison : l'ontologie de première personne est exclusive à la conscience","La notion est valide mais inutile pour la philosophie de l'esprit","Elle ne s'applique qu'aux états affectifs, pas à tous les états conscients"],correct:0,exp:"Bennett et Hacker : si l'argument pour l'irréductibilité de la conscience est qu'elle est <strong>forcément celle de quelqu'un</strong>, le même argument s'appliquerait au sourire, à la douleur, à la marche — qui sont tous forcément ceux <em>de quelqu'un</em>. L'argument est trop large et ne distingue pas la conscience des autres propriétés de la personne."},
+  {cat:"Wittgenstein / Hacker",q:"Qu'est-ce que l'erreur méréologique selon Bennett et Hacker ?",opts:["Attribuer à une partie (le cerveau) des propriétés qui ne peuvent appartenir qu'au tout (la personne) — dire 'le cerveau pense' n'est pas faux mais dépourvu de sens","Confondre le tout et ses parties dans un raisonnement déductif","Attribuer des propriétés physiques à des entités mentales","Réduire des propriétés macroscopiques à des propriétés microscopiques"],correct:0,exp:"L'<strong>erreur méréologique</strong> : attribuer à une partie (cerveau, neurone) des propriétés n'ayant de sens que pour le tout (la personne). Wittgenstein : 'c'est seulement d'un être humain vivant qu'on peut dire il voit, pense, est conscient.' Dire 'le cerveau pense' n'est pas faux — c'est <em>dépourvu de sens</em>, comme attribuer la puissance du moteur au seul carburateur."},
+  {cat:"Wittgenstein / Hacker",q:"Quelle est la distinction entre comportement en accord avec une règle et comportement guidé par une règle (Wittgenstein) ?",opts:["Un comportement peut être en accord avec une règle sans que l'agent l'ait suivie — les machines sont en accord avec des règles, elles ne les suivent pas au sens propre","En accord avec une règle = automatique / guidé par une règle = délibéré","Seuls les humains peuvent suivre des règles car ils ont une volonté","Les deux expressions désignent la même chose selon Wittgenstein"],correct:0,exp:"Wittgenstein : beaucoup de comportements sont <strong>en accord</strong> avec une règle sans que l'agent ait à proprement parler <em>suivi</em> cette règle. Une calculatrice produit des additions correctes — elle est en accord avec la règle, elle ne la suit pas. Suivre une règle suppose de pouvoir l'appliquer dans de nouveaux cas, l'expliquer, la reconnaître — ce qui requiert une forme de compréhension que la machine n'a pas."},
+  {cat:"Computationnalisme",q:"Quel est l'argument de Fodor en faveur d'une implémentation computationnelle des lois psychologiques ?",opts:["Les processus mentaux tendent à préserver la vérité — seule une implémentation computationnelle peut expliquer comment des entrées vraies produisent fiablement des sorties vraies","Les ordinateurs sont les seules machines capables de traiter du langage naturel","Les processus biologiques sont trop lents pour expliquer la pensée","Les lois psychologiques sont identiques aux lois neurologiques"],correct:0,exp:"Fodor : le fait le plus important sur l'esprit est son caractère <strong>truth-preserving</strong>. Si on part de pensées vraies et qu'on pense, on arrive typiquement à des pensées vraies. Comme Turing l'a montré, une machine pilotée <em>syntaxiquement</em> peut fiablement transformer des entrées vraies en sorties vraies. C'est la seule proposition sérieuse de mécanisme pour expliquer ce fait."},
+  {cat:"Computationnalisme",q:"Qu'est-ce que l'hypothèse du mentalais (mentalese) chez Fodor ?",opts:["Il existerait un langage de la pensée interne, inné et universel — les processus cognitifs consistent en calculs sur ces symboles mentaux","Le mentalais est un dialecte propre à chaque individu","Le mentalais est le code binaire du cerveau","Le mentalais est le langage naturel intériorisé"],correct:0,exp:"Fodor (influencé par Chomsky) : les processus de pensée consistent en calculs sur des <strong>symboles mentaux</strong> — le <em>mentalais</em>. Ce langage est inné, universel, distinct du langage naturel qui n'en serait que l'expression extérieure. L'acquisition du langage naturel <em>présuppose</em> la maîtrise préalable du mentalais."},
+  {cat:"Computationnalisme",q:"Quelle est la critique de Bouveresse concernant la relation langage/pensée chez Fodor ?",opts:["Fodor traite la relation comme externe (mécanisme acquis reliant langage à processus internes) — alors qu'elle est interne : le langage fait partie des critères de la pensée, non un simple symptôme","Fodor sépare trop radicalement pensée et langage","Fodor confond le langage et le code neuronal","Fodor ne reconnaît pas le rôle du contexte social"],correct:0,exp:"Bouveresse : dans la perspective de Fodor, comprendre quelqu'un c'est accéder <em>indirectement</em> à des processus mentaux via le langage. Relation <strong>externe</strong>. Or elle est <em>interne</em> : le langage fait partie des critères de la pensée (pas un symptôme). On ne peut pas vérifier indépendamment qu'un locuteur pense — comme on peut vérifier une pneumonie par radiographie."},
+  {cat:"Externalisme (Putnam)",q:"Quelle est la thèse principale de Putnam dans 'The Meaning of Meaning' ?",opts:["Les significations ne sont pas dans la tête — des traits de l'environnement inconnus du locuteur façonnent la signification","Les significations sont entièrement dans la tête — l'environnement n'y joue aucun rôle","La signification est une propriété du cerveau seul","Les significations sont construites collectivement uniquement"],correct:0,exp:"Putnam via la Terre-Jumelle : deux locuteurs jumeaux ont les mêmes états mentaux mais leurs termes 'eau' ont des extensions différentes (H2O / XYZ). Les états mentaux ne déterminent pas l'extension. <strong>Meanings ain't in the head</strong>. Ce sont des traits de l'environnement réel (composition chimique) qui fixent la signification — désignateurs rigides + indexicalité."},
+  {cat:"Externalisme (Putnam)",q:"Comment Fodor répond-il à l'externalisme de Putnam ?",opts:["Les jumeaux putnamiens (XYZ) sont nomologiquement impossibles — la survenance du contenu large sur les computations est nomologiquement nécessaire dans notre monde","Fodor accepte l'externalisme et révise sa psychologie","Fodor affirme que les jumeaux auraient des états mentaux différents","Fodor rejette entièrement la notion de contenu large"],correct:0,exp:"Fodor : la survenance du contenu large sur les computations n'est pas <strong>conceptuellement nécessaire</strong> (Putnam a raison) mais elle est <strong>nomologiquement nécessaire</strong> — XYZ est nomologiquement impossible selon notre chimie. Les cas problématiques ne se présentent pas dans les mondes voisins nomologiquement semblables au nôtre."},
+  {cat:"Synthèse",q:"Quelle est la conclusion de Bennett et Hacker sur la nature de l'esprit ?",opts:["L'esprit est une forme de représentation pour parler de capacités mentales (pensée, mémoire, volonté) attribuables à la personne entière — non au cerveau","L'esprit est une propriété émergente du cerveau réductible causalement","L'esprit est une entité immatérielle — le dualisme est inévitable","L'esprit est identique à l'activité computationnelle du cerveau"],correct:0,exp:"Bennett & Hacker (dans la lignée de Wittgenstein/Ryle/Kenny) : l'esprit est une <strong>forme de représentation</strong> pour parler de capacités mentales — pensée, mémoire, volonté — et de leur exercice. Les capacités ne sont pas localisables. Le cerveau est leur véhicule. Mais elles doivent être attribuées à la <em>personne entière</em>."},
+  {cat:"Synthèse",q:"Pourquoi les modèles computationnels sont-ils des redescriptions plutôt que des explications selon B&H ?",opts:["Un modèle computationnel redécrit dans un autre vocabulaire ce que les concepts psychologiques ordinaires décrivent déjà — comme modéliser la météo ne prouve pas que le temps résulte de computations","Les modèles computationnels expliquent réellement car ils sont mathématiquement rigoureux","Les modèles computationnels sont valides mais incomplets — il faut les compléter biologiquement","Les modèles computationnels sont des explications causales complètes"],correct:0,exp:"Bennett & Hacker : élaborer un modèle computationnel de phénomènes cognitifs ne prouve pas que ces phénomènes <em>résultent</em> de computations. On peut modéliser la météo computationnellement — cela ne signifie pas que les orages calculent. Les modèles computationnels <strong>redécrivent</strong> dans un vocabulaire formel ce que les concepts psychologiques ordinaires décrivent déjà."},
+  {cat:"Synthèse",q:"Quelle est la thèse centrale du cours résumée par 'Il n'y a pas d'esprit dans la machine mais l'esprit n'est pas non plus une machine' ?",opts:["Rejeter à la fois l'IA forte (esprit = programme) et le matérialisme d'émergence (esprit = propriété cérébrale) — l'esprit est un ensemble de capacités de la personne entière","Les machines peuvent penser à condition d'être suffisamment complexes","L'esprit existe indépendamment du corps — dualisme renouvelé","L'esprit est dans le cerveau mais pas dans les machines artificielles"],correct:0,exp:"La thèse du cours : <strong>rejeter le dualisme</strong> ne conduit pas à dire que 'le cerveau pense' (erreur méréologique). <strong>Rejeter le computationnalisme</strong> ne conduit pas au dualisme. L'esprit est une forme de représentation pour parler de capacités (pensée, mémoire, volonté) de la personne entière. Les capacités ne sont pas localisables — leur véhicule est le cerveau."},
+];
+
+// ── FICHES ───────────────────────────────────────────
+const FICHES=[
+  {id:"f1",label:"Cybernétique",content:`
+    <div class="fiche-section">
+      <div class="fiche-section-title">Le comportement orienté vers un but (RWB, 1943)</div>
+      <div class="fiche-block">
+        <span class="auteur">RWB</span>
+        <span class="terme">Comportement</span> = toute modification d'une entité relativement à son environnement. <strong>But</strong> = condition finale vers laquelle le système est dirigé. Pas toutes les machines : une roulette est conçue pour l'<em>absence</em> de but ; une horloge a un comportement régulier mais non intrinsèquement dirigé vers un but.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">RWB</span>
+        <strong>Feedback négatif</strong> = rétroaction correctrice. Les signaux venant du but réduisent l'erreur. <em>Servomécanisme</em> = machine intrinsèquement dirigée vers un but via feedback. Feedback positif = amplification de la perturbation (peut mener à l'explosion). La torpille vs l'horloge.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Monod</span>
+        <strong>Téléonomie</strong> vs téléologie classique. Le postulat d'objectivité (Galilée/Descartes) interdit les causes finales. La téléonomie garde le but comme concept opératoire sans cause subséquente. La téléologie classique avait été discréditée pour avoir supposé une cause postérieure à l'effet.
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Les objections de Shanker et Kenny</div>
+      <div class="fiche-block">
+        <span class="auteur">Shanker</span>
+        RWB introduisent un <strong>homonyme trompeur</strong> de 'suivre un but'. Leur système est 'orienté vers un but' même sans choix, sans essai, sans conscience du but. Les relations <em>internes</em> entre but, conscience et volition deviennent <em>externes</em> — purement relationnelles.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Kenny</span>
+        Seules les créatures capables de <strong>donner des raisons</strong> (= langagières) peuvent agir <em>pour des raisons</em>. Le lien entre intention et motif est interne seulement pour les êtres langagiers. Un chimpanzé fait X pour Y mais pas <em>pour une raison</em>. Une intention n'est pas une cause interne — c'est l'action elle-même qui est cause.
+      </div>
+      <div class="fiche-warning">Distinction cruciale : être en accord avec une règle ≠ suivre une règle. Un chat court vers une souris — comportement prédictif mais non raisonné. Une intention n'est pas un pilote mental de l'action.</div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Babbage et les origines du calcul universel</div>
+      <div class="fiche-block">
+        <span class="auteur">Babbage</span>
+        Machine analytique (1834–36) : la <strong>bifurcation conditionnelle</strong> ('si C, alors A, sinon B') confère l'universalité — la machine peut choisir entre procédures en fonction de résultats qu'elle a elle-même calculés. Ada Lovelace : premier algorithme (1843). L'essentiel n'est pas dans les opérations de base mais dans leur <em>enchaînement systématique</em>.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Gödel 1931</span>
+        Quels que soient les axiomes, il existe des <strong>énoncés indécidables</strong>. Programme de Hilbert réfuté. Ouvre l'Entscheidungsproblem : peut-on décider si un énoncé est démontrable ? → Turing répond non en 1936.
+      </div>
+    </div>
+  `},
+  {id:"f2",label:"Turing",content:`
+    <div class="fiche-section">
+      <div class="fiche-section-title">La machine de Turing (1936)</div>
+      <div class="fiche-block">
+        <span class="auteur">Turing</span>
+        Objet <strong>mathématique</strong> : ruban illimité, tête de lecture-écriture, table d'états finis. Conçue pour répondre à l'<em>Entscheidungsproblem</em>. Réponse : aucune méthode effective pour décider si une machine s'arrêtera sur une donnée donnée. Thèse de Church-Turing : tout calcul effectif peut être simulé par une machine de Turing.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Turing / Hobbes</span>
+        Idée ancienne : le raisonnement est un calcul (<em>reckoning</em> chez Hobbes). Hobbes : le langage verbal n'est pas la condition de la pensée mais de la réflexion sur les pensées. Les animaux ont un discours mental, pas de discours verbal — pas de réflexion. Le discours mental = calcul sur des signes mentaux (occurrences dans le cerveau).
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Le jeu de l'imitation (1950)</div>
+      <div class="fiche-block">
+        <span class="auteur">Turing 1950</span>
+        Un juge communique par écrit avec deux interlocuteurs cachés (humain + machine). Si la machine trompe le juge, Turing : <strong>aucune raison de ne pas dire qu'elle pense</strong>. Questions écrites pour exclure les indices vocaux. Critère cartésien de pertinence repris : répondre <em>au sens</em> de ce qui est dit.
+      </div>
+      <div class="fiche-block">
+        <strong>Objection théologique</strong> : Dieu n'a donné d'âme qu'aux humains. Turing : il ne serait pas irrévérencieux de construire une machine accueillant une âme — comme nous procédons des enfants. <strong>Objection de Jefferson</strong> (conscience) : la machine doit ressentir plaisir et peine. Turing : pousser l'argument à l'extrême mène au solipsisme.
+      </div>
+      <div class="fiche-block">
+        <strong>Objection de Lovelace</strong> : la machine ne fait que ce qu'on lui demande. Turing : erreur de supposer que toutes les conséquences d'un fait sautent simultanément à l'esprit. <strong>Informalité</strong> : être une machine c'est être gouverné par des lois du comportement — si l'homme l'est aussi, l'argument est un undistributed middle.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Fodor</span>
+        Critique : le test ne mesure qu'une capacité parmi toutes celles qui constituent la rationalité. Une machine passant le test peut être incapable de <strong>'Veille sur le bébé'</strong> — tâche simple mobilisant une variété de comportements non verbaux.
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Critère cartésien de pertinence</div>
+      <div class="fiche-accent">
+        « Car on peut bien concevoir qu'une machine soit tellement faite qu'elle profère des paroles, et même qu'elle en profère quelques-unes à propos des actions corporelles qui causeront quelques changements en ses organes [...] mais non pas qu'elle les arrange diversement pour répondre au sens de tout ce qui se dira en sa présence, ainsi que des hommes les plus hébétés peuvent faire. »
+        <span class="cite">— Descartes, Discours de la Méthode, 5e partie</span>
+      </div>
+    </div>
+  `},
+  {id:"f3",label:"Searle",content:`
+    <div class="fiche-section">
+      <div class="fiche-section-title">La Chambre Chinoise (1980)</div>
+      <div class="fiche-block">
+        <span class="auteur">Searle</span>
+        Un homme suit des règles syntaxiques (livret en anglais) pour combiner des idéogrammes — il produit des réponses correctes <strong>sans comprendre un mot de chinois</strong>. Il occupe la position de la machine dans le jeu de Turing. Morale : les machines ont une <em>syntaxe</em> mais pas de <em>sémantique</em>. L'intentionnalité dérivée des symboles présuppose l'intentionnalité intrinsèque d'un esprit.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Searle</span>
+        <strong>Intentionnalité intrinsèque</strong> : propriété originale de l'esprit d'être 'à propos de'. <strong>Intentionnalité dérivée</strong> : intentionnalité imposée par un esprit à des objets physiques. Les ordinateurs n'ont que de la dérivée — ils ne comprennent pas ce qu'ils manipulent. Deep Blue ne joue pas aux échecs — nous interprétons ses sorties comme des mouvements.
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Le second argument : syntaxe et observateur</div>
+      <div class="fiche-block">
+        <span class="auteur">Searle</span>
+        La syntaxe n'est pas <strong>intrinsèque</strong> à la physique du système — elle est dans l'œil de l'observateur. La computation n'existe que relativement à un agent qui l'interprète. Propriété indépendante de l'observateur : masse, photosynthèse, charge électrique. Propriété dépendante : argent, mariage, syntax computationnelle.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Hacker</span>
+        Même argument via la calculatrice : si ses sorties étaient connectées à un piano, elle deviendrait une machine à musique. <em>Le calcul n'est pas intrinsèque</em> — il est dans notre interprétation. Dire qu'une calculatrice 'calcule' est un usage secondaire du terme.
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Émergence, réduction, erreur méréologique</div>
+      <div class="fiche-block">
+        <span class="auteur">Searle</span>
+        <strong>Réduction causale oui, ontologique non</strong>. Les états mentaux sont causés par et réalisés dans les microprocessus cérébraux (comme la liquidité dans la structure moléculaire). Mais la conscience a une <em>ontologie de première personne</em> — irréductible. Critique de B&H : ce critère s'appliquerait aussi au sourire (qui est forcément le sourire de <em>quelqu'un</em>).
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Bennett & Hacker</span>
+        <strong>Erreur méréologique</strong> : attribuer à une partie (cerveau, neurone) des propriétés n'ayant de sens que pour le tout (la personne). Wittgenstein : « c'est seulement d'un être humain vivant qu'on peut dire il voit, pense, est conscient. » Dire 'le cerveau pense' n'est pas faux — c'est dépourvu de sens.
+      </div>
+      <div class="fiche-accent">
+        « Les neurosciences n'ont pas la possibilité de prouver que le cerveau est capable de calculer quoi que ce soit. Ce sont les êtres humains qui calculent. »
+        <span class="cite">— Bennett & Hacker, Philosophical Foundations of Neuroscience, 2022</span>
+      </div>
+    </div>
+  `},
+  {id:"f4",label:"Fodor & Computationnalisme",content:`
+    <div class="fiche-section">
+      <div class="fiche-section-title">La RTM — Théorie représentationnelle de l'esprit</div>
+      <div class="fiche-block">
+        <span class="auteur">Fodor</span>
+        Les lois psychologiques sont <strong>intentionnelles</strong> et <strong>truth-preserving</strong>. Seule une implémentation computationnelle peut expliquer comment des pensées vraies produisent fiablement des pensées vraies. 'Ce que Turing a montré' : une machine pilotée syntaxiquement peut exploiter les parallélismes entre propriétés sémantiques et syntaxiques des symboles.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Fodor</span>
+        Hypothèse du <strong>mentalais</strong> (mentalese) : langage de la pensée interne, inné, universel. Influencé par Chomsky (LAD). L'acquisition du langage naturel présuppose la maîtrise préalable du mentalais. Le langage naturel est l'expression externe de processus computationnels internes.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Chomsky</span>
+        <strong>LAD</strong> (Language Acquisition Device) : structure innée pour expliquer la rapidité d'acquisition sur données parcellaires. Grammaire universelle. Critiques : Putnam (sous-estime l'apprentissage) ; Bruner (<em>LASS</em> — l'enfant apprend la grammaire comme moyen de faire des choses, non pour elle-même ; instrument principal = autre être humain familier).
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Critiques du computationnalisme</div>
+      <div class="fiche-block">
+        <span class="auteur">Bouveresse</span>
+        Fodor traite la relation langage/pensée comme <em>externe</em> (mécanisme acquis). Or elle est <strong>interne</strong> : le langage fait partie des critères de la pensée, non un simple symptôme. On ne peut pas vérifier la pensée indépendamment du discours.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Wittgenstein</span>
+        Si on remplace l'image mentale par une image peinte, elle perd son pouvoir apparent — les représentations internes semblent utiles seulement tant que leur nature reste <em>occulte</em>. Supposer un langage interne repousse le problème d'interprétation d'un cran. « Lorsque je pense en mots, je n'ai pas de 'significations' dans l'esprit en plus des expressions verbales. »
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Bennett & Hacker</span>
+        Les modèles computationnels sont des <strong>redescriptions</strong>, non des explications. Modéliser la météo computationnellement ne prouve pas que le temps résulte de computations. 'Penser' désigne typiquement une <em>disposition</em> (croyance), non un processus. Les dispositions résistent aux interruptions — on peut imputer une croyance à quelqu'un qui dort.
+      </div>
+    </div>
+  `},
+  {id:"f5",label:"Putnam & Externalisme",content:`
+    <div class="fiche-section">
+      <div class="fiche-section-title">L'externalisme sémantique</div>
+      <div class="fiche-block">
+        <span class="auteur">Putnam</span>
+        Expérience de la <strong>Terre-Jumelle</strong> : deux jumeaux, mêmes états mentaux, mais 'eau' = H2O ici / XYZ là-bas. L'intension (stéréotype mental) ne détermine pas l'extension. <em>Meanings ain't in the head</em>. Les termes d'espèces naturelles sont des désignateurs rigides : ils désignent le même objet dans tous les mondes possibles.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Putnam</span>
+        <strong>Division du travail linguistique</strong> : certains concepts sont déférentiels — je m'en remets à un expert (bijoutier pour l'or, botaniste pour les ormes). La signification est co-déterminée par l'environnement et par la communauté. Vecteur de la signification : marqueur syntaxique + marqueur sémantique + stéréotype + extension.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Fodor</span>
+        Réponse : XYZ est <strong>nomologiquement impossible</strong>. La survenance du contenu large sur les computations n'est pas conceptuellement nécessaire mais l'est nomologiquement. Les cas 'à la Putnam' et 'à la Frege' ne prolifèrent pas dans les mondes voisins au nôtre. La sémantique est une affaire de contrefactuels — l'épistémologie une affaire d'argent.
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">Enjeux pour la philosophie de l'esprit</div>
+      <div class="fiche-block">
+        <span class="auteur">Putnam → Descartes</span>
+        Putnam renverse le paradigme cartésien : pour Descartes, <em>je sais ce que je pense</em> mais j'ignore si les idées correspondent au réel (→ véracité divine). Pour Putnam, <em>je puis ne pas savoir ce que je pense</em> — si j'ignore que eau = H2O, j'ignore le contenu de mes propres pensées.
+      </div>
+      <div class="fiche-warning">Implication computationnaliste : si le contenu est partiellement externe, comment une psychologie purement computationnelle (états internes) peut-elle rendre compte des lois intentionnelles qui font intervenir le contenu large ? C'est la difficulté de la conjonction des thèses 2 et 3 de Fodor.</div>
+    </div>
+  `},
+  {id:"f6",label:"Wittgenstein & Conclusion",content:`
+    <div class="fiche-section">
+      <div class="fiche-section-title">Critère, symptôme et grammaire</div>
+      <div class="fiche-block">
+        <span class="auteur">Wittgenstein</span>
+        <strong>Critère</strong> vs <strong>symptôme</strong> : le discours est critère de la pensée (lié constitutivement), non symptôme (vérifiable indépendamment). On ne peut pas vérifier la pensée indépendamment du discours — comme on vérifie une pneumonie par radiographie. L'expression de la douleur <em>fait partie</em> de la douleur dans les cas où elle existe.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Wittgenstein</span>
+        <strong>Règle vs accord avec une règle</strong> : un comportement peut être en accord avec un nombre indéfini de règles sans avoir suivi aucune. Les machines 'en accord avec des règles' ne les <em>suivent</em> pas au sens propre — elles ne comprennent pas, ne peuvent pas les appliquer dans de nouveaux cas ni les expliquer.
+      </div>
+      <div class="fiche-accent">
+        « Dieu, s'il avait regardé dans nos âmes, n'aurait pas pu dire de quoi nous parlions. »
+        <span class="cite">— Wittgenstein, Recherches philosophiques, II, §283–284</span>
+      </div>
+      <div class="fiche-accent">
+        « Lorsque je pense en mots, je n'ai pas de 'significations' dans l'esprit en plus des expressions verbales. C'est plutôt que le langage est lui-même le véhicule des pensées. »
+        <span class="cite">— Wittgenstein, Recherches philosophiques, §329</span>
+      </div>
+    </div>
+    <div class="fiche-section">
+      <div class="fiche-section-title">La conclusion du cours : personne entière</div>
+      <div class="fiche-block">
+        <span class="auteur">B&H / Wittgenstein</span>
+        <strong>Erreur méréologique</strong> : le cerveau, un neurone, ne peuvent pas penser — ce n'est pas faux, c'est absurde. Wittgenstein : « c'est seulement d'un être humain vivant ou de ce qui lui ressemble qu'on peut dire il pense, voit, est conscient. »
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Kenny / B&H</span>
+        <strong>Capacités vs véhicule</strong> : les capacités mentales (penser, vouloir, percevoir) ne sont pas localisables — elles n'ont ni lieu ni date. Le cerveau est leur véhicule. Mais attribuer la capacité au véhicule est une erreur catégoriale — comme attribuer la capacité d'une clé à ouvrir une serrure au métal lui-même.
+      </div>
+      <div class="fiche-block">
+        <span class="auteur">Synthèse</span>
+        Rejeter le dualisme ne conduit pas à 'le cerveau pense'. Rejeter le computationnalisme ne conduit pas au dualisme. L'esprit est une <em>forme de représentation</em> pour parler de capacités mentales de la <strong>personne entière</strong>. Il n'y a pas d'esprit dans la machine — mais l'esprit n'est pas non plus une sorte de machine.
+      </div>
+    </div>
+  `},
+];
+
+// ── FLASHCARDS ───────────────────────────────────────
+const FLASHCARDS=[
+  {q:"Qu'est-ce que le feedback négatif (rétroaction correctrice) ?",a:"Signaux venant du but utilisés pour réduire l'erreur entre la position actuelle et l'objectif. Toute machine intrinsèquement dirigée vers un but en requiert un. Exemple paradigmatique : le thermostat."},
+  {q:"Formuler la distinction entre comportement en accord avec une règle et comportement guidé par une règle.",a:"Un comportement peut être en accord avec une règle sans que l'agent l'ait suivie. Suivre une règle suppose de comprendre, d'appliquer dans de nouveaux cas, d'expliquer. Les machines sont en accord — elles ne suivent pas au sens propre."},
+  {q:"Qu'est-ce que l'intentionnalité intrinsèque vs dérivée (Searle) ?",a:"Intrinsèque = propriété originale de l'esprit d'être 'à propos de'. Dérivée = intentionnalité imposée par un esprit à des objets physiques. Les ordinateurs n'ont que de l'intentionnalité dérivée — ils ne comprennent pas."},
+  {q:"Formuler la thèse centrale de la Chambre Chinoise.",a:"Un système peut avoir une syntaxe correcte sans avoir de sémantique. La syntaxe seule ne génère pas la signification. L'homme dans la chambre produit les bonnes sorties sans comprendre un mot de chinois."},
+  {q:"Qu'est-ce que l'erreur méréologique ?",a:"Attribuer à une partie (le cerveau) des propriétés qui n'appartiennent qu'au tout (la personne). Dire 'le cerveau pense' n'est pas faux — c'est dépourvu de sens, comme attribuer la puissance du moteur au carburateur."},
+  {q:"Quel est l'argument de Fodor en faveur d'une implémentation computationnelle ?",a:"Les processus mentaux sont truth-preserving. Seule une machine pilotée syntaxiquement peut fiablement transformer des entrées vraies en sorties vraies. C'est la seule proposition sérieuse de mécanisme pour ce fait."},
+  {q:"Qu'est-ce que l'hypothèse du mentalais ?",a:"Langage de la pensée interne, inné, universel. Les processus cognitifs consistent en calculs sur ces symboles mentaux. Le langage naturel n'en est que l'expression externe."},
+  {q:"Formuler le slogan de Putnam et son argument.",a:"'Meanings ain't in the head.' Deux jumeaux avec les mêmes états mentaux, mais 'eau' = H2O ici / XYZ là-bas. Les stéréotypes internes ne déterminent pas l'extension — la réalité extérieure la fixe."},
+  {q:"Quelle est la relation entre langage et pensée selon Wittgenstein ?",a:"Interne, non externe. Le langage fait partie des critères de la pensée (pas un simple symptôme). On ne peut pas vérifier la pensée indépendamment du discours. 'Le langage est lui-même le véhicule des pensées.'"},
+  {q:"Quelle est la conclusion de B&H sur la nature de l'esprit ?",a:"L'esprit est une forme de représentation pour parler de capacités mentales (pensée, mémoire, volonté) et de leur exercice. Les capacités ne sont pas localisables. Leur véhicule est le cerveau. Elles s'attribuent à la personne entière."},
+  {q:"Qu'est-ce que la réduction causale sans réduction ontologique (Searle) ?",a:"Les états mentaux sont causés par et réalisés dans les microprocessus cérébraux (réduction causale). Mais la conscience a une ontologie de première personne — irréductible ontologiquement (pas de réduction ontologique)."},
+  {q:"Pourquoi Shanker dit-il que RWB introduisent un 'homonyme trompeur' ?",a:"Leur concept de 'but' s'applique même à des systèmes sans choix, sans conscience du but, sans essai. Les relations internes entre but, conscience et volition deviennent externes."},
+  {q:"Qu'est-ce que la distinction critère / symptôme chez Wittgenstein ?",a:"Un symptôme peut être vérifié indépendamment. Un critère est lié constitutivement à ce dont il est le critère : le discours est critère de la pensée. On ne peut pas vérifier la pensée indépendamment du discours."},
+  {q:"Quel est le rôle de Kenny sur l'action intentionnelle ?",a:"Seules les créatures langagières peuvent agir pour des raisons. Le lien entre intention et motif est interne seulement pour elles. Une intention n'est pas une cause interne de l'action — l'action elle-même est cause."},
+];
+
+// ── RESSOURCES ───────────────────────────────────────
+const RESSOURCES=[
+  {icon:"📄",title:"Cours — Philosophie de l'esprit et la machine (PDF)",meta:"Cours · M2 · 2025–26",desc:"Le cours complet au format PDF — cybernétique, Turing, Searle, Fodor, Wittgenstein.",url:"https://drive.google.com/file/d/1uYZfIZ9klOwxtbl4rbVlGNVAND6hrP5E/view?usp=drive_link"},
+  {icon:"📄",title:"Turing — Computing Machinery and Intelligence (1950)",meta:"Article · Mind · Libre accès",desc:"L'article original du jeu de l'imitation, des objections et réponses. Fondateur.",url:"https://www.cs.ox.ac.uk/activities/ieg/e-library/sources/t_article.pdf"},
+  {icon:"📄",title:"Searle — Minds, Brains and Programs (1980)",meta:"Article · BBS",desc:"L'expérience de la Chambre Chinoise et la critique de l'IA forte.",url:"https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/minds-brains-and-programs/DC644B47A4299C637C89772FACC2706A"},
+  {icon:"📝",title:"SEP — Chinese Room Argument",meta:"Stanford Encyclopedia · Libre accès",desc:"Entrée exhaustive sur la Chambre Chinoise, les réponses et la littérature secondaire.",url:"https://plato.stanford.edu/entries/chinese-room/"},
+  {icon:"📝",title:"SEP — Turing Machines",meta:"Stanford Encyclopedia · Libre accès",desc:"Machines de Turing, thèse de Church-Turing, Entscheidungsproblem.",url:"https://plato.stanford.edu/entries/turing-machine/"},
+  {icon:"📝",title:"SEP — Functionalism",meta:"Stanford Encyclopedia · Libre accès",desc:"Fonctionnalisme, multi-réalisabilité, computationnalisme et critiques.",url:"https://plato.stanford.edu/entries/functionalism/"},
+  {icon:"📚",title:"Bennett & Hacker — Philosophical Foundations of Neuroscience (2022)",meta:"Livre · Wiley-Blackwell",desc:"Critique systématique de l'erreur méréologique en neurosciences et en IA.",url:"https://www.wiley.com/en-us/Philosophical+Foundations+of+Neuroscience-p-9781119610113"},
+  {icon:"📚",title:"Haugeland — L'esprit dans la machine (1985/1989)",meta:"Livre · Odile Jacob",desc:"Introduction accessible à l'IA et à ses présupposés philosophiques.",url:"https://www.odilejacob.fr"},
+];
+
+// ── CARTES MENTALES (multiples) ───────────────────────
+function renderCartes(){
+  cartesInited=true;
+  const root=document.getElementById('cartes-root');
+
+  const MAPS=[
+    {
+      id:'cm0',
+      label:'Vue d\'ensemble',
+      desc:'Tous les acteurs et leurs relations principales',
+      nodes:[
+        {id:'q',label:'Machines\npeuvent-elles\npenser ?',x:354,y:250,r:50,color:'#c9a96e',ring:'#8a6a30',
+         detail:'La question centrale du cours. Trois réponses : Turing (oui, si test passé), Searle (non, syntaxe ≠ sémantique), Wittgenstein/Hacker (question mal posée — penser appartient à la personne entière, non au cerveau).'},
+        {id:'turing',label:'Turing\n1950',x:140,y:100,r:36,color:'#7a9ec2',ring:'#3a6e9a',
+         detail:'Jeu de l\'imitation : si une machine trompe un juge en communication écrite, aucune raison de ne pas dire qu\'elle pense. Critère cartésien de pertinence. Thèse de Church-Turing.'},
+        {id:'searle',label:'Searle',x:570,y:100,r:36,color:'#c06860',ring:'#903030',
+         detail:'Chambre Chinoise : syntaxe ≠ sémantique. Intentionnalité intrinsèque vs dérivée. La syntaxe n\'est pas intrinsèque à la machine — elle dépend de l\'observateur.'},
+        {id:'fodor',label:'Fodor /\nComputationnalisme',x:150,y:390,r:34,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Lois psychologiques truth-preserving → implémentation computationnelle. RTM + mentalais. Influencé par Chomsky (LAD, grammaire universelle). Répond à Putnam.'},
+        {id:'wittg',label:'Wittgenstein\n/ Hacker / Kenny',x:560,y:390,r:34,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Erreur méréologique : attribuer au cerveau des propriétés de la personne. Règle vs accord avec règle. Le langage = critère, non symptôme. L\'esprit = capacités de la personne entière.'},
+        {id:'rwb',label:'RWB\n1943',x:140,y:250,r:28,color:'#7ab8aa',ring:'#3a8878',
+         detail:'Comportement orienté vers un but via feedback négatif (téléonomie). Shanker : homonyme trompeur — les relations internes (but/conscience/volition) deviennent externes.'},
+        {id:'putnam',label:'Putnam',x:570,y:250,r:28,color:'#b8a060',ring:'#887030',
+         detail:'Externalisme : Meanings ain\'t in the head. Terre-Jumelle. Désignateurs rigides. Division du travail linguistique. Conteste l\'internalisme de Fodor.'},
+        {id:'haugeland',label:'Haugeland',x:354,y:90,r:24,color:'#888888',ring:'#555555',
+         detail:'Tests de QI ≠ test d\'intelligence des machines. Le test de Turing évalue si une entité est intelligente, les tests de QI mesurent un degré présupposé.'},
+        {id:'mccarthy',label:'McCarthy /\nDennett',x:354,y:410,r:22,color:'#888888',ring:'#555555',
+         detail:'Imputer des croyances aux machines est épistémologiquement utile (McCarthy). Dennett : l\'attribution d\'états mentaux est une stratégie interprétative (stance intentionnelle). Question : réalisme ou instrumentalisme ?'},
+      ],
+      edges:[
+        {f:'rwb',t:'turing',label:'précède',c:'#7ab8aa'},
+        {f:'turing',t:'q',label:'teste si',c:'#7a9ec2'},
+        {f:'searle',t:'q',label:'réfute',c:'#c06860'},
+        {f:'fodor',t:'q',label:'implémente',c:'#8a7eaa'},
+        {f:'wittg',t:'q',label:'dissout',c:'#6aaa7e'},
+        {f:'putnam',t:'fodor',label:'conteste',c:'#b8a060'},
+        {f:'haugeland',t:'turing',label:'précise',c:'#888888'},
+        {f:'mccarthy',t:'searle',label:'vs',c:'#888888'},
+        {f:'fodor',t:'wittg',label:'vs',c:'#999999'},
+      ]
+    },
+    {
+      id:'cm1',
+      label:'Cybernétique & Turing',
+      desc:'Du comportement orienté vers un but à la machine pensante',
+      nodes:[
+        {id:'rb',label:'Comportement\norienté vers\nun but',x:354,y:240,r:46,color:'#7ab8aa',ring:'#3a8878',
+         detail:'Rosenblueth, Wiener, Bigelow (1943) : toute modification d\'une entité relativement à son environnement. But = condition finale. Pas toutes les machines : la roulette est conçue pour l\'absence de but.'},
+        {id:'feed',label:'Feedback\nnégatif',x:180,y:130,r:32,color:'#7ab8aa',ring:'#3a8878',
+         detail:'Rétroaction correctrice : les signaux venant du but réduisent l\'erreur. Tout comportement dirigé vers un but exige un feedback négatif. Feedback positif = amplification (instabilité).'},
+        {id:'servo',label:'Servo-\nmécanisme',x:530,y:130,r:28,color:'#7ab8aa',ring:'#3a8878',
+         detail:'Machine intrinsèquement dirigée vers un but via feedback. La torpille (avec mécanisme de recherche de cible) vs l\'horloge (régulière mais sans but intrinsèque).'},
+        {id:'teleon',label:'Téléonomie',x:180,y:380,r:28,color:'#7ab8aa',ring:'#3a8878',
+         detail:'But contrôlé par feedback, sans cause finale. Monod : le postulat d\'objectivité (Galilée/Descartes) interdit les causes finales. La téléonomie préserve le concept de but sans l\'impliquer dans un projet.'},
+        {id:'shanker',label:'Shanker',x:530,y:380,r:28,color:'#c06860',ring:'#903030',
+         detail:'Homonyme trompeur : le \'but\' de RWB s\'applique sans choix, sans conscience, sans essai. Les relations internes (but/conscience/volition) deviennent externes. Pas de continuum entre comportement cybernétique et comportement intentionnel.'},
+        {id:'babbage',label:'Babbage\n1834',x:354,y:100,r:26,color:'#b8a060',ring:'#887030',
+         detail:'Machine analytique : bifurcation conditionnelle (si C, alors A, sinon B) = universalité. L\'essentiel est dans l\'enchaînement, non dans les opérations de base. Ada Lovelace : premier algorithme (1843).'},
+        {id:'godel',label:'Gödel\n1931',x:200,y:240,r:22,color:'#b8a060',ring:'#887030',
+         detail:'Incomplétude : quels que soient les axiomes, il existe des énoncés indécidables. Programme de Hilbert réfuté. Ouvre l\'Entscheidungsproblem auquel Turing répondra.'},
+        {id:'turingm',label:'Machine\nde Turing\n1936',x:510,y:240,r:26,color:'#7a9ec2',ring:'#3a6e9a',
+         detail:'Objet mathématique (ruban + tête + table). Répond par la négative à l\'Entscheidungsproblem. Thèse de Church-Turing : tout calcul effectif simulable. Fondement théorique de l\'informatique.'},
+        {id:'jeu',label:'Jeu de\nl\'imitation\n1950',x:354,y:390,r:26,color:'#7a9ec2',ring:'#3a6e9a',
+         detail:'Un juge communique par écrit avec un humain et une machine cachés. Si la machine trompe le juge → aucune raison de ne pas dire qu\'elle pense. Critère cartésien de pertinence : répondre au sens.'},
+        {id:'kenny',label:'Kenny',x:354,y:240,r:0,color:'transparent',ring:'transparent',detail:''},
+      ],
+      edges:[
+        {f:'babbage',t:'rb',label:'précède',c:'#b8a060'},
+        {f:'godel',t:'turingm',label:'→ Entscheidungsproblem',c:'#b8a060'},
+        {f:'feed',t:'rb',label:'composante de',c:'#7ab8aa'},
+        {f:'servo',t:'rb',label:'exemple de',c:'#7ab8aa'},
+        {f:'rb',t:'teleon',label:'= téléonomie',c:'#7ab8aa'},
+        {f:'rb',t:'shanker',label:'critiqué par',c:'#c06860'},
+        {f:'turingm',t:'jeu',label:'mène au',c:'#7a9ec2'},
+        {f:'babbage',t:'turingm',label:'inspire',c:'#b8a060'},
+      ]
+    },
+    {
+      id:'cm2',
+      label:'Searle — Chambre Chinoise',
+      desc:'De la syntaxe à la sémantique : pourquoi ça ne suffit pas',
+      nodes:[
+        {id:'cc',label:'Chambre\nChinoise',x:354,y:240,r:50,color:'#c06860',ring:'#903030',
+         detail:'Un homme suit des règles syntaxiques (livret en anglais) pour combiner des idéogrammes — produit des réponses correctes sans comprendre le chinois. Il occupe la position de la machine dans le jeu de Turing.'},
+        {id:'synt',label:'Syntaxe\nsans\nsémantique',x:170,y:130,r:34,color:'#c06860',ring:'#903030',
+         detail:'La morale de la chambre : les machines ont une syntaxe mais pas de sémantique. Elles ne comprennent pas ce qu\'elles manipulent. Exécuter un programme ne suffit pas pour avoir une sémantique.'},
+        {id:'intrinseque',label:'Intentionnalité\nintrinsèque',x:540,y:130,r:34,color:'#c06860',ring:'#903030',
+         detail:'Propriété originale de l\'esprit d\'être \'à propos de\'. S\'oppose à l\'intentionnalité dérivée (imposée par un esprit à des objets). Les ordinateurs n\'ont que de la dérivée — Deep Blue ne joue pas aux échecs.'},
+        {id:'observ',label:'Syntaxe =\npropr. de\nl\'observateur',x:170,y:380,r:34,color:'#c06860',ring:'#903030',
+         detail:'Second argument de Searle : \'avoir une syntaxe\' n\'est pas intrinsèque à la physique d\'un système. La computation existe relativement à un observateur. Contraire à la masse, la photosynthèse (propriétés indépendantes).'},
+        {id:'emergf',label:'Émergence\nfaible',x:540,y:380,r:30,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Réduction causale oui, ontologique non. Les états mentaux sont causés par et réalisés dans les microprocessus cérébraux (comme la liquidité dans la structure moléculaire). Mais la conscience ne peut se redéfinir en termes de microstructure.'},
+        {id:'hacker2',label:'Hacker',x:354,y:110,r:26,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'La calculatrice : si ses sorties étaient connectées à un piano, elle deviendrait une machine à musique. Le calcul n\'est pas intrinsèque — il est dans notre interprétation. Usage secondaire du terme \'calculer\'.'},
+        {id:'mereol2',label:'Erreur\nméréologique',x:354,y:390,r:26,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Searle commet l\'erreur méréologique : il attribue la conscience au cerveau (une partie) alors qu\'elle ne peut appartenir qu\'à la personne entière (le tout). B&H : \'le cerveau pense\' n\'est pas faux — c\'est dépourvu de sens.'},
+        {id:'mccarthy2',label:'McCarthy',x:180,y:240,r:22,color:'#888888',ring:'#555555',
+         detail:'Imputer des croyances aux machines est épistémologiquement utile. Même les thermostats peuvent avoir des \'croyances\'. Question instrumentalisme vs réalisme.'},
+        {id:'qualia',label:'Qualia &\nontologie 1e\npersonne',x:530,y:240,r:24,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Searle : tous les phénomènes conscients sont des qualia. B&H : erreur — penser, croire ne sont pas des \'expériences\'. La notion de qualia étire indûment le concept d\'expérience.'},
+      ],
+      edges:[
+        {f:'synt',t:'cc',label:'démontre',c:'#c06860'},
+        {f:'intrinseque',t:'cc',label:'manque aux machines',c:'#c06860'},
+        {f:'cc',t:'observ',label:'radicalise en',c:'#c06860'},
+        {f:'hacker2',t:'synt',label:'confirme',c:'#6aaa7e'},
+        {f:'mccarthy2',t:'cc',label:'précède /\ncontexte',c:'#888888'},
+        {f:'cc',t:'mereol2',label:'mais commet l\'',c:'#6aaa7e'},
+        {f:'cc',t:'emergf',label:'mène à la thèse d\'',c:'#8a7eaa'},
+        {f:'emergf',t:'qualia',label:'problème des',c:'#8a7eaa'},
+      ]
+    },
+    {
+      id:'cm3',
+      label:'Fodor & Computationnalisme',
+      desc:'L\'esprit comme calculateur : thèses et critiques',
+      nodes:[
+        {id:'rtm',label:'RTM\nThéorie\nReprés.',x:354,y:240,r:48,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Théorie Représentationnelle de l\'Esprit. Recette pour mécaniser la rationalité : utiliser une machine pilotée syntaxiquement pour exploiter les parallélismes entre propriétés sémantiques et syntaxiques des symboles.'},
+        {id:'truth2',label:'Truth-\npreserving',x:170,y:130,r:32,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Fait le plus important sur l\'esprit : si on part de pensées vraies et qu\'on pense, on arrive typiquement à des pensées vraies. Seule une implémentation computationnelle peut expliquer ce fait. Justifie la RTM.'},
+        {id:'mentalais2',label:'Mentalais',x:540,y:130,r:30,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Langage de la pensée interne, inné, universel. Les processus cognitifs = calculs sur des symboles mentaux. Le langage naturel = expression externe. Influencé par Chomsky.'},
+        {id:'chomsky',label:'Chomsky /\nLAD',x:170,y:380,r:30,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Language Acquisition Device : structure innée expliquant la rapidité d\'acquisition du langage. Grammaire universelle. Bruner critique : les enfants apprennent le langage pour faire des choses, pas pour lui-même. LASS requis.'},
+        {id:'putnam2',label:'Putnam\nExternalisme',x:540,y:380,r:30,color:'#b8a060',ring:'#887030',
+         detail:'Meanings ain\'t in the head. Terre-Jumelle : mêmes états mentaux, extensions différentes (H2O / XYZ). L\'internalisme computationnel de Fodor est menacé. Réponse de Fodor : XYZ est nomologiquement impossible.'},
+        {id:'bouv',label:'Bouveresse\nCritique',x:354,y:110,r:26,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'La relation langage/pensée est interne (Wittgenstein), non externe comme chez Fodor. Le langage fait partie des critères de la pensée. On ne peut vérifier la pensée indépendamment du discours.'},
+        {id:'bh2',label:'Bennett &\nHacker',x:354,y:390,r:26,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Les modèles computationnels sont des redescriptions, non des explications. On peut modéliser la météo computationnellement sans que le temps \'calcule\'. La pensée est une disposition, non un processus.'},
+        {id:'davidson',label:'Davidson\nMonisme\nanomal',x:180,y:240,r:22,color:'#888888',ring:'#555555',
+         detail:'Identité token/token (non type/type). Le mental survient sur le physique mais pas de lois psychophysiques. Opposition à Fodor sur l\'existence de lois intentionnelles.'},
+        {id:'fonct',label:'Fonctionnalisme\nMulti-réalisabilité',x:530,y:240,r:24,color:'#8a7eaa',ring:'#5a4e7a',
+         detail:'Les états mentaux sont définis par leur rôle causal, non leur constitution. Multi-réalisabilité : même état mental, substrats différents (cerveau, silicium). Lien avec Turing : les machines pourraient instancier des états mentaux.'},
+      ],
+      edges:[
+        {f:'truth2',t:'rtm',label:'justifie',c:'#8a7eaa'},
+        {f:'mentalais2',t:'rtm',label:'composante de',c:'#8a7eaa'},
+        {f:'chomsky',t:'mentalais2',label:'inspire',c:'#8a7eaa'},
+        {f:'putnam2',t:'rtm',label:'conteste',c:'#b8a060'},
+        {f:'bouv',t:'rtm',label:'critique',c:'#6aaa7e'},
+        {f:'bh2',t:'rtm',label:'critique',c:'#6aaa7e'},
+        {f:'davidson',t:'rtm',label:'vs (pas de lois)',c:'#888888'},
+        {f:'fonct',t:'rtm',label:'lié au',c:'#8a7eaa'},
+      ]
+    },
+    {
+      id:'cm4',
+      label:'Wittgenstein & Conclusion',
+      desc:'Personne entière, erreur méréologique, capacités vs véhicule',
+      nodes:[
+        {id:'personne2',label:'Personne\nentière',x:354,y:240,r:50,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Wittgenstein : penser, voir, entendre ne peuvent s\'attribuer qu\'à un être humain vivant. Les capacités mentales et leur exercice s\'attribuent à la personne entière — ni au cerveau seul ni à une âme immatérielle.'},
+        {id:'capa',label:'Capacités',x:170,y:130,r:32,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Les capacités mentales (penser, vouloir, percevoir) ne sont pas localisables. Elles n\'ont ni lieu ni date (contrairement à leur exercice). La capacité d\'une clé à ouvrir ne se trouve pas dans le métal.'},
+        {id:'vehicule',label:'Véhicule\n(cerveau)',x:540,y:130,r:30,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Le véhicule est l\'ingrédient matériel permettant aux capacités de s\'exercer. Le cerveau est le véhicule des capacités mentales. Attribuer les capacités au véhicule = erreur catégoriale.'},
+        {id:'mereol3',label:'Erreur\nméréologique',x:170,y:380,r:32,color:'#c06860',ring:'#903030',
+         detail:'Attribuer à une partie (cerveau, neurone) des propriétés du tout (personne). \'Le cerveau pense\' n\'est pas faux — c\'est dépourvu de sens. Searle commet aussi cette erreur en attribuant les propriétés au cerveau.'},
+        {id:'regle2',label:'Règle vs\nAccord\navec règle',x:540,y:380,r:30,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Wittgenstein : un comportement peut être en accord avec une règle sans que l\'agent l\'ait suivie. Les machines sont \'en accord\' avec des règles — elles ne les suivent pas (elles ne comprennent pas, ne peuvent pas les appliquer dans de nouveaux cas).'},
+        {id:'critere',label:'Critère vs\nSymptôme',x:354,y:110,r:26,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Le discours est critère de la pensée (lié constitutivement), non symptôme (vérifiable indépendamment). On ne peut pas vérifier la pensée indépendamment du discours — contrairement à une pneumonie vérifiable par radiographie.'},
+        {id:'conc',label:'Conclusion\ndu cours',x:354,y:400,r:26,color:'#c9a96e',ring:'#8a6a30',
+         detail:'Il n\'y a pas d\'esprit dans la machine — mais l\'esprit n\'est pas non plus une sorte de machine. Rejeter le dualisme ≠ dire que le cerveau pense (erreur méréologique). L\'esprit = forme de représentation pour parler de capacités de la personne entière.'},
+        {id:'wit2',label:'Wittgenstein\nRP §281',x:180,y:240,r:22,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'\'C\'est seulement d\'un être humain vivant ou de ce qui lui ressemble qu\'on peut dire : il a des sensations ; il voit, il est aveugle ; entend, est sourd ; est conscient ou inconscient.\''},
+        {id:'kennyc',label:'Kenny\nCapacité\nvs Acte',x:530,y:240,r:22,color:'#6aaa7e',ring:'#3a7a4e',
+         detail:'Distinction capacité / exercice de la capacité. Les capacités ne sont pas localisables ni datables. L\'exercice, lui, peut être localisé et daté. Seules les créatures langagières peuvent agir pour des raisons.'},
+      ],
+      edges:[
+        {f:'capa',t:'personne2',label:'appartiennent à',c:'#6aaa7e'},
+        {f:'vehicule',t:'personne2',label:'sert la',c:'#6aaa7e'},
+        {f:'mereol3',t:'personne2',label:'ignore que',c:'#c06860'},
+        {f:'regle2',t:'personne2',label:'illustre limite',c:'#6aaa7e'},
+        {f:'critere',t:'personne2',label:'confirme',c:'#6aaa7e'},
+        {f:'wit2',t:'personne2',label:'formule',c:'#6aaa7e'},
+        {f:'kennyc',t:'personne2',label:'détaille',c:'#6aaa7e'},
+        {f:'personne2',t:'conc',label:'→',c:'#c9a96e'},
+      ]
+    },
+  ];
+
+  let activeMapIdx=0;
+  const mapInstances={};
+
+  function buildMapUI(idx){
+    const m=MAPS[idx];
+    return `
+      <div class="cm-controls">
+        <button class="cm-btn" onclick="mapZoom('${m.id}',1.15)">+ Zoom</button>
+        <button class="cm-btn" onclick="mapZoom('${m.id}',0.87)">− Zoom</button>
+        <button class="cm-btn" onclick="mapReset('${m.id}')">Réinitialiser</button>
+        <span class="cm-hint">· Glisser · Cliquer pour détails</span>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--s1);">
+        <canvas id="canvas-${m.id}" width="708" height="460" style="display:block;cursor:grab;touch-action:none;"></canvas>
+      </div>
+      <div id="detail-${m.id}" style="margin-top:8px;"></div>
+    `;
+  }
+
+  root.innerHTML=`
+    <div class="section-title">Cartes mentales</div>
+    <div style="margin-bottom:16px;">
+      <div style="display:flex;gap:4px;flex-wrap:wrap;" id="map-tabs">
+        ${MAPS.map((m,i)=>`
+          <button class="fiche-tab ${i===0?'active':''}" onclick="switchMap(${i})" id="maptab-${i}">
+            ${m.label}
+          </button>`).join('')}
+      </div>
+      <div style="font-size:12px;color:var(--dim);margin-top:6px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;" id="map-desc">${MAPS[0].desc}</div>
+    </div>
+    <div id="map-area">${buildMapUI(0)}</div>
+  `;
+
+  function initMap(idx){
+    const m=MAPS[idx];
+    const canvas=document.getElementById('canvas-'+m.id);
+    if(!canvas||mapInstances[m.id])return;
+    const ctx=canvas.getContext('2d');
+    let scale=1,offX=0,offY=0;
+    let dragging=null,dX=0,dY=0,dMoved=false;
+    let panning=false,pX=0,pY=0,oX=0,oY=0,pMoved=false;
+    let hovered=null,selected=null,mdNode=null,lastPinch=null;
+
+    const inst={scale,offX,offY};
+    mapInstances[m.id]=inst;
+
+    function getNode(id){return m.nodes.find(n=>n.id===id);}
+    function toWorld(cx,cy){return{x:(cx-inst.offX)/inst.scale,y:(cy-inst.offY)/inst.scale};}
+    function nodeAt(cx,cy){
+      const w=toWorld(cx,cy);
+      return m.nodes.find(n=>n.r>0&&Math.hypot(n.x-w.x,n.y-w.y)<n.r+4);
+    }
+
+    function draw(){
+      const W=canvas.width,H=canvas.height;
+      ctx.clearRect(0,0,W,H);
+      // Grid
+      ctx.save();ctx.strokeStyle='rgba(255,255,255,0.025)';ctx.lineWidth=0.5;
+      const gs=50*inst.scale;
+      const gX=((inst.offX%gs)+gs)%gs,gY=((inst.offY%gs)+gs)%gs;
+      for(let x=gX;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+      for(let y=gY;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+      ctx.restore();
+
+      ctx.save();ctx.translate(inst.offX,inst.offY);ctx.scale(inst.scale,inst.scale);
+
+      // Edges
+      m.edges.forEach(e=>{
+        const a=getNode(e.f),b=getNode(e.t);if(!a||!b||a.r===0||b.r===0)return;
+        const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);
+        if(len<1)return;
+        const ux=dx/len,uy=dy/len;
+        const sx=a.x+ux*a.r,sy=a.y+uy*a.r;
+        const ex=b.x-ux*(b.r+5),ey=b.y-uy*(b.r+5);
+        const mx=(sx+ex)/2-uy*16,my=(sy+ey)/2+ux*16;
+        ctx.save();
+        ctx.strokeStyle=e.c+'88';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.quadraticCurveTo(mx,my,ex,ey);ctx.stroke();
+        ctx.setLineDash([]);
+        const t=0.88,qx=(1-t)*(1-t)*sx+2*(1-t)*t*mx+t*t*ex,qy=(1-t)*(1-t)*sy+2*(1-t)*t*my+t*t*ey;
+        const ang=Math.atan2(ey-qy,ex-qx);
+        ctx.fillStyle=e.c+'99';ctx.beginPath();
+        ctx.moveTo(ex,ey);ctx.lineTo(ex-7*Math.cos(ang-0.4),ey-7*Math.sin(ang-0.4));ctx.lineTo(ex-7*Math.cos(ang+0.4),ey-7*Math.sin(ang+0.4));ctx.fill();
+        if(e.label){
+          const lx=(sx+ex)/2-uy*20,ly=(sy+ey)/2+ux*20;
+          ctx.font=`400 9px 'Inter',sans-serif`;ctx.fillStyle=e.c+'66';ctx.textAlign='center';ctx.textBaseline='middle';
+          ctx.fillText(e.label,lx,ly);
+        }
+        ctx.restore();
+      });
+
+      // Nodes
+      m.nodes.forEach(n=>{
+        if(n.r===0)return;
+        const isH=hovered===n.id,isS=selected===n.id;
+        const r=n.r+(isH||isS?3:0);
+        ctx.save();
+        if(isH||isS){
+          const g=ctx.createRadialGradient(n.x,n.y,r*0.4,n.x,n.y,r*2);
+          g.addColorStop(0,n.color+'1a');g.addColorStop(1,'transparent');
+          ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x,n.y,r*2,0,Math.PI*2);ctx.fill();
+        }
+        const bg=ctx.createRadialGradient(n.x-r*0.3,n.y-r*0.3,1,n.x,n.y,r);
+        bg.addColorStop(0,n.color+'ff');bg.addColorStop(1,n.ring+'dd');
+        ctx.fillStyle=bg;ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle=isS?'#e4e0d8':n.ring;ctx.lineWidth=isS?2:0.8;ctx.stroke();
+        const lines=n.label.split('\n');
+        const fs=Math.max(8,Math.min(11,r*0.36));
+        ctx.font=`500 ${fs}px 'Inter',sans-serif`;ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+        const lh=fs*1.25;
+        lines.forEach((l,i)=>ctx.fillText(l,n.x,n.y+(i-(lines.length-1)/2)*lh));
+        ctx.restore();
+      });
+      ctx.restore();
+    }
+
+    function resize(){
+      const cont=canvas.parentElement;
+      canvas.width=cont?cont.clientWidth:708;
+      canvas.height=460;draw();
+    }
+
+    function getEvtPos(e){
+      const rect=canvas.getBoundingClientRect();
+      if(e.touches)return{x:e.touches[0].clientX-rect.left,y:e.touches[0].clientY-rect.top};
+      return{x:e.clientX-rect.left,y:e.clientY-rect.top};
+    }
+
+    function showDetail(n){
+      if(!n)return;
+      const area=document.getElementById('detail-'+m.id);
+      if(!area)return;
+      area.innerHTML=`<div class="cm-detail" style="border-left:2px solid ${n.color};"><div class="cm-detail-title" style="color:${n.color};">${n.label.replace(/\n/g,' ')}</div><div class="cm-detail-body">${n.detail}</div></div>`;
+    }
+
+    canvas.addEventListener('mousedown',e=>{
+      const p=getEvtPos(e),n=nodeAt(p.x,p.y);
+      if(n){dragging=n;dX=p.x-(n.x*inst.scale+inst.offX);dY=p.y-(n.y*inst.scale+inst.offY);dMoved=false;mdNode=n.id;}
+      else{panning=true;pX=p.x;pY=p.y;oX=inst.offX;oY=inst.offY;pMoved=false;}
+    });
+    canvas.addEventListener('mousemove',e=>{
+      const p=getEvtPos(e);
+      if(dragging){dragging.x=(p.x-dX-inst.offX)/inst.scale;dragging.y=(p.y-dY-inst.offY)/inst.scale;dMoved=true;draw();}
+      else if(panning){inst.offX=oX+(p.x-pX);inst.offY=oY+(p.y-pY);pMoved=true;draw();}
+      else{const n=nodeAt(p.x,p.y);const h=n?n.id:null;if(h!==hovered){hovered=h;canvas.style.cursor=h?'pointer':'grab';draw();}}
+    });
+    canvas.addEventListener('mouseup',e=>{
+      if(dragging&&!dMoved&&mdNode){selected=selected===mdNode?null:mdNode;showDetail(m.nodes.find(n=>n.id===mdNode));draw();}
+      else if(!panning||!pMoved){const p=getEvtPos(e);const n=nodeAt(p.x,p.y);if(n&&!dMoved){selected=selected===n.id?null:n.id;showDetail(n);draw();}else if(!n){selected=null;const a=document.getElementById('detail-'+m.id);if(a)a.innerHTML='';draw();}}
+      dragging=null;panning=false;mdNode=null;
+    });
+    canvas.addEventListener('wheel',e=>{
+      e.preventDefault();const f=e.deltaY<0?1.12:0.89;
+      const p=getEvtPos(e);inst.offX=p.x-(p.x-inst.offX)*f;inst.offY=p.y-(p.y-inst.offY)*f;
+      inst.scale=Math.max(0.3,Math.min(4,inst.scale*f));draw();
+    },{passive:false});
+    canvas.addEventListener('touchstart',e=>{
+      if(e.touches.length===2){lastPinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);return;}
+      const p=getEvtPos(e),n=nodeAt(p.x,p.y);
+      if(n){dragging=n;dX=p.x-(n.x*inst.scale+inst.offX);dY=p.y-(n.y*inst.scale+inst.offY);dMoved=false;mdNode=n.id;}
+      else{panning=true;pX=p.x;pY=p.y;oX=inst.offX;oY=inst.offY;pMoved=false;}
+    },{passive:true});
+    canvas.addEventListener('touchmove',e=>{
+      if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(lastPinch){const f=d/lastPinch;inst.scale=Math.max(0.3,Math.min(4,inst.scale*f));draw();}lastPinch=d;return;}
+      const p=getEvtPos(e);
+      if(dragging){dragging.x=(p.x-dX-inst.offX)/inst.scale;dragging.y=(p.y-dY-inst.offY)/inst.scale;dMoved=true;draw();}
+      else if(panning){inst.offX=oX+(p.x-pX);inst.offY=oY+(p.y-pY);pMoved=true;draw();}
+    },{passive:true});
+    canvas.addEventListener('touchend',e=>{
+      lastPinch=null;
+      if(dragging&&!dMoved&&mdNode){selected=selected===mdNode?null:mdNode;showDetail(m.nodes.find(n=>n.id===mdNode));draw();}
+      else if(!pMoved){const p=getEvtPos(e);const n=nodeAt(p.x,p.y);if(n){selected=selected===n.id?null:n.id;showDetail(n);draw();}}
+      dragging=null;panning=false;mdNode=null;
+    });
+
+    inst.draw=draw;inst.resize=resize;
+    resize();
+    window.addEventListener('resize',()=>{if(document.getElementById('canvas-'+m.id))resize();});
+  }
+
+  window.switchMap=function(idx){
+    activeMapIdx=idx;
+    document.querySelectorAll('#map-tabs .fiche-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+    const desc=document.getElementById('map-desc');
+    if(desc)desc.textContent=MAPS[idx].desc;
+    const area=document.getElementById('map-area');
+    if(area)area.innerHTML=buildMapUI(idx);
+    setTimeout(()=>initMap(idx),20);
+  };
+
+  window.mapZoom=function(id,f){
+    const inst=mapInstances[id];if(!inst)return;
+    const canvas=document.getElementById('canvas-'+id);if(!canvas)return;
+    inst.offX=canvas.width/2-(canvas.width/2-inst.offX)*f;
+    inst.offY=canvas.height/2-(canvas.height/2-inst.offY)*f;
+    inst.scale=Math.max(0.3,Math.min(4,inst.scale*f));
+    if(inst.draw)inst.draw();
+  };
+  window.mapReset=function(id){
+    const inst=mapInstances[id];if(!inst)return;
+    inst.scale=1;inst.offX=0;inst.offY=0;
+    const a=document.getElementById('detail-'+id);if(a)a.innerHTML='';
+    if(inst.draw)inst.draw();
+  };
+
+  setTimeout(()=>initMap(0),30);
+}
+
+// ── QUIZ ─────────────────────────────────────────────
+let playerName='',questions=[],current=0,score=0,answered=false,timerInt=null,timeLeft=TIMER_SEC;
+
+async function renderIntro(){
+  const uid=getUID();
+  document.getElementById('root').innerHTML=`
+    <div class="panel intro-box">
+      <h2>Philosophie de l'esprit et la machine</h2>
+      <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
+      <div class="input-group"><label>Prénom</label><input id="name-input" type="text" placeholder="Ex : Sophie…" disabled autocomplete="off"></div>
+      <div id="prev-score-msg" class="prev-score-msg">Chargement…</div>
+      <div class="intro-stats">
+        <span class="intro-stat">${BANK.length} questions</span>
+        <span class="intro-stat">${TOTAL} / partie</span>
+        <span class="intro-stat">${TIMER_SEC}s / question</span>
+        <span class="intro-stat">Mélangées</span>
+      </div>
+      <button class="btn-primary" id="btn-start" onclick="startQuiz()" disabled>Chargement…</button>
+      <div class="lb-preview">
+        <div class="lb-preview-title">Classement</div>
+        <div id="lb-intro-body"><div class="lb-loading">Chargement…</div></div>
+      </div>
+    </div>
+  `;
+  const scores=await fetchScores();
+  const entry=(scores||[]).find(s=>s.uid===getUID());
+  const inp=document.getElementById('name-input');
+  const btn=document.getElementById('btn-start');
+  const msg=document.getElementById('prev-score-msg');
+  if(inp){inp.value=entry?entry.name:'';inp.disabled=false;inp.addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});}
+  if(btn){btn.textContent='Commencer →';btn.disabled=false;}
+  if(msg){
+    if(entry){const pct=Math.round(entry.pts/(entry.total||TOTAL)*100);msg.innerHTML=`Bienvenue ${entry.name} — meilleur score : <strong style="color:var(--gold)">${entry.pts}/${entry.total||TOTAL} (${pct}%)</strong>`;}
+    else{msg.textContent='Première visite — entre ton prénom.';}
+  }
+  const lb=document.getElementById('lb-intro-body');
+  if(lb){const uid2=getUID();lb.innerHTML=(scores||[]).slice(0,8).map((s,i)=>`
+    <div class="lb-row ${s.uid===uid2?'me':''}">
+      <span class="lb-rank ${i<3?'top':''}">${i===0?'#1':i===1?'#2':i===2?'#3':'#'+(i+1)}</span>
+      <span class="lb-name">${s.name}</span>
+      <span class="lb-pts">${s.pts}</span>
+      <span class="lb-pct">${Math.round(s.pts/(s.total||TOTAL)*100)}%</span>
+    </div>`).join('')||'<div class="lb-loading">Aucun score.</div>';}
+}
+
+function startQuiz(){
+  const inp=document.getElementById('name-input');
+  const name=inp?inp.value.trim():playerName;
+  if(!name){if(inp)inp.style.borderColor='var(--red)';return;}
+  playerName=name;
+  questions=shuffle(BANK).slice(0,TOTAL).map(buildQ);
+  current=0;score=0;answered=false;renderQuestion();
+}
+
+function renderQuestion(){
+  clearInterval(timerInt);
+  const q=questions[current],pct=(current/questions.length)*100;
+  document.getElementById('root').innerHTML=`
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${current+1}/${questions.length}</div>
+      <div class="score-badge">${playerName} · ${score} pts</div>
+    </div>
+    <div class="timer-row">
+      <div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%;background:var(--gold)"></div></div>
+      <div class="timer-label" id="timer-label">${TIMER_SEC}</div>
+    </div>
+    <div class="card panel">
+      <div class="card-header"><span class="card-num">Q ${current+1}</span><span class="card-tag">${q.cat}</span></div>
+      <div class="card-body">
+        <div class="question-text">${q.q}</div>
+        <div class="options">${q.shuffledOpts.map((opt,i)=>`
+          <button class="option" id="opt-${i}" onclick="choose(${i})">
+            <span class="option-letter">${['A','B','C','D'][i]}</span>
+            <span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span>
+          </button>`).join('')}</div>
+        <div id="feedback"></div><div id="next-area"></div>
+      </div>
+    </div>
+  `;
+  startTimer();
+}
+
+function startTimer(){
+  timeLeft=TIMER_SEC;answered=false;clearInterval(timerInt);
+  setTimeout(()=>{
+    const fi=document.getElementById('timer-fill');if(fi){fi.style.width='100%';fi.style.background='var(--gold)';}
+    timerInt=setInterval(()=>{
+      timeLeft-=0.25;
+      const fill=document.getElementById('timer-fill'),label=document.getElementById('timer-label');
+      if(!fill){clearInterval(timerInt);return;}
+      const p=Math.max(0,timeLeft/TIMER_SEC*100);
+      fill.style.width=p+'%';fill.style.background=p>50?'var(--gold)':p>25?'var(--blue)':'var(--red)';
+      if(label)label.textContent=Math.ceil(Math.max(0,timeLeft));
+      if(timeLeft<=0){clearInterval(timerInt);timeExpired();}
+    },250);
+  },30);
+}
+
+function timeExpired(){
+  if(answered)return;answered=true;
+  const q=questions[current];q._wasWrong=true;
+  for(let i=0;i<4;i++){const b=document.getElementById(`opt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');}
+  document.getElementById('feedback').innerHTML=`<div class="feedback ko"><div class="feedback-header"><span>⏱</span> Temps écoulé</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
+}
+
+function choose(idx){
+  if(answered)return;answered=true;clearInterval(timerInt);
+  const q=questions[current];const ok=idx===q.newCorrect;
+  if(ok)score++;else q._wasWrong=true;
+  for(let i=0;i<4;i++){const b=document.getElementById(`opt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
+  document.getElementById('feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
+}
+
+function nextQ(){current++;if(current>=questions.length)renderResults();else renderQuestion();}
+
+async function renderResults(){
+  clearInterval(timerInt);
+  const pct=Math.round(score/questions.length*100);
+  const msg=pct>=80?'Maîtrise solide — tu distingues syntaxe, sémantique et intentionnalité.':pct>=60?'Bon niveau. Relis la Chambre Chinoise et Wittgenstein.':pct>=40?'Des bases. Insiste sur les critiques de Searle, B&H et le concept de personne.':'Reprends les fiches — commence par cybernétique et Turing.';
+  const missed=questions.filter(q=>q._wasWrong);
+  document.getElementById('root').innerHTML=`
+    <div class="panel results-top">
+      <h2>Résultat</h2>
+      <div class="results-name">${playerName}</div>
+      <div class="results-score">${score}</div>
+      <div class="results-total">/ ${questions.length} · ${pct}%</div>
+      <div class="results-msg">${msg}</div>
+      <div class="saving-msg" id="saving-msg">Enregistrement…</div>
+      <button class="btn-restart" onclick="renderIntro()">Rejouer</button>
+    </div>
+    ${missed.length>0?`
+    <div class="panel" style="margin-top:12px;">
+      <div class="lb-full-header"><span class="lb-full-title">Questions manquées — ${missed.length}</span></div>
+      <div>${missed.map(q=>`
+        <div class="missed-block">
+          <div class="missed-cat">${q.cat}</div>
+          <div class="missed-q">${q.q}</div>
+          <div class="missed-label">Bonne réponse</div>
+          <div class="missed-answer">${q.shuffledOpts[q.newCorrect].replace(/^[A-D]\.\s*/,'')}</div>
+          <div class="missed-label">Explication</div>
+          <div class="missed-exp">${q.exp}</div>
+        </div>`).join('')}</div>
+    </div>`:''}
+    <div class="panel" style="margin-top:12px;">
+      <div class="lb-full-header"><span class="lb-full-title">Classement</span></div>
+      <div id="lb-body"><div class="lb-loading">Chargement…</div></div>
+    </div>
+  `;
+  let scores=[];
+  try{scores=await saveScore(playerName,score);}catch(e){console.error(e);}
+  const m2=document.getElementById('saving-msg');if(m2)m2.textContent=scores&&scores.length?'Score enregistré.':'Erreur.';
+  const uid=getUID(),lb=document.getElementById('lb-body');
+  if(lb)lb.innerHTML=(scores||[]).slice(0,10).map((s,i)=>`
+    <div class="lb-full-row ${s.uid===uid?'mine':''}">
+      <div class="lb-full-rank ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${i===0?'#1':i===1?'#2':i===2?'#3':'#'+(i+1)}</div>
+      <div class="lb-full-name">${s.name}</div>
+      <div class="lb-full-pts">${s.pts}/${s.total||TOTAL}</div>
+      <div class="lb-full-pct">${Math.round(s.pts/(s.total||TOTAL)*100)}%</div>
+    </div>`).join('')||'<div class="lb-loading">Aucun score.</div>';
+}
+
+// ── FICHES ────────────────────────────────────────────
+let activeFiche=0;
+function renderFiches(){
+  fichesInited=true;
+  document.getElementById('fiches-root').innerHTML=`
+    <div class="section-title">Fiches de révision</div>
+    <div class="fiche-tabs">
+      ${FICHES.map((f,i)=>`<button class="fiche-tab ${i===0?'active':''}" onclick="switchFiche(${i})">${f.label}</button>`).join('')}
+    </div>
+    <div id="fiche-content-area"></div>
+  `;
+  showFiche(0);
+}
+
+function switchFiche(i){
+  activeFiche=i;
+  document.querySelectorAll('.fiche-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  showFiche(i);
+}
+
+function showFiche(i){
+  const f=FICHES[i];
+  document.getElementById('fiche-content-area').innerHTML=`
+    <div class="panel fiche-content">
+      ${f.content}
+      <button onclick="startMiniQuiz(${i})" style="width:100%;margin-top:8px;padding:10px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--dim);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dim)'">Se tester : ${f.label} →</button>
+    </div>
+  `;
+}
+
+// Mini-quiz par fiche
+const CAT_MAP={'f1':'Cybernétique','f2':'Test de Turing','f3':'Chambre chinoise','f4':'Computationnalisme','f5':'Externalisme (Putnam)','f6':'Wittgenstein / Hacker'};
+let miniIdx=0,miniScore=0,miniQ=[],miniAnswered=false,miniFicheIdx=0;
+
+function startMiniQuiz(ficheIdx){
+  miniFicheIdx=ficheIdx;
+  const f=FICHES[ficheIdx];
+  const cat=CAT_MAP[f.id]||f.label;
+  const pool=BANK.filter(q=>q.cat===cat||q.cat.includes(cat.split(' ')[0].split('/')[0].trim()));
+  if(!pool.length){alert('Pas de questions pour cette section.');return;}
+  miniQ=shuffle(pool).slice(0,Math.min(5,pool.length)).map(buildQ);
+  miniIdx=0;miniScore=0;miniAnswered=false;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-fiches').classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{t.classList.remove('active');if(t.textContent.includes('Fiches'))t.classList.add('active');});
+  renderMiniQ();
+}
+
+function renderMiniQ(){
+  const q=miniQ[miniIdx];
+  document.getElementById('fiche-content-area').innerHTML=`
+    <div class="card panel">
+      <div class="card-header"><span class="card-num">Q ${miniIdx+1}/${miniQ.length}</span><span class="card-tag">${q.cat}</span></div>
+      <div class="card-body">
+        <div class="question-text">${q.q}</div>
+        <div class="options">${q.shuffledOpts.map((opt,i)=>`<button class="option" id="mopt-${i}" onclick="miniChoose(${i})"><span class="option-letter">${['A','B','C','D'][i]}</span><span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span></button>`).join('')}</div>
+        <div id="mini-feedback"></div><div id="mini-next"></div>
+      </div>
+    </div>`;
+}
+
+function miniChoose(idx){
+  if(miniAnswered)return;miniAnswered=true;
+  const q=miniQ[miniIdx];const ok=idx===q.newCorrect;if(ok)miniScore++;
+  for(let i=0;i<4;i++){const b=document.getElementById(`mopt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
+  document.getElementById('mini-feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('mini-next').innerHTML=`<button class="btn-next" onclick="miniNext()">${miniIdx+1<miniQ.length?'Suivant →':'Résultats →'}</button>`;
+}
+
+function miniNext(){
+  miniIdx++;
+  if(miniIdx>=miniQ.length){
+    const pct=Math.round(miniScore/miniQ.length*100);
+    document.getElementById('fiche-content-area').innerHTML=`
+      <div class="panel" style="text-align:center;padding:28px 20px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Résultat</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px;">${pct}%</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:20px;">${miniScore} / ${miniQ.length}</div>
+        <div style="display:flex;gap:8px;justify-content:center;">
+          <button onclick="startMiniQuiz(${miniFicheIdx})" style="padding:8px 20px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;">Recommencer</button>
+          <button onclick="showFiche(${miniFicheIdx})" style="padding:8px 20px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:12px;color:var(--dim);cursor:pointer;">← Fiche</button>
+        </div>
+      </div>`;
+  }else{miniAnswered=false;renderMiniQ();}
+}
+
+// ── ENTRAÎNEMENT ──────────────────────────────────────
+let fcIdx=0,fcFlipped=false;
+function renderTraining(){
+  trainingInited=true;
+  document.getElementById('training-root').innerHTML=`
+    <div class="section-title">Modes d'entraînement</div>
+    <div class="training-grid">
+      <div class="training-card" onclick="showFlashcards()">
+        <div class="training-card-icon">🃏</div>
+        <div class="training-card-title">Flashcards</div>
+        <div class="training-card-count">${FLASHCARDS.length} cartes</div>
+        <div class="training-card-desc">Définitions clés — retourner pour révéler</div>
+      </div>
+      <div class="training-card" onclick="showThematicQuiz()">
+        <div class="training-card-icon">🎯</div>
+        <div class="training-card-title">Quiz thématique</div>
+        <div class="training-card-count">6 thèmes</div>
+        <div class="training-card-desc">S'entraîner par auteur ou notion</div>
+      </div>
+      <div class="training-card" onclick="showSpeedRound()">
+        <div class="training-card-icon">⚡</div>
+        <div class="training-card-title">Speed round</div>
+        <div class="training-card-count">10 q · 15 sec</div>
+        <div class="training-card-desc">Minuteur réduit — réponse rapide</div>
+      </div>
+      <div class="training-card" onclick="showHardReview()">
+        <div class="training-card-icon">↩</div>
+        <div class="training-card-title">Points difficiles</div>
+        <div class="training-card-count">Concepts subtils</div>
+        <div class="training-card-desc">Searle, B&H, Wittgenstein, synthèse</div>
+      </div>
+    </div>
+    <div id="training-area"></div>
+  `;
+}
+
+function showFlashcards(){fcIdx=0;fcFlipped=false;renderFlashcard();}
+function renderFlashcard(){
+  const fc=FLASHCARDS[fcIdx];
+  document.getElementById('training-area').innerHTML=`
+    <div>
+      <div class="flashcard-container" onclick="flipCard()">
+        <div class="flashcard ${fcFlipped?'flipped':''}" id="the-card">
+          <div class="flashcard-face flashcard-front"><div><div class="flashcard-front-text">${fc.q}</div><div class="flashcard-hint">cliquer pour révéler</div></div></div>
+          <div class="flashcard-face flashcard-back"><div class="flashcard-back-text">${fc.a}</div></div>
+        </div>
+      </div>
+      <div class="flashcard-nav" style="margin-top:10px;">
+        <button class="flashcard-nav-btn" onclick="fcPrev()">← Préc.</button>
+        <span class="flashcard-counter">${fcIdx+1} / ${FLASHCARDS.length}</span>
+        <button class="flashcard-nav-btn" onclick="fcNext()">Suiv. →</button>
+      </div>
+    </div>`;
+}
+function flipCard(){fcFlipped=!fcFlipped;const c=document.getElementById('the-card');if(c)c.classList.toggle('flipped',fcFlipped);}
+function fcNext(){fcIdx=(fcIdx+1)%FLASHCARDS.length;fcFlipped=false;renderFlashcard();}
+function fcPrev(){fcIdx=(fcIdx-1+FLASHCARDS.length)%FLASHCARDS.length;fcFlipped=false;renderFlashcard();}
+
+function showThematicQuiz(){
+  const cats=[...new Set(BANK.map(q=>q.cat))];
+  document.getElementById('training-area').innerHTML=`
+    <div class="panel" style="padding:18px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:14px;">Thème</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${cats.map(cat=>`
+          <button onclick="startTQ('${cat}')" style="padding:10px 14px;text-align:left;background:var(--s2);border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:13px;color:var(--soft);cursor:pointer;transition:all 0.12s;display:flex;justify-content:space-between;" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--soft)'">
+            <span>${cat}</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);">${BANK.filter(q=>q.cat===cat).length} q</span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+}
+
+let tQ=[],tIdx=0,tScore=0,tAnswered=false,tCat='';
+function startTQ(cat){tCat=cat;tQ=shuffle(BANK.filter(q=>q.cat===cat)).map(buildQ);tIdx=0;tScore=0;tAnswered=false;renderTQ();}
+function renderTQ(){
+  if(tIdx>=tQ.length){
+    const pct=Math.round(tScore/tQ.length*100);
+    document.getElementById('training-area').innerHTML=`
+      <div class="panel" style="text-align:center;padding:26px 18px;">
+        <div style="font-size:11px;color:var(--dim);margin-bottom:8px;">${tCat}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px;">${pct}%</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:18px;">${tScore} / ${tQ.length}</div>
+        <div style="display:flex;gap:8px;justify-content:center;">
+          <button onclick="startTQ('${tCat}')" style="padding:8px 18px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;">Rejouer</button>
+          <button onclick="showThematicQuiz()" style="padding:8px 18px;background:transparent;border:1px solid var(--border);border-radius:5px;font-size:12px;color:var(--dim);cursor:pointer;">← Thèmes</button>
+        </div>
+      </div>`;
+    return;
+  }
+  const q=tQ[tIdx];
+  document.getElementById('training-area').innerHTML=`
+    <div class="card panel">
+      <div class="card-header"><span class="card-num">${tIdx+1}/${tQ.length} · ${tCat}</span><span class="card-tag">${tScore} pts</span></div>
+      <div class="card-body">
+        <div class="question-text">${q.q}</div>
+        <div class="options">${q.shuffledOpts.map((opt,i)=>`<button class="option" id="topt-${i}" onclick="tChoose(${i})"><span class="option-letter">${['A','B','C','D'][i]}</span><span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span></button>`).join('')}</div>
+        <div id="t-fb"></div><div id="t-nx"></div>
+      </div>
+    </div>`;
+}
+function tChoose(idx){
+  if(tAnswered)return;tAnswered=true;
+  const q=tQ[tIdx];const ok=idx===q.newCorrect;if(ok)tScore++;
+  for(let i=0;i<4;i++){const b=document.getElementById(`topt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
+  document.getElementById('t-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('t-nx').innerHTML=`<button class="btn-next" onclick="tNext()">${tIdx+1<tQ.length?'Suivant →':'Résultats →'}</button>`;
+}
+function tNext(){tIdx++;tAnswered=false;renderTQ();}
+
+// Speed
+let sQ=[],sIdx=0,sScore=0,sAnswered=false,sTimer,sLeft;
+const SPEED_TIME=15;
+function showSpeedRound(){sQ=shuffle(BANK).slice(0,10).map(buildQ);sIdx=0;sScore=0;sAnswered=false;renderSQ();}
+function renderSQ(){
+  if(sIdx>=sQ.length){
+    document.getElementById('training-area').innerHTML=`
+      <div class="panel" style="text-align:center;padding:26px 18px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px;">${Math.round(sScore/10*100)}%</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:18px;">${sScore} / 10</div>
+        <button onclick="showSpeedRound()" style="padding:8px 18px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;">Recommencer</button>
+      </div>`;
+    return;
+  }
+  const q=sQ[sIdx];
+  document.getElementById('training-area').innerHTML=`
+    <div class="card panel">
+      <div style="height:1px;background:var(--s3)"><div id="s-fill" style="height:100%;width:100%;background:var(--gold);transition:width 0.25s linear;"></div></div>
+      <div class="card-header"><span class="card-num">⚡ ${sIdx+1}/10</span><span class="card-tag" id="s-lbl">${SPEED_TIME}</span></div>
+      <div class="card-body">
+        <div class="question-text" style="font-size:15px;">${q.q}</div>
+        <div class="options">${q.shuffledOpts.map((opt,i)=>`<button class="option" id="sopt-${i}" onclick="sChoose(${i})"><span class="option-letter">${['A','B','C','D'][i]}</span><span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span></button>`).join('')}</div>
+        <div id="s-fb"></div><div id="s-nx"></div>
+      </div>
+    </div>`;
+  startST();
+}
+function startST(){
+  sLeft=SPEED_TIME;sAnswered=false;clearInterval(sTimer);
+  sTimer=setInterval(()=>{
+    sLeft-=0.25;
+    const fill=document.getElementById('s-fill'),lbl=document.getElementById('s-lbl');
+    if(!fill){clearInterval(sTimer);return;}
+    const p=Math.max(0,sLeft/SPEED_TIME*100);
+    fill.style.width=p+'%';fill.style.background=p>50?'var(--gold)':p>25?'var(--blue)':'var(--red)';
+    if(lbl)lbl.textContent=Math.ceil(Math.max(0,sLeft))+'s';
+    if(sLeft<=0){clearInterval(sTimer);sExpired();}
+  },250);
+}
+function sExpired(){
+  if(sAnswered)return;sAnswered=true;
+  const q=sQ[sIdx];
+  for(let i=0;i<4;i++){const b=document.getElementById(`sopt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');}
+  document.getElementById('s-fb').innerHTML=`<div class="feedback ko"><div class="feedback-header"><span>⏱</span>Temps</div></div>`;
+  document.getElementById('s-nx').innerHTML=`<button class="btn-next" onclick="sNext()">${sIdx+1<sQ.length?'Suivant →':'Résultats →'}</button>`;
+}
+function sChoose(idx){
+  if(sAnswered)return;sAnswered=true;clearInterval(sTimer);
+  const q=sQ[sIdx];const ok=idx===q.newCorrect;if(ok)sScore++;
+  for(let i=0;i<4;i++){const b=document.getElementById(`sopt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
+  document.getElementById('s-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('s-nx').innerHTML=`<button class="btn-next" onclick="sNext()">${sIdx+1<sQ.length?'Suivant →':'Résultats →'}</button>`;
+}
+function sNext(){sIdx++;sAnswered=false;renderSQ();}
+
+// Hard review
+function showHardReview(){
+  const hard=['Chambre chinoise','Émergence (Searle)','Wittgenstein / Hacker','Synthèse'];
+  const pool=shuffle(BANK.filter(q=>hard.includes(q.cat))).slice(0,8).map(buildQ);
+  let idx=0,sc=0,an=false;
+  function render(){
+    if(idx>=pool.length){
+      document.getElementById('training-area').innerHTML=`
+        <div class="panel" style="text-align:center;padding:26px 18px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px;">${Math.round(sc/pool.length*100)}%</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:18px;">${sc} / ${pool.length}</div>
+          <button onclick="showHardReview()" style="padding:8px 18px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;">Recommencer</button>
+        </div>`;
+      return;
+    }
+    const q=pool[idx];
+    document.getElementById('training-area').innerHTML=`
+      <div class="card panel">
+        <div class="card-header"><span class="card-num">${idx+1}/${pool.length}</span><span class="card-tag">${q.cat}</span></div>
+        <div class="card-body">
+          <div class="question-text">${q.q}</div>
+          <div class="options">${q.shuffledOpts.map((opt,i)=>`<button class="option" id="hopt-${i}" onclick="hCh(${i})"><span class="option-letter">${['A','B','C','D'][i]}</span><span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span></button>`).join('')}</div>
+          <div id="h-fb"></div><div id="h-nx"></div>
+        </div>
+      </div>`;
+    an=false;
+    window.hCh=function(i){
+      if(an)return;an=true;const ok=i===q.newCorrect;if(ok)sc++;
+      for(let j=0;j<4;j++){const b=document.getElementById(`hopt-${j}`);if(!b)continue;b.disabled=true;if(j===q.newCorrect)b.classList.add('reveal');if(j===i&&!ok)b.classList.add('wrong');if(j===i&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
+      document.getElementById('h-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+      document.getElementById('h-nx').innerHTML=`<button class="btn-next" onclick="hNx()">${idx+1<pool.length?'Suivant →':'Résultats →'}</button>`;
+    };
+    window.hNx=function(){idx++;render();};
+  }
+  render();
+}
+
+// ── DISSERTATION ─────────────────────────────────────
+const SUJETS_DISSERT=[
+  {
+    id:'d1',
+    label:'Cybernétique & But',
+    q:'Les machines cybernétiques peuvent-elles être dites agir « dans un but » au sens ordinaire du terme ?',
+    contexte:'Rosenblueth, Wiener, Bigelow (1943) affirment qu\'une analyse comportementale uniforme s\'applique aux machines et aux êtres vivants. Shanker et Kenny contestent cette assimilation.',
+    notions:['feedback négatif','servomécanisme','téléonomie','intentionnalité','raisonnement pratique','homonyme trompeur'],
+    pistes:'Distinguer les différents sens de «but» (condition finale cybernétique / intention consciente / raison d\'agir). Examiner l\'argument de Shanker sur l\'homonyme trompeur. Analyser la position de Kenny sur le lien entre intentionnalité et langage.'
+  },
+  {
+    id:'d2',
+    label:'Test de Turing',
+    q:'Le test de Turing fournit-il un critère suffisant pour attribuer la pensée à une machine ?',
+    contexte:'Turing (1950) propose son jeu de l\'imitation comme test de la pensée. Fodor, Searle et d\'autres contestent la valeur de ce test.',
+    notions:['jeu de l\'imitation','critère de pertinence','condition suffisante','simulation','intentionnalité','rationalité'],
+    pistes:'Exposer le test et sa justification (critère de pertinence cartésien). Examiner les objections (Fodor : le test ne mesure qu\'une capacité ; argument de la conscience ; Searle : syntaxe sans sémantique). Conclure sur la valeur et les limites du critère comportemental.'
+  },
+  {
+    id:'d3',
+    label:'Chambre Chinoise',
+    q:'L\'expérience de la Chambre Chinoise prouve-t-elle que les machines ne peuvent pas penser ?',
+    contexte:'Searle (1980) construit cette expérience de pensée pour montrer que la manipulation de symboles selon des règles syntaxiques ne suffit pas pour produire une sémantique.',
+    notions:['syntaxe','sémantique','intentionnalité intrinsèque','intentionnalité dérivée','propriété intrinsèque','computation'],
+    pistes:'Exposer rigoureusement l\'expérience et sa conclusion. Examiner le second argument de Searle (syntaxe = propriété de l\'observateur). Présenter la position de Hacker. Évaluer les limites : Searle commet-il lui-même l\'erreur méréologique ?'
+  },
+  {
+    id:'d4',
+    label:'Computationnalisme',
+    q:'L\'hypothèse que l\'esprit est une sorte d\'ordinateur est-elle défendable ?',
+    contexte:'Fodor défend la RTM (Théorie Représentationnelle de l\'Esprit) et l\'hypothèse du mentalais. Bouveresse, Wittgenstein et Bennett & Hacker la contestent.',
+    notions:['truth-preserving','mentalais','RTM','fonctionnalisme','multi-réalisabilité','critère vs symptôme','erreur méréologique'],
+    pistes:'Exposer l\'argument de Fodor (truth-preserving → implémentation computationnelle). Examiner le rôle de Chomsky (LAD, grammaire universelle). Présenter les critiques : relation interne langage/pensée (Bouveresse/Wittgenstein), les modèles computationnels comme redescriptions (B&H), pensée comme disposition non processus.'
+  },
+  {
+    id:'d5',
+    label:'Externalisme',
+    q:'Les significations sont-elles dans la tête ? Que peut-on en conclure pour la philosophie de l\'esprit ?',
+    contexte:'Putnam (1975) défend l\'externalisme sémantique contre le paradigme internaliste de Fodor. Ce débat a des implications pour la psychologie computationnelle.',
+    notions:['désignateur rigide','stéréotype','extension','division du travail linguistique','internalisme','contenu large vs étroit'],
+    pistes:'Exposer l\'expérience de la Terre-Jumelle et le slogan «Meanings ain\'t in the head». Analyser la réponse de Fodor (survenance nomologique). Évaluer les enjeux pour la psychologie computationnelle : comment les lois intentionnelles peuvent-elles être à la fois informationnelles et computationnelles ?'
+  },
+  {
+    id:'d6',
+    label:'Erreur méréologique',
+    q:'Dans quelle mesure «le cerveau pense» est-il une affirmation dépourvue de sens ?',
+    contexte:'Bennett & Hacker introduisent la notion d\'erreur méréologique pour critiquer à la fois le neuroscientisme et certaines positions de Searle. Wittgenstein est la source philosophique de cette critique.',
+    notions:['erreur méréologique','capacité vs véhicule','personne entière','règle vs accord avec règle','critère','propriétés du tout'],
+    pistes:'Expliquer ce qu\'est l\'erreur méréologique et pourquoi «le cerveau pense» est dépourvu de sens (pas seulement faux). Distinguer capacité et véhicule (Kenny). Montrer que Searle et Fodor commettent tous deux cette erreur à leur manière. Conclure sur ce qu\'il faut entendre par «esprit».'
+  },
+  {
+    id:'d7',
+    label:'Synthèse générale',
+    q:'«Il n\'y a pas d\'esprit dans la machine, mais l\'esprit n\'est pas non plus une sorte de machine.» Expliquez et défendez cette thèse.',
+    contexte:'C\'est la thèse centrale du cours, défendue par Wittgenstein, Ryle, Kenny et Hacker contre le computationnalisme (Fodor) et contre le naturalisme biologique (Searle).',
+    notions:['dualisme','émergence','erreur méréologique','capacité','personne entière','forme de représentation'],
+    pistes:'Montrer que rejeter le dualisme ne conduit pas à «le cerveau pense» (erreur méréologique). Montrer que rejeter le computationnalisme ne conduit pas au dualisme. Expliquer positivement ce qu\'est l\'esprit : une forme de représentation pour les capacités de la personne entière.'
+  },
+];
+
+let dissertActif=null,dissertConv=[],dissertEval=null;
+
+function renderDissert(){
+  dissertInited=true;
+  const root=document.getElementById('dissert-root');
+  root.innerHTML=`
+    <div class="section-title">Entraînement à la dissertation</div>
+    <div style="padding:12px 0 20px;">
+      <div style="font-size:13px;color:var(--soft);line-height:1.75;margin-bottom:20px;padding:14px 16px;background:var(--s2);border:1px solid var(--border);border-left:2px solid var(--gold-b);border-radius:6px;">
+        Choisis une problématique, rédige ta réponse librement, puis reçois une évaluation détaillée de Claude qui corrige et complète ton argumentation selon les exigences du cours.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="dissert-list">
+        ${SUJETS_DISSERT.map((s,i)=>`
+          <div class="panel" style="cursor:pointer;transition:border-color 0.15s;" onclick="openDissert(${i})" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="padding:14px 16px;display:flex;align-items:flex-start;gap:14px;">
+              <div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--gold-d);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:2px;">${i+1}</div>
+              <div style="flex:1;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;">${s.label}</div>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text);line-height:1.6;">${s.q}</div>
+              </div>
+              <div style="color:var(--dim);font-size:14px;flex-shrink:0;margin-top:4px;">→</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div id="dissert-view" style="display:none;"></div>
+  `;
+}
+
+function openDissert(i){
+  dissertActif=i;
+  dissertConv=[];
+  const s=SUJETS_DISSERT[i];
+  document.getElementById('dissert-list').style.display='none';
+  const view=document.getElementById('dissert-view');
+  view.style.display='block';
+  view.innerHTML=`
+    <button onclick="closeDissert()" style="display:flex;align-items:center;gap:6px;padding:7px 12px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);cursor:pointer;margin-bottom:16px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold-b)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dim)'">← Retour aux sujets</button>
+
+    <div class="panel" style="margin-bottom:14px;">
+      <div style="padding:16px 18px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">${s.label}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--text);line-height:1.65;margin-bottom:14px;">${s.q}</div>
+        <div style="font-size:12px;color:var(--soft);line-height:1.75;padding:10px 12px;background:var(--s2);border-left:2px solid var(--border2);border-radius:0 4px 4px 0;margin-bottom:10px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:4px;">Contexte</span>
+          ${s.contexte}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">
+          ${s.notions.map(n=>`<span style="padding:2px 8px;background:var(--s3);border:1px solid var(--border);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);">${n}</span>`).join('')}
+        </div>
+        <div style="font-size:12px;color:var(--soft);line-height:1.7;padding:10px 12px;background:var(--gold-d);border-left:2px solid var(--gold-b);border-radius:0 4px 4px 0;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:4px;">Pistes</span>
+          ${s.pistes}
+        </div>
+      </div>
+    </div>
+
+    <div id="dissert-chat"></div>
+
+    <div class="panel" style="margin-top:12px;">
+      <div style="padding:14px 16px;">
+        <label style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:0.12em;display:block;margin-bottom:8px;" id="dissert-prompt-label">Ta réponse</label>
+        <textarea id="dissert-textarea" placeholder="Rédige ta réponse ici. Sois précis·e sur les auteurs, les notions et les arguments du cours. Une réponse de quelques paragraphes bien construits suffit pour l'évaluation." style="width:100%;min-height:180px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.8;color:var(--text);resize:vertical;outline:none;transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px;flex-wrap:wrap;">
+          <span id="dissert-charcount" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);">0 caractères</span>
+          <button id="dissert-send-btn" onclick="sendDissert()" style="padding:10px 22px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='rgba(201,169,110,0.22)'" onmouseout="this.style.background='var(--gold-d)'">Faire évaluer →</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('dissert-textarea').addEventListener('input',function(){
+    document.getElementById('dissert-charcount').textContent=this.value.length+' caractères';
+  });
+}
+
+function closeDissert(){
+  document.getElementById('dissert-list').style.display='block';
+  document.getElementById('dissert-view').style.display='none';
+}
+
+function renderDissertMsg(role,content){
+  const chat=document.getElementById('dissert-chat');
+  if(!chat)return;
+  const isUser=role==='user';
+  const div=document.createElement('div');
+  div.style.cssText=`margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;${isUser?'flex-direction:row-reverse;':''}`;
+  div.innerHTML=`
+    <div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:${isUser?'var(--gold-d)':'var(--s3)'};border:1px solid ${isUser?'var(--gold-b)':'var(--border2)'};display:flex;align-items:center;justify-content:center;font-size:11px;color:${isUser?'var(--gold)':'var(--soft)'};margin-top:2px;">${isUser?'Toi':'C'}</div>
+    <div style="flex:1;padding:12px 14px;background:${isUser?'var(--s2)':'var(--s1)'};border:1px solid ${isUser?'var(--border)':'var(--border2)'};border-radius:6px;font-size:13px;line-height:1.8;color:var(--soft);">${content.replace(/\n/g,'<br>')}</div>
+  `;
+  chat.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+async function sendDissert(){
+  const s=SUJETS_DISSERT[dissertActif];
+  const ta=document.getElementById('dissert-textarea');
+  const btn=document.getElementById('dissert-send-btn');
+  const label=document.getElementById('dissert-prompt-label');
+  const text=ta.value.trim();
+
+  if(text.length<30){ta.style.borderColor='var(--red)';setTimeout(()=>ta.style.borderColor='var(--border2)',2000);return;}
+
+  // Add user message to chat
+  renderDissertMsg('user',text);
+  dissertConv.push({role:'user',content:text});
+
+  // Clear textarea and disable
+  ta.value='';
+  ta.disabled=true;
+  btn.disabled=true;
+  btn.textContent='Évaluation…';
+  btn.style.opacity='0.5';
+  if(label)label.textContent='Poursuis l\'échange';
+
+  // Show typing indicator
+  const chat=document.getElementById('dissert-chat');
+  const typing=document.createElement('div');
+  typing.id='dissert-typing';
+  typing.style.cssText='margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;';
+  typing.innerHTML=`
+    <div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--s3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--soft);">C</div>
+    <div style="padding:12px 14px;background:var(--s1);border:1px solid var(--border2);border-radius:6px;font-size:13px;color:var(--dim);font-style:italic;">Lecture en cours…</div>
+  `;
+  if(chat)chat.appendChild(typing);
+
+  const SYSTEM=`Tu es un correcteur bienveillant et exigeant en philosophie de l'esprit, spécialisé dans le cours suivant : Philosophie de l'esprit et la machine (Rosenblueth/Wiener/Bigelow, Turing, Searle, Fodor, Putnam, Wittgenstein, Hacker, Kenny, Bennett).
+
+Tu évalues des réponses à des problématiques philosophiques. Ta réponse doit :
+1. Commencer par une appréciation globale courte (2-3 phrases) avec une note sur 20.
+2. Identifier les points forts (ce qui est bien vu, bien argumenté, fidèle au cours).
+3. Identifier les points manquants ou à améliorer (notions absentes, auteurs non mobilisés, arguments insuffisants).
+4. Proposer un ou deux développements complémentaires clés que la réponse aurait dû inclure — avec le contenu du cours (auteur, argument précis).
+5. Si c'est une réponse de suivi (l'étudiant·e répond à tes commentaires), évaluer le progrès et approfondir le dialogue.
+
+Ton ton est rigoureux mais encourageant. Tu utilises les concepts exacts du cours. Tu ne rédiges pas la dissertation à la place de l'étudiant·e mais tu fournis des pistes précises et des rappels de cours.
+
+Sujet : "${s.q}"
+Notions attendues : ${s.notions.join(', ')}.
+Pistes : ${s.pistes}`;
+
+  try{
+    const messages=dissertConv.map(m=>({role:m.role,content:m.content}));
+    const r=await fetch('/api/claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:SYSTEM,
+        messages
+      })
+    });
+    const d=await r.json();
+    const reply=d.content?.filter(c=>c.type==='text').map(c=>c.text).join('')||'Erreur de réponse.';
+
+    // Remove typing indicator
+    const t=document.getElementById('dissert-typing');
+    if(t)t.remove();
+
+    // Add assistant message
+    renderDissertMsg('assistant',reply);
+    dissertConv.push({role:'assistant',content:reply});
+
+  }catch(e){
+    const t=document.getElementById('dissert-typing');
+    if(t)t.remove();
+    renderDissertMsg('assistant','Erreur de connexion. Vérifie ta connexion et réessaie.');
+  }
+
+  // Re-enable
+  ta.disabled=false;
+  btn.disabled=false;
+  btn.textContent='Envoyer →';
+  btn.style.opacity='1';
+  ta.focus();
+}
+
+// ── RESSOURCES ────────────────────────────────────────
+function renderRessources(){
+  ressourcesInited=true;
+  document.getElementById('ressources-root').innerHTML=`
+    <div class="section-title">Ressources</div>
+    ${RESSOURCES.map(r=>`
+      <div class="resource-card">
+        <div class="resource-icon">${r.icon}</div>
+        <div class="resource-info">
+          <div class="resource-title">${r.title}</div>
+          <div class="resource-meta">${r.meta}</div>
+          <div class="resource-desc">${r.desc}</div>
+        </div>
+        <a href="${r.url}" target="_blank" rel="noopener" class="resource-btn">→ Ouvrir</a>
+      </div>`).join('')}
+    <div class="panel" style="padding:18px;margin-top:14px;">
+      <div class="section-title" style="margin-bottom:12px;font-size:14px;">Auteurs & notions</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">
+        ${['Turing','Searle','Fodor','Putnam','Wittgenstein','Hacker','Bennett','Chomsky','Shanker','Kenny','Rosenblueth','Wiener','Bigelow','McCarthy','Dennett','Babbage','Gödel','Hilbert','Bouveresse','Bruner'].map(a=>`<span style="padding:3px 9px;background:var(--s2);border:1px solid var(--border);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);">${a}</span>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ── INIT ─────────────────────────────────────────────
+renderIntro();
+</script>
+</body>
+</html>
