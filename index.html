@@ -1610,6 +1610,8 @@ function renderCartes(){
     if(desc)desc.textContent=MAPS[idx].desc;
     const area=document.getElementById('map-area');
     if(area)area.innerHTML=buildMapUI(idx);
+    // Supprimer l'instance en cache pour forcer la réinitialisation sur le nouveau canvas
+    if(MAPS[idx])delete mapInstances[MAPS[idx].id];
     setTimeout(()=>initMap(idx),20);
   };
 
@@ -2417,6 +2419,57 @@ Pistes : ${s.pistes}`;
 }
 
 // ── RESSOURCES ────────────────────────────────────────
+const MEDIAS=[
+  {
+    type:'podcast',
+    icon:'🎙',
+    title:'Avec philosophie — France Culture',
+    meta:'France Culture · Quotidien · Gratuit',
+    desc:'L\'émission phare de philo de France Culture (ex Les Chemins de la philosophie). Épisodes sur la conscience, le langage, l\'IA et la philosophie de l\'esprit. Chercher "Turing", "Searle" ou "Wittgenstein" dans l\'archive.',
+    url:'https://www.radiofrance.fr/franceculture/podcasts/avec-philosophie'
+  },
+  {
+    type:'video',
+    icon:'▶',
+    title:'Une machine peut-elle penser ? — Passe-science',
+    meta:'YouTube · Passe-science · 2024 · ~30 min',
+    desc:'Vidéo récente (déc. 2024) sur la conscience, le dualisme, le matérialisme et le fonctionnalisme. Couvre directement les enjeux du cours : test de Turing, chambre chinoise, computationnalisme.',
+    url:'https://www.youtube.com/watch?v=lJVjbyOEWOk'
+  },
+  {
+    type:'video',
+    icon:'▶',
+    title:'Wittgenstein et les frontières du langage — Noé Jacomet',
+    meta:'YouTube · Noé Jacomet · 2023 · ~45 min',
+    desc:'Présentation claire et rigoureuse de la philosophie du langage de Wittgenstein — règles, signification, grammaire — directement pertinente pour les critiques de B&H et Kenny.',
+    url:'https://www.youtube.com/watch?v=7MegNkciZmE'
+  },
+  {
+    type:'video',
+    icon:'▶',
+    title:'Introduction à la philosophie de l\'IA — Lefevre Ardant',
+    meta:'YouTube · ENS · 2017 · ~1h',
+    desc:'Conférence universitaire couvrant le test de Turing, la chambre chinoise, le fonctionnalisme et les grandes questions de la philosophie de l\'intelligence artificielle.',
+    url:'https://www.youtube.com/watch?v=pDPFnywbWDo'
+  },
+  {
+    type:'video',
+    icon:'▶',
+    title:'Un philosophe face à l\'IA — Monsieur Phi',
+    meta:'YouTube · Monsieur Phi · 2025 · ~30 min',
+    desc:'Chaîne de référence pour la philosophie analytique en français. Aborde les questions de conscience, de langage et d\'intelligence artificielle avec rigueur et pédagogie.',
+    url:'https://www.youtube.com/watch?v=8QOCHlk8mhU'
+  },
+  {
+    type:'podcast',
+    icon:'🎙',
+    title:'Les Chemins de la philosophie — Archive',
+    meta:'France Culture · Archive · 2011–2022',
+    desc:'Riche archive d\'émissions sur Wittgenstein, Searle, Fodor, la philosophie du langage et de l\'esprit. Chercher par auteur ou notion dans l\'archive de Radio France.',
+    url:'https://www.radiofrance.fr/franceculture/podcasts/les-chemins-de-la-philosophie'
+  },
+];
+
 function renderRessources(){
   ressourcesInited=true;
   document.getElementById('ressources-root').innerHTML=`
@@ -2431,6 +2484,23 @@ function renderRessources(){
         </div>
         <a href="${r.url}" target="_blank" rel="noopener" class="resource-btn">→ Ouvrir</a>
       </div>`).join('')}
+
+    <div class="panel" style="overflow:hidden;margin-top:4px;">
+      <div style="padding:14px 18px 10px;border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:8px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">🎙 Podcasts & Vidéos</div>
+      </div>
+      ${MEDIAS.map(m=>`
+        <div class="resource-card" style="border:none;border-bottom:1px solid var(--border);margin-bottom:0;">
+          <div class="resource-icon">${m.icon}</div>
+          <div class="resource-info">
+            <div class="resource-title">${m.title}</div>
+            <div class="resource-meta">${m.meta}</div>
+            <div class="resource-desc">${m.desc}</div>
+          </div>
+          <a href="${m.url}" target="_blank" rel="noopener" class="resource-btn">→ Voir</a>
+        </div>`).join('')}
+    </div>
+
     <div class="panel" style="padding:18px;margin-top:14px;">
       <div class="section-title" style="margin-bottom:12px;font-size:14px;">Auteurs & notions</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;">
