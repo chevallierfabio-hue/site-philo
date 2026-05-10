@@ -592,6 +592,7 @@ body{background:#070604;}
     <button class="nav-tab" onclick="showPage('cartes',this)">Cartes mentales</button>
     <button class="nav-tab" onclick="showPage('dissert',this)">Disserter</button>
     <button class="nav-tab" onclick="showPage('ressources',this)">Ressources</button>
+    <button class="nav-tab" onclick="showPage('jeu',this)">⚙ Mini-jeu</button>
   </nav>
 </div>
 
@@ -602,11 +603,12 @@ body{background:#070604;}
   <div id="page-cartes"    class="page"><div id="cartes-root"></div></div>
   <div id="page-dissert"   class="page"><div id="dissert-root"></div></div>
   <div id="page-ressources"class="page"><div id="ressources-root"></div></div>
+  <div id="page-jeu"      class="page"><div id="jeu-root"></div></div>
 </div>
 
 <script>
 // ── UTILS ────────────────────────────────────────────
-let fichesInited=false,trainingInited=false,cartesInited=false,dissertInited=false,ressourcesInited=false;
+let fichesInited=false,trainingInited=false,cartesInited=false,dissertInited=false,ressourcesInited=false,jeuInited=false;
 function showPage(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
@@ -617,6 +619,7 @@ function showPage(name,btn){
   if(name==='cartes'&&!cartesInited)renderCartes();
   if(name==='dissert'&&!dissertInited)renderDissert();
   if(name==='ressources'&&!ressourcesInited)renderRessources();
+  if(name==='jeu'&&!jeuInited)renderJeu();
 }
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
 function buildQ(q){const o=shuffle([...q.opts]);return{...q,shuffledOpts:o,newCorrect:o.indexOf(q.opts[q.correct])};}
@@ -829,7 +832,7 @@ function renderDashboard(){
       }).join('')}
     </div>
     ${totalDue>0?`<button onclick="startSRQuiz()" style="width:100%;margin-top:16px;padding:10px;background:var(--gold-d);border:1px solid var(--gold-b);font-family:var(--serif);font-size:17px;color:var(--gold);cursor:pointer;">
-      Réviser les ${totalDue} questions dues →
+      Réviser les ${totalDue} questions dues &rarr;
     </button>`:`<div style="text-align:center;margin-top:14px;font-family:var(--body);font-size:14px;font-style:italic;color:var(--dim);">Aucune question à réviser pour l'instant.</div>`}
   </div>`;
 }
@@ -935,10 +938,10 @@ function authorChoose(idx){
   }
   document.getElementById('author-feedback').innerHTML=`
     <div class="feedback ${ok?'ok':'ko'}">
-      <div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect — c\'était '+q.correct}</div>
+      <div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect — c\'était '+q.correct}</div>
     </div>`;
   document.getElementById('author-next').innerHTML=`
-    <button class="btn-next" onclick="authorNext()">${authorIdx+1<authorTotal?'Suivant →':'Résultats →'}</button>`;
+    <button class="btn-next" onclick="authorNext()">${authorIdx+1<authorTotal?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 
 function authorNext(){
@@ -952,7 +955,7 @@ function authorNext(){
         <div style="font-size:13px;color:var(--dim);margin-bottom:20px;">${authorScore} / ${authorTotal}</div>
         <div style="display:flex;gap:8px;justify-content:center;">
           <button onclick="startAuthorMode()" style="padding:8px 20px;background:var(--gold-d);border:1px solid var(--gold-b);font-family:var(--serif);font-size:17px;color:var(--gold);cursor:pointer;">Recommencer</button>
-          <button onclick="renderTraining()" style="padding:8px 20px;background:transparent;border:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.08em;">← Modes</button>
+          <button onclick="renderTraining()" style="padding:8px 20px;background:transparent;border:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.08em;">&larr; Modes</button>
         </div>
       </div>`;
   } else {
@@ -991,7 +994,7 @@ function renderSRQ(){
         <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Révision terminée</div>
         <div style="font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin-bottom:6px;">${srScore}</div>
         <div style="font-size:13px;color:var(--dim);margin-bottom:20px;">/ ${srQuestions.length} correctes</div>
-        <button onclick="renderTraining()" style="padding:8px 20px;background:transparent;border:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.08em;">← Retour</button>
+        <button onclick="renderTraining()" style="padding:8px 20px;background:transparent;border:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.08em;">&larr; Retour</button>
       </div>`;
     return;
   }
@@ -1033,11 +1036,11 @@ async function srChoose(idx){
   const nextInterval=srCache[getSRKey(q)]?.i||1;
   document.getElementById('sr-feedback').innerHTML=`
     <div class="feedback ${ok?'ok':'ko'}">
-      <div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'} — prochaine révision dans ${nextInterval}j</div>
+      <div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect'} — prochaine révision dans ${nextInterval}j</div>
       <div class="feedback-body">${q.exp}</div>
     </div>`;
   document.getElementById('sr-next').innerHTML=`
-    <button class="btn-next" onclick="srNext()">${srCurrent+1<srQuestions.length?'Suivant →':'Terminé →'}</button>`;
+    <button class="btn-next" onclick="srNext()">${srCurrent+1<srQuestions.length?'Suivant &rarr;':'Terminé &rarr;'}</button>`;
 }
 
 function srNext(){srCurrent++;srAnswered=false;renderSRQ();}
@@ -1129,7 +1132,7 @@ const FICHES=[
       </div>
       <div class="fiche-block">
         <span class="auteur">Gödel 1931</span>
-        Quels que soient les axiomes, il existe des <strong>énoncés indécidables</strong>. Programme de Hilbert réfuté. Ouvre l'Entscheidungsproblem : peut-on décider si un énoncé est démontrable ? → Turing répond non en 1936.
+        Quels que soient les axiomes, il existe des <strong>énoncés indécidables</strong>. Programme de Hilbert réfuté. Ouvre l'Entscheidungsproblem : peut-on décider si un énoncé est démontrable ? &rarr; Turing répond non en 1936.
       </div>
     </div>
   `},
@@ -1260,8 +1263,8 @@ const FICHES=[
     <div class="fiche-section">
       <div class="fiche-section-title">Enjeux pour la philosophie de l'esprit</div>
       <div class="fiche-block">
-        <span class="auteur">Putnam → Descartes</span>
-        Putnam renverse le paradigme cartésien : pour Descartes, <em>je sais ce que je pense</em> mais j'ignore si les idées correspondent au réel (→ véracité divine). Pour Putnam, <em>je puis ne pas savoir ce que je pense</em> — si j'ignore que eau = H2O, j'ignore le contenu de mes propres pensées.
+        <span class="auteur">Putnam &rarr; Descartes</span>
+        Putnam renverse le paradigme cartésien : pour Descartes, <em>je sais ce que je pense</em> mais j'ignore si les idées correspondent au réel (&rarr; véracité divine). Pour Putnam, <em>je puis ne pas savoir ce que je pense</em> — si j'ignore que eau = H2O, j'ignore le contenu de mes propres pensées.
       </div>
       <div class="fiche-warning">Implication computationnaliste : si le contenu est partiellement externe, comment une psychologie purement computationnelle (états internes) peut-elle rendre compte des lois intentionnelles qui font intervenir le contenu large ? C'est la difficulté de la conjonction des thèses 2 et 3 de Fodor.</div>
     </div>
@@ -1324,14 +1327,14 @@ const FLASHCARDS=[
 
 // ── RESSOURCES ───────────────────────────────────────
 const RESSOURCES=[
-  {icon:"📄",title:"Cours — Philosophie de l'esprit et la machine",meta:"Cours · M2 · 2025–26 · Google Drive",desc:"Le cours complet — cybernétique, Turing, Searle, Fodor, Wittgenstein. Accessible et consultable en ligne.",url:"https://drive.google.com/file/d/11vy4eXnZxkGmxnmT6jzbGJ-UuaaA40pF/view?usp=sharing"},
-  {icon:"📄",title:"Turing — Computing Machinery and Intelligence (1950)",meta:"Article · Mind · Libre accès",desc:"L'article original du jeu de l'imitation, des objections et réponses. Fondateur.",url:"https://www.cs.ox.ac.uk/activities/ieg/e-library/sources/t_article.pdf"},
-  {icon:"📄",title:"Searle — Minds, Brains and Programs (1980)",meta:"Article · BBS",desc:"L'expérience de la Chambre Chinoise et la critique de l'IA forte.",url:"https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/minds-brains-and-programs/DC644B47A4299C637C89772FACC2706A"},
-  {icon:"📝",title:"SEP — Chinese Room Argument",meta:"Stanford Encyclopedia · Libre accès",desc:"Entrée exhaustive sur la Chambre Chinoise, les réponses et la littérature secondaire.",url:"https://plato.stanford.edu/entries/chinese-room/"},
-  {icon:"📝",title:"SEP — Turing Machines",meta:"Stanford Encyclopedia · Libre accès",desc:"Machines de Turing, thèse de Church-Turing, Entscheidungsproblem.",url:"https://plato.stanford.edu/entries/turing-machine/"},
-  {icon:"📝",title:"SEP — Functionalism",meta:"Stanford Encyclopedia · Libre accès",desc:"Fonctionnalisme, multi-réalisabilité, computationnalisme et critiques.",url:"https://plato.stanford.edu/entries/functionalism/"},
-  {icon:"📚",title:"Bennett & Hacker — Philosophical Foundations of Neuroscience (2022)",meta:"Livre · Wiley-Blackwell",desc:"Critique systématique de l'erreur méréologique en neurosciences et en IA.",url:"https://www.wiley.com/en-us/Philosophical+Foundations+of+Neuroscience-p-9781119610113"},
-  {icon:"📚",title:"Haugeland — L'esprit dans la machine (1985/1989)",meta:"Livre · Odile Jacob",desc:"Introduction accessible à l'IA et à ses présupposés philosophiques.",url:"https://www.odilejacob.fr"},
+  {icon:"doc",title:"Cours — Philosophie de l'esprit et la machine",meta:"Cours · M2 · 2025–26 · Google Drive",desc:"Le cours complet — cybernétique, Turing, Searle, Fodor, Wittgenstein. Accessible et consultable en ligne.",url:"https://drive.google.com/file/d/11vy4eXnZxkGmxnmT6jzbGJ-UuaaA40pF/view?usp=sharing"},
+  {icon:"doc",title:"Turing — Computing Machinery and Intelligence (1950)",meta:"Article · Mind · Libre accès",desc:"L'article original du jeu de l'imitation, des objections et réponses. Fondateur.",url:"https://www.cs.ox.ac.uk/activities/ieg/e-library/sources/t_article.pdf"},
+  {icon:"doc",title:"Searle — Minds, Brains and Programs (1980)",meta:"Article · BBS",desc:"L'expérience de la Chambre Chinoise et la critique de l'IA forte.",url:"https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/minds-brains-and-programs/DC644B47A4299C637C89772FACC2706A"},
+  {icon:"sep",title:"SEP — Chinese Room Argument",meta:"Stanford Encyclopedia · Libre accès",desc:"Entrée exhaustive sur la Chambre Chinoise, les réponses et la littérature secondaire.",url:"https://plato.stanford.edu/entries/chinese-room/"},
+  {icon:"sep",title:"SEP — Turing Machines",meta:"Stanford Encyclopedia · Libre accès",desc:"Machines de Turing, thèse de Church-Turing, Entscheidungsproblem.",url:"https://plato.stanford.edu/entries/turing-machine/"},
+  {icon:"sep",title:"SEP — Functionalism",meta:"Stanford Encyclopedia · Libre accès",desc:"Fonctionnalisme, multi-réalisabilité, computationnalisme et critiques.",url:"https://plato.stanford.edu/entries/functionalism/"},
+  {icon:"livre",title:"Bennett & Hacker — Philosophical Foundations of Neuroscience (2022)",meta:"Livre · Wiley-Blackwell",desc:"Critique systématique de l'erreur méréologique en neurosciences et en IA.",url:"https://www.wiley.com/en-us/Philosophical+Foundations+of+Neuroscience-p-9781119610113"},
+  {icon:"livre",title:"Haugeland — L'esprit dans la machine (1985/1989)",meta:"Livre · Odile Jacob",desc:"Introduction accessible à l'IA et à ses présupposés philosophiques.",url:"https://www.odilejacob.fr"},
 ];
 
 // ── CARTES MENTALES (multiples) ───────────────────────
@@ -1352,7 +1355,7 @@ function renderCartes(){
         {id:'searle',label:'Searle',x:570,y:100,r:36,color:'#c06860',ring:'#903030',
          detail:'Chambre Chinoise : syntaxe ≠ sémantique. Intentionnalité intrinsèque vs dérivée. La syntaxe n\'est pas intrinsèque à la machine — elle dépend de l\'observateur.'},
         {id:'fodor',label:'Fodor /\nComputationnalisme',x:150,y:390,r:34,color:'#8a7eaa',ring:'#5a4e7a',
-         detail:'Lois psychologiques truth-preserving → implémentation computationnelle. RTM + mentalais. Influencé par Chomsky (LAD, grammaire universelle). Répond à Putnam.'},
+         detail:'Lois psychologiques truth-preserving &rarr; implémentation computationnelle. RTM + mentalais. Influencé par Chomsky (LAD, grammaire universelle). Répond à Putnam.'},
         {id:'wittg',label:'Wittgenstein\n/ Hacker / Kenny',x:560,y:390,r:34,color:'#6aaa7e',ring:'#3a7a4e',
          detail:'Erreur méréologique : attribuer au cerveau des propriétés de la personne. Règle vs accord avec règle. Le langage = critère, non symptôme. L\'esprit = capacités de la personne entière.'},
         {id:'rwb',label:'RWB\n1943',x:140,y:250,r:28,color:'#7ab8aa',ring:'#3a8878',
@@ -1398,12 +1401,12 @@ function renderCartes(){
         {id:'turingm',label:'Machine\nde Turing\n1936',x:510,y:240,r:26,color:'#7a9ec2',ring:'#3a6e9a',
          detail:'Objet mathématique (ruban + tête + table). Répond par la négative à l\'Entscheidungsproblem. Thèse de Church-Turing : tout calcul effectif simulable. Fondement théorique de l\'informatique.'},
         {id:'jeu',label:'Jeu de\nl\'imitation\n1950',x:354,y:390,r:26,color:'#7a9ec2',ring:'#3a6e9a',
-         detail:'Un juge communique par écrit avec un humain et une machine cachés. Si la machine trompe le juge → aucune raison de ne pas dire qu\'elle pense. Critère cartésien de pertinence : répondre au sens.'},
+         detail:'Un juge communique par écrit avec un humain et une machine cachés. Si la machine trompe le juge &rarr; aucune raison de ne pas dire qu\'elle pense. Critère cartésien de pertinence : répondre au sens.'},
         {id:'kenny',label:'Kenny',x:354,y:240,r:0,color:'transparent',ring:'transparent',detail:''},
       ],
       edges:[
         {f:'babbage',t:'rb',label:'précède',c:'#b8a060'},
-        {f:'godel',t:'turingm',label:'→ Entscheidungsproblem',c:'#b8a060'},
+        {f:'godel',t:'turingm',label:'&rarr; Entscheidungsproblem',c:'#b8a060'},
         {f:'feed',t:'rb',label:'composante de',c:'#7ab8aa'},
         {f:'servo',t:'rb',label:'exemple de',c:'#7ab8aa'},
         {f:'rb',t:'teleon',label:'= téléonomie',c:'#7ab8aa'},
@@ -1514,7 +1517,7 @@ function renderCartes(){
         {f:'critere',t:'personne2',label:'confirme',c:'#6aaa7e'},
         {f:'wit2',t:'personne2',label:'formule',c:'#6aaa7e'},
         {f:'kennyc',t:'personne2',label:'détaille',c:'#6aaa7e'},
-        {f:'personne2',t:'conc',label:'→',c:'#c9a96e'},
+        {f:'personne2',t:'conc',label:'&rarr;',c:'#c9a96e'},
       ]
     },
   ];
@@ -1754,7 +1757,7 @@ async function renderIntro(){
         <div id="form-login">
           <div class="input-group"><label>Email</label><input id="login-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
           <div class="input-group"><label>Mot de passe</label><input id="login-pwd" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-          <button class="btn-primary" onclick="doSignIn()">Se connecter →</button>
+          <button class="btn-primary" onclick="doSignIn()">Se connecter &rarr;</button>
         </div>
 
         <!-- Formulaire inscription (caché par défaut) -->
@@ -1762,7 +1765,7 @@ async function renderIntro(){
           <div class="input-group"><label>Prénom</label><input id="signup-name" type="text" placeholder="Ex : Sophie…" autocomplete="given-name"></div>
           <div class="input-group"><label>Email</label><input id="signup-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
           <div class="input-group"><label>Mot de passe</label><input id="signup-pwd" type="password" placeholder="6 caractères minimum" autocomplete="new-password"></div>
-          <button class="btn-primary" onclick="doSignUp()">Créer mon compte →</button>
+          <button class="btn-primary" onclick="doSignUp()">Créer mon compte &rarr;</button>
         </div>
       </div>`;
     return;
@@ -1782,7 +1785,7 @@ async function renderIntro(){
         <span class="intro-stat">${TIMER_SEC}s / question</span>
         <span class="intro-stat">Mélangées</span>
       </div>
-      <button class="btn-primary" id="btn-start" onclick="startQuiz()">Commencer →</button>
+      <button class="btn-primary" id="btn-start" onclick="startQuiz()">Commencer &rarr;</button>
       <div style="margin-top:10px;text-align:center;">
         <button onclick="signOut()" style="background:transparent;border:none;font-family:var(--mono);font-size:8px;color:var(--dim);cursor:pointer;letter-spacing:.1em;">
           Connecté : ${supaUser.email} · Se déconnecter
@@ -1914,7 +1917,7 @@ function timeExpired(){
   const q=questions[current];q._wasWrong=true;
   for(let i=0;i<4;i++){const b=document.getElementById(`opt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');}
   document.getElementById('feedback').innerHTML=`<div class="feedback ko"><div class="feedback-header"><span>⏱</span> Temps écoulé</div><div class="feedback-body">${q.exp}</div></div>`;
-  document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
+  document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 
 async function choose(idx){
@@ -1923,8 +1926,8 @@ async function choose(idx){
   if(ok)score++;else q._wasWrong=true;
   await updateSR(q, ok?5:2);
   for(let i=0;i<4;i++){const b=document.getElementById(`opt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
-  document.getElementById('feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
-  document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant →':'Résultats →'}</button>`;
+  document.getElementById('feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('next-area').innerHTML=`<button class="btn-next" onclick="nextQ()">${current+1<questions.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 
 function nextQ(){current++;if(current>=questions.length)renderResults();else renderQuestion();}
@@ -2000,7 +2003,7 @@ function showFiche(i){
   document.getElementById('fiche-content-area').innerHTML=`
     <div class="panel fiche-content">
       ${f.content}
-      <button onclick="startMiniQuiz(${i})" style="width:100%;margin-top:8px;padding:10px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--dim);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dim)'">Se tester : ${f.label} →</button>
+      <button onclick="startMiniQuiz(${i})" style="width:100%;margin-top:8px;padding:10px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--dim);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dim)'">Se tester : ${f.label} &rarr;</button>
     </div>
   `;
 }
@@ -2040,8 +2043,8 @@ function miniChoose(idx){
   if(miniAnswered)return;miniAnswered=true;
   const q=miniQ[miniIdx];const ok=idx===q.newCorrect;if(ok)miniScore++;
   for(let i=0;i<4;i++){const b=document.getElementById(`mopt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
-  document.getElementById('mini-feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
-  document.getElementById('mini-next').innerHTML=`<button class="btn-next" onclick="miniNext()">${miniIdx+1<miniQ.length?'Suivant →':'Résultats →'}</button>`;
+  document.getElementById('mini-feedback').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('mini-next').innerHTML=`<button class="btn-next" onclick="miniNext()">${miniIdx+1<miniQ.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 
 function miniNext(){
@@ -2055,7 +2058,7 @@ function miniNext(){
         <div style="font-size:12px;color:var(--dim);margin-bottom:20px;">${miniScore} / ${miniQ.length}</div>
         <div style="display:flex;gap:8px;justify-content:center;">
           <button onclick="startMiniQuiz(${miniFicheIdx})" style="padding:8px 20px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;">Recommencer</button>
-          <button onclick="showFiche(${miniFicheIdx})" style="padding:8px 20px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:12px;color:var(--dim);cursor:pointer;">← Fiche</button>
+          <button onclick="showFiche(${miniFicheIdx})" style="padding:8px 20px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:12px;color:var(--dim);cursor:pointer;">&larr; Fiche</button>
         </div>
       </div>`;
   }else{miniAnswered=false;renderMiniQ();}
@@ -2069,37 +2072,37 @@ function renderTraining(){
     <div class="section-title">Modes d'entraînement</div>
     <div class="training-grid">
       <div class="training-card" onclick="showFlashcards()">
-        <div class="training-card-icon">🃏</div>
+        <div class="training-card-icon">&#127183;</div>
         <div class="training-card-title">Flashcards</div>
         <div class="training-card-count">${FLASHCARDS.length} cartes</div>
         <div class="training-card-desc">Définitions clés — retourner pour révéler</div>
       </div>
       <div class="training-card" onclick="showThematicQuiz()">
-        <div class="training-card-icon">🎯</div>
+        <div class="training-card-icon">&#127919;</div>
         <div class="training-card-title">Quiz thématique</div>
         <div class="training-card-count">6 thèmes</div>
         <div class="training-card-desc">S'entraîner par auteur ou notion</div>
       </div>
       <div class="training-card" onclick="startAuthorMode()">
-        <div class="training-card-icon">✒️</div>
+        <div class="training-card-icon">&#9998;</div>
         <div class="training-card-title">Mode auteur</div>
         <div class="training-card-count">${AUTHORS.length} auteurs</div>
         <div class="training-card-desc">Associe une thèse à son auteur</div>
       </div>
       <div class="training-card" onclick="showSpeedRound()">
-        <div class="training-card-icon">⚡</div>
+        <div class="training-card-icon">&#9889;</div>
         <div class="training-card-title">Speed round</div>
         <div class="training-card-count">10 q · 15 sec</div>
         <div class="training-card-desc">Minuteur réduit — réponse rapide</div>
       </div>
       <div class="training-card" onclick="showHardReview()">
-        <div class="training-card-icon">↩</div>
+        <div class="training-card-icon">&#8617;</div>
         <div class="training-card-title">Points difficiles</div>
         <div class="training-card-count">Concepts subtils</div>
         <div class="training-card-desc">Searle, B&H, Wittgenstein, synthèse</div>
       </div>
       <div class="training-card" onclick="startSRQuiz()" style="${BANK.filter(q=>isDue(q)).length===0?'opacity:0.5;':''}" >
-        <div class="training-card-icon">🔁</div>
+        <div class="training-card-icon">&#128257;</div>
         <div class="training-card-title">Répétition espacée</div>
         <div class="training-card-count">${BANK.filter(q=>isDue(q)).length} dues</div>
         <div class="training-card-desc">Algorithme SM-2 — révise au bon moment</div>
@@ -2123,9 +2126,9 @@ function renderFlashcard(){
         </div>
       </div>
       <div class="flashcard-nav" style="margin-top:10px;">
-        <button class="flashcard-nav-btn" onclick="fcPrev()">← Préc.</button>
+        <button class="flashcard-nav-btn" onclick="fcPrev()">&larr; Préc.</button>
         <span class="flashcard-counter">${fcIdx+1} / ${FLASHCARDS.length}</span>
-        <button class="flashcard-nav-btn" onclick="fcNext()">Suiv. →</button>
+        <button class="flashcard-nav-btn" onclick="fcNext()">Suiv. &rarr;</button>
       </div>
     </div>`;
 }
@@ -2159,7 +2162,7 @@ function renderTQ(){
         <div style="font-size:12px;color:var(--dim);margin-bottom:18px;">${tScore} / ${tQ.length}</div>
         <div style="display:flex;gap:8px;justify-content:center;">
           <button onclick="startTQ('${tCat}')" style="padding:8px 18px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;">Rejouer</button>
-          <button onclick="showThematicQuiz()" style="padding:8px 18px;background:transparent;border:1px solid var(--border);border-radius:5px;font-size:12px;color:var(--dim);cursor:pointer;">← Thèmes</button>
+          <button onclick="showThematicQuiz()" style="padding:8px 18px;background:transparent;border:1px solid var(--border);border-radius:5px;font-size:12px;color:var(--dim);cursor:pointer;">&larr; Thèmes</button>
         </div>
       </div>`;
     return;
@@ -2179,8 +2182,8 @@ function tChoose(idx){
   if(tAnswered)return;tAnswered=true;
   const q=tQ[tIdx];const ok=idx===q.newCorrect;if(ok)tScore++;
   for(let i=0;i<4;i++){const b=document.getElementById(`topt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
-  document.getElementById('t-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
-  document.getElementById('t-nx').innerHTML=`<button class="btn-next" onclick="tNext()">${tIdx+1<tQ.length?'Suivant →':'Résultats →'}</button>`;
+  document.getElementById('t-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('t-nx').innerHTML=`<button class="btn-next" onclick="tNext()">${tIdx+1<tQ.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 function tNext(){tIdx++;tAnswered=false;renderTQ();}
 
@@ -2202,7 +2205,7 @@ function renderSQ(){
   document.getElementById('training-area').innerHTML=`
     <div class="card panel">
       <div style="height:1px;background:var(--s3)"><div id="s-fill" style="height:100%;width:100%;background:var(--gold);transition:width 0.25s linear;"></div></div>
-      <div class="card-header"><span class="card-num">⚡ ${sIdx+1}/10</span><span class="card-tag" id="s-lbl">${SPEED_TIME}</span></div>
+      <div class="card-header"><span class="card-num">&#9889; ${sIdx+1}/10</span><span class="card-tag" id="s-lbl">${SPEED_TIME}</span></div>
       <div class="card-body">
         <div class="question-text" style="font-size:15px;">${q.q}</div>
         <div class="options">${q.shuffledOpts.map((opt,i)=>`<button class="option" id="sopt-${i}" onclick="sChoose(${i})"><span class="option-letter">${['A','B','C','D'][i]}</span><span class="option-text">${opt.replace(/^[A-D]\.\s*/,'')}</span></button>`).join('')}</div>
@@ -2228,14 +2231,14 @@ function sExpired(){
   const q=sQ[sIdx];
   for(let i=0;i<4;i++){const b=document.getElementById(`sopt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');}
   document.getElementById('s-fb').innerHTML=`<div class="feedback ko"><div class="feedback-header"><span>⏱</span>Temps</div></div>`;
-  document.getElementById('s-nx').innerHTML=`<button class="btn-next" onclick="sNext()">${sIdx+1<sQ.length?'Suivant →':'Résultats →'}</button>`;
+  document.getElementById('s-nx').innerHTML=`<button class="btn-next" onclick="sNext()">${sIdx+1<sQ.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 function sChoose(idx){
   if(sAnswered)return;sAnswered=true;clearInterval(sTimer);
   const q=sQ[sIdx];const ok=idx===q.newCorrect;if(ok)sScore++;
   for(let i=0;i<4;i++){const b=document.getElementById(`sopt-${i}`);if(!b)continue;b.disabled=true;if(i===q.newCorrect)b.classList.add('reveal');if(i===idx&&!ok)b.classList.add('wrong');if(i===idx&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
-  document.getElementById('s-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
-  document.getElementById('s-nx').innerHTML=`<button class="btn-next" onclick="sNext()">${sIdx+1<sQ.length?'Suivant →':'Résultats →'}</button>`;
+  document.getElementById('s-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+  document.getElementById('s-nx').innerHTML=`<button class="btn-next" onclick="sNext()">${sIdx+1<sQ.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
 }
 function sNext(){sIdx++;sAnswered=false;renderSQ();}
 
@@ -2268,8 +2271,8 @@ function showHardReview(){
     window.hCh=function(i){
       if(an)return;an=true;const ok=i===q.newCorrect;if(ok)sc++;
       for(let j=0;j<4;j++){const b=document.getElementById(`hopt-${j}`);if(!b)continue;b.disabled=true;if(j===q.newCorrect)b.classList.add('reveal');if(j===i&&!ok)b.classList.add('wrong');if(j===i&&ok){b.classList.remove('reveal');b.classList.add('correct');}}
-      document.getElementById('h-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'✓':'✗'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
-      document.getElementById('h-nx').innerHTML=`<button class="btn-next" onclick="hNx()">${idx+1<pool.length?'Suivant →':'Résultats →'}</button>`;
+      document.getElementById('h-fb').innerHTML=`<div class="feedback ${ok?'ok':'ko'}"><div class="feedback-header"><span>${ok?'OK':'X'}</span>${ok?'Correct':'Incorrect'}</div><div class="feedback-body">${q.exp}</div></div>`;
+      document.getElementById('h-nx').innerHTML=`<button class="btn-next" onclick="hNx()">${idx+1<pool.length?'Suivant &rarr;':'Résultats &rarr;'}</button>`;
     };
     window.hNx=function(){idx++;render();};
   }
@@ -2308,7 +2311,7 @@ const SUJETS_DISSERT=[
     q:'L\'hypothèse que l\'esprit est une sorte d\'ordinateur est-elle défendable ?',
     contexte:'Fodor défend la RTM (Théorie Représentationnelle de l\'Esprit) et l\'hypothèse du mentalais. Bouveresse, Wittgenstein et Bennett & Hacker la contestent.',
     notions:['truth-preserving','mentalais','RTM','fonctionnalisme','multi-réalisabilité','critère vs symptôme','erreur méréologique'],
-    pistes:'Exposer l\'argument de Fodor (truth-preserving → implémentation computationnelle). Examiner le rôle de Chomsky (LAD, grammaire universelle). Présenter les critiques : relation interne langage/pensée (Bouveresse/Wittgenstein), les modèles computationnels comme redescriptions (B&H), pensée comme disposition non processus.'
+    pistes:'Exposer l\'argument de Fodor (truth-preserving &rarr; implémentation computationnelle). Examiner le rôle de Chomsky (LAD, grammaire universelle). Présenter les critiques : relation interne langage/pensée (Bouveresse/Wittgenstein), les modèles computationnels comme redescriptions (B&H), pensée comme disposition non processus.'
   },
   {
     id:'d5',
@@ -2356,7 +2359,7 @@ function renderDissert(){
                 <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;">${s.label}</div>
                 <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text);line-height:1.6;">${s.q}</div>
               </div>
-              <div style="color:var(--dim);font-size:14px;flex-shrink:0;margin-top:4px;">→</div>
+              <div style="color:var(--dim);font-size:14px;flex-shrink:0;margin-top:4px;">&rarr;</div>
             </div>
           </div>`).join('')}
       </div>
@@ -2373,7 +2376,7 @@ function openDissert(i){
   const view=document.getElementById('dissert-view');
   view.style.display='block';
   view.innerHTML=`
-    <button onclick="closeDissert()" style="display:flex;align-items:center;gap:6px;padding:7px 12px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);cursor:pointer;margin-bottom:16px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold-b)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dim)'">← Retour aux sujets</button>
+    <button onclick="closeDissert()" style="display:flex;align-items:center;gap:6px;padding:7px 12px;background:transparent;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);cursor:pointer;margin-bottom:16px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold-b)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dim)'">&larr; Retour aux sujets</button>
 
     <div class="panel" style="margin-bottom:14px;">
       <div style="padding:16px 18px;">
@@ -2401,7 +2404,7 @@ function openDissert(i){
         <textarea id="dissert-textarea" placeholder="Rédige ta réponse ici. Sois précis·e sur les auteurs, les notions et les arguments du cours. Une réponse de quelques paragraphes bien construits suffit pour l'évaluation." style="width:100%;min-height:180px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.8;color:var(--text);resize:vertical;outline:none;transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px;flex-wrap:wrap;">
           <span id="dissert-charcount" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);">0 caractères</span>
-          <button id="dissert-send-btn" onclick="sendDissert()" style="padding:10px 22px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='rgba(201,169,110,0.22)'" onmouseout="this.style.background='var(--gold-d)'">Faire évaluer →</button>
+          <button id="dissert-send-btn" onclick="sendDissert()" style="padding:10px 22px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='rgba(201,169,110,0.22)'" onmouseout="this.style.background='var(--gold-d)'">Faire évaluer &rarr;</button>
         </div>
       </div>
     </div>
@@ -2510,16 +2513,261 @@ Pistes : ${s.pistes}`;
   // Re-enable
   ta.disabled=false;
   btn.disabled=false;
-  btn.textContent='Envoyer →';
+  btn.textContent='Envoyer &rarr;';
   btn.style.opacity='1';
   ta.focus();
 }
 
-// ── RESSOURCES ────────────────────────────────────────
+// ── MINI-JEU : PONG PHILOSOPHIQUE ────────────────────
+function renderJeu(){
+  jeuInited=true;
+  document.getElementById('jeu-root').innerHTML=`
+    <div class="section-title">Pong Philosophique</div>
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Joueur</div>
+          <div style="font-family:var(--serif);font-size:32px;color:var(--gold);" id="pong-p-score">0</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:2px 10px;border-radius:2px;" id="pong-level">Niveau 1</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:6px;" id="pong-lives">&#10084; &#10084; &#10084;</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Machine</div>
+          <div style="font-family:var(--serif);font-size:32px;color:var(--soft);" id="pong-ai-score">0</div>
+        </div>
+      </div>
+
+      <div style="position:relative;width:100%;">
+        <canvas id="pong-canvas" style="width:100%;border:1px solid var(--border);display:block;border-radius:2px;background:#06050a;"></canvas>
+        <div id="pong-overlay" style="position:absolute;inset:0;background:rgba(6,5,10,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border-radius:2px;">
+          <div style="font-family:var(--serif);font-size:24px;color:var(--gold);">Pong Philosophique</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);">Renvoie les citations — marque des points</div>
+          <button onclick="pongStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Commencer &rarr;</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:10px 14px;min-height:48px;display:flex;align-items:center;gap:12px;">
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap;" id="pong-cite-author">—</div>
+        <div style="font-family:var(--body);font-size:13px;font-style:italic;color:var(--soft);line-height:1.5;" id="pong-cite-text">La balle transporte une thèse. Renvoie-la pour marquer !</div>
+      </div>
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">&uarr; &darr; ou souris pour déplacer · La balle accélère avec les rallyes</div>
+    </div>
+  `;
+  initPong();
+}
+
+function initPong(){
+  const cv=document.getElementById('pong-canvas');
+  if(!cv)return;
+  const DPR=window.devicePixelRatio||1;
+  const CW=cv.parentElement.offsetWidth;
+  const CH=Math.round(CW*0.6);
+  cv.width=CW*DPR; cv.height=CH*DPR;
+  cv.style.width=CW+'px'; cv.style.height=CH+'px';
+  const ctx=cv.getContext('2d');
+  ctx.scale(DPR,DPR);
+  const W=CW,H=CH;
+
+  const CITES=[
+    {a:"Turing",t:"Si la machine trompe le juge, on ne peut plus dire qu'elle ne pense pas."},
+    {a:"Searle",t:"La syntaxe seule ne suffit pas à produire la sémantique."},
+    {a:"Fodor",t:"Les processus mentaux tendent à préserver la vérité."},
+    {a:"Putnam",t:"Meanings ain't in the head."},
+    {a:"Wittgenstein",t:"C'est seulement d'un être humain qu'on peut dire qu'il voit."},
+    {a:"Hacker",t:"Le cerveau ne pense pas — c'est la personne qui pense."},
+    {a:"Monod",t:"Le comportement téléonomique n'implique aucune cause finale."},
+    {a:"Kenny",t:"Seules les créatures langagières peuvent agir pour des raisons."},
+    {a:"Wiener & Bigelow",t:"Le feedback négatif est le critère du comportement purposif."},
+    {a:"Shanker",t:"'But' est ici un homonyme trompeur de son usage ordinaire."},
+    {a:"Descartes",t:"Une machine ne peut répondre au sens de ce qu'on lui dit."},
+    {a:"Gödel",t:"Tout système cohérent contient des énoncés indécidables."},
+    {a:"Fodor",t:"Une machine passant le test reste incapable de 'veille sur le bébé'."},
+    {a:"Searle",t:"L'intentionnalité intrinsèque ne peut pas être simulée."},
+    {a:"Bennett & Hacker",t:"Attribuer la pensée au cerveau, c'est commettre une erreur méréologique."},
+  ];
+
+  const PAD_W=10, PAD_H=Math.round(H*0.18), BALL_R=Math.round(W*0.013);
+  const MARGIN=Math.round(W*0.03);
+  let pY=H/2-PAD_H/2, aiY=H/2-PAD_H/2;
+  let bX=W/2,bY=H/2,bVX=W*0.008,bVY=W*0.005;
+  let pScore=0,aiScore=0,lives=3,level=1,running=false,rally=0,citIdx=0;
+  let keys={},mouseY=null,raf=null;
+  let flashP=0,flashAI=0;
+
+  function setCite(){
+    citIdx=(citIdx+1)%CITES.length;
+    const c=CITES[citIdx];
+    const el=document.getElementById('pong-cite-author');
+    const et=document.getElementById('pong-cite-text');
+    if(el)el.textContent=c.a;
+    if(et)et.textContent='« '+c.t+' »';
+  }
+
+  function updateHUD(){
+    const ps=document.getElementById('pong-p-score');
+    const as=document.getElementById('pong-ai-score');
+    const lv=document.getElementById('pong-level');
+    const li=document.getElementById('pong-lives');
+    if(ps)ps.textContent=pScore;
+    if(as)as.textContent=aiScore;
+    if(lv)lv.textContent='Niveau '+level;
+    if(li)li.textContent='&#10084; '.repeat(lives)+'&#128420; '.repeat(Math.max(0,3-lives));
+  }
+
+  window.pongStart=function(){
+    pScore=0;aiScore=0;lives=3;level=1;rally=0;citIdx=0;
+    bX=W/2;bY=H/2;bVX=W*0.008;bVY=W*0.005;
+    pY=H/2-PAD_H/2;aiY=H/2-PAD_H/2;
+    setCite();updateHUD();
+    const o=document.getElementById('pong-overlay');
+    if(o)o.style.display='none';
+    running=true;
+    cancelAnimationFrame(raf);
+    gameLoop();
+  };
+
+  function resetBall(dir){
+    bX=W/2;bY=H/2;
+    const spd=W*0.008+level*W*0.0006;
+    bVX=spd*(dir||1);
+    bVY=(Math.random()*2-1)*W*0.005;
+    rally=0;
+  }
+
+  function showEndOverlay(msg){
+    running=false;
+    const o=document.getElementById('pong-overlay');
+    if(!o)return;
+    o.style.display='flex';
+    o.innerHTML=`
+      <div style="font-family:var(--serif);font-size:22px;color:var(--gold);">${msg}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.1em;">Score final</div>
+      <div style="font-family:var(--serif);font-size:42px;color:var(--text);">${pScore}</div>
+      <button onclick="pongStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Rejouer &rarr;</button>`;
+  }
+
+  function gameLoop(){
+    if(!running)return;
+    // Player
+    const spd=H*0.022;
+    if(keys['ArrowUp']||keys['w'])pY=Math.max(0,pY-spd);
+    if(keys['ArrowDown']||keys['s'])pY=Math.min(H-PAD_H,pY+spd);
+    if(mouseY!==null)pY=Math.max(0,Math.min(H-PAD_H,mouseY-PAD_H/2));
+    // AI
+    const aiSpd=H*0.012+level*H*0.0012;
+    const aiTarget=bY-PAD_H/2;
+    if(aiY<aiTarget-2)aiY=Math.min(H-PAD_H,aiY+aiSpd);
+    else if(aiY>aiTarget+2)aiY=Math.max(0,aiY-aiSpd);
+    // Ball
+    bX+=bVX;bY+=bVY;
+    if(bY-BALL_R<0){bY=BALL_R;bVY=Math.abs(bVY);}
+    if(bY+BALL_R>H){bY=H-BALL_R;bVY=-Math.abs(bVY);}
+    // Player paddle hit
+    if(bX-BALL_R<MARGIN+PAD_W&&bX-BALL_R>MARGIN&&bY>pY&&bY<pY+PAD_H){
+      bVX=Math.abs(bVX);
+      bVY=((bY-(pY+PAD_H/2))/(PAD_H/2))*W*0.008;
+      rally++;
+      if(rally%3===0)bVX=Math.min(bVX*1.08,W*0.022);
+      setCite();flashP=8;
+    }
+    // AI paddle hit
+    if(bX+BALL_R>W-MARGIN-PAD_W&&bX+BALL_R<W-MARGIN&&bY>aiY&&bY<aiY+PAD_H){
+      bVX=-Math.abs(bVX);
+      bVY=((bY-(aiY+PAD_H/2))/(PAD_H/2))*W*0.006;
+      rally++;flashAI=8;
+    }
+    // Scoring
+    if(bX<0){
+      aiScore++;lives--;updateHUD();
+      if(lives<=0){showEndOverlay('Partie terminée');}
+      else resetBall(1);
+    }
+    if(bX>W){
+      pScore+=1+Math.floor(rally/3);
+      if(pScore>0&&pScore%5===0){level=Math.min(10,level+1);}
+      updateHUD();resetBall(-1);
+    }
+    drawFrame();
+    raf=requestAnimationFrame(gameLoop);
+  }
+
+  function drawFrame(){
+    ctx.fillStyle='#06050a';ctx.fillRect(0,0,W,H);
+    // Centre dashed
+    ctx.setLineDash([5,8]);ctx.strokeStyle='rgba(212,168,48,0.06)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
+    ctx.setLineDash([]);
+    // Glow balle
+    const g=ctx.createRadialGradient(bX,bY,0,bX,bY,BALL_R*4);
+    g.addColorStop(0,'rgba(255,220,80,0.2)');g.addColorStop(1,'rgba(255,180,30,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(bX,bY,BALL_R*4,0,Math.PI*2);ctx.fill();
+    // Balle
+    ctx.fillStyle='#d4a830';ctx.beginPath();ctx.arc(bX,bY,BALL_R,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,248,180,0.75)';ctx.beginPath();ctx.arc(bX-BALL_R*0.28,bY-BALL_R*0.28,BALL_R*0.35,0,Math.PI*2);ctx.fill();
+    // Paddle joueur
+    if(flashP>0)flashP--;
+    const pA=flashP>0?0.55:0.22;
+    ctx.fillStyle=`rgba(212,168,48,${pA})`;ctx.fillRect(MARGIN,pY,PAD_W,PAD_H);
+    ctx.strokeStyle=`rgba(212,168,48,${pA+0.3})`;ctx.lineWidth=1;ctx.strokeRect(MARGIN,pY,PAD_W,PAD_H);
+    // Rivets paddle joueur
+    [pY+PAD_H*0.18,pY+PAD_H*0.82].forEach(ry=>{
+      ctx.beginPath();ctx.arc(MARGIN+PAD_W/2,ry,2,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,230,100,${pA+0.2})`;ctx.fill();
+    });
+    // Paddle AI
+    if(flashAI>0)flashAI--;
+    const aA=flashAI>0?0.38:0.14;
+    ctx.fillStyle=`rgba(140,110,40,${aA})`;ctx.fillRect(W-MARGIN-PAD_W,aiY,PAD_W,PAD_H);
+    ctx.strokeStyle=`rgba(140,110,40,${aA+0.25})`;ctx.lineWidth=1;ctx.strokeRect(W-MARGIN-PAD_W,aiY,PAD_W,PAD_H);
+    [aiY+PAD_H*0.18,aiY+PAD_H*0.82].forEach(ry=>{
+      ctx.beginPath();ctx.arc(W-MARGIN-PAD_W/2,ry,2,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,170,70,${aA+0.15})`;ctx.fill();
+    });
+    // Labels
+    ctx.font=`${Math.round(W*0.016)}px sans-serif`;ctx.fillStyle='rgba(80,68,38,0.6)';
+    ctx.fillText('JOUEUR',MARGIN+PAD_W+6,H-6);
+    ctx.textAlign='right';ctx.fillText('MACHINE',W-MARGIN-PAD_W-6,H-6);ctx.textAlign='left';
+    // Rallye
+    if(rally>1){
+      ctx.fillStyle=`rgba(212,168,48,${Math.min(0.65,rally*0.07)})`;
+      ctx.font=`${Math.round(W*0.018)}px sans-serif`;ctx.textAlign='center';
+      ctx.fillText('× '+rally,W/2,16);ctx.textAlign='left';
+    }
+  }
+
+  // Events
+  const keyDown=e=>{
+    if(['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();}
+    keys[e.key]=true;
+  };
+  const keyUp=e=>{keys[e.key]=false;};
+  const mouseMove=e=>{
+    const r=cv.getBoundingClientRect();
+    mouseY=(e.clientY-r.top)*(H/r.height);
+  };
+  const mouseLeave=()=>{mouseY=null;};
+  document.addEventListener('keydown',keyDown);
+  document.addEventListener('keyup',keyUp);
+  cv.addEventListener('mousemove',mouseMove);
+  cv.addEventListener('mouseleave',mouseLeave);
+
+  // Cleanup on page switch
+  const origShow=window.showPage;
+  window.showPage=function(name,btn){
+    if(name!=='jeu'){running=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',keyDown);document.removeEventListener('keyup',keyUp);}
+    origShow&&origShow(name,btn);
+  };
+
+  // Initial draw
+  ctx.fillStyle='#06050a';ctx.fillRect(0,0,W,H);
+}
+
 const MEDIAS=[
   {
     type:'podcast',
-    icon:'🎙',
+    icon:'~',
     title:'Avec philosophie — France Culture',
     meta:'France Culture · Quotidien · Gratuit',
     desc:'L\'émission phare de philo de France Culture (ex Les Chemins de la philosophie). Épisodes sur la conscience, le langage, l\'IA et la philosophie de l\'esprit. Chercher "Turing", "Searle" ou "Wittgenstein" dans l\'archive.',
@@ -2527,7 +2775,7 @@ const MEDIAS=[
   },
   {
     type:'video',
-    icon:'▶',
+    icon:'>',
     title:'Une machine peut-elle penser ? — Passe-science',
     meta:'YouTube · Passe-science · 2024 · ~30 min',
     desc:'Vidéo récente (déc. 2024) sur la conscience, le dualisme, le matérialisme et le fonctionnalisme. Couvre directement les enjeux du cours : test de Turing, chambre chinoise, computationnalisme.',
@@ -2535,7 +2783,7 @@ const MEDIAS=[
   },
   {
     type:'video',
-    icon:'▶',
+    icon:'>',
     title:'Wittgenstein et les frontières du langage — Noé Jacomet',
     meta:'YouTube · Noé Jacomet · 2023 · ~45 min',
     desc:'Présentation claire et rigoureuse de la philosophie du langage de Wittgenstein — règles, signification, grammaire — directement pertinente pour les critiques de B&H et Kenny.',
@@ -2543,7 +2791,7 @@ const MEDIAS=[
   },
   {
     type:'video',
-    icon:'▶',
+    icon:'>',
     title:'Introduction à la philosophie de l\'IA — Lefevre Ardant',
     meta:'YouTube · ENS · 2017 · ~1h',
     desc:'Conférence universitaire couvrant le test de Turing, la chambre chinoise, le fonctionnalisme et les grandes questions de la philosophie de l\'intelligence artificielle.',
@@ -2551,7 +2799,7 @@ const MEDIAS=[
   },
   {
     type:'video',
-    icon:'▶',
+    icon:'>',
     title:'Un philosophe face à l\'IA — Monsieur Phi',
     meta:'YouTube · Monsieur Phi · 2025 · ~30 min',
     desc:'Chaîne de référence pour la philosophie analytique en français. Aborde les questions de conscience, de langage et d\'intelligence artificielle avec rigueur et pédagogie.',
@@ -2559,7 +2807,7 @@ const MEDIAS=[
   },
   {
     type:'podcast',
-    icon:'🎙',
+    icon:'~',
     title:'Les Chemins de la philosophie — Archive',
     meta:'France Culture · Archive · 2011–2022',
     desc:'Riche archive d\'émissions sur Wittgenstein, Searle, Fodor, la philosophie du langage et de l\'esprit. Chercher par auteur ou notion dans l\'archive de Radio France.',
@@ -2579,12 +2827,12 @@ function renderRessources(){
           <div class="resource-meta">${r.meta}</div>
           <div class="resource-desc">${r.desc}</div>
         </div>
-        <a href="${r.url}" target="_blank" rel="noopener" class="resource-btn">→ Ouvrir</a>
+        <a href="${r.url}" target="_blank" rel="noopener" class="resource-btn">&rarr; Ouvrir</a>
       </div>`).join('')}
 
     <div class="panel" style="overflow:hidden;margin-top:4px;">
       <div style="padding:14px 18px 10px;border-bottom:1px solid var(--border);">
-        <div style="font-family:var(--mono);font-size:8px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">🎙 Podcasts & Vidéos</div>
+        <div style="font-family:var(--mono);font-size:8px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">&#127897; Podcasts & Vidéos</div>
       </div>
       ${MEDIAS.map(m=>`
         <div class="resource-card" style="border:none;border-bottom:1px solid var(--border);margin-bottom:0;">
@@ -2594,7 +2842,7 @@ function renderRessources(){
             <div class="resource-meta">${m.meta}</div>
             <div class="resource-desc">${m.desc}</div>
           </div>
-          <a href="${m.url}" target="_blank" rel="noopener" class="resource-btn">→ Voir</a>
+          <a href="${m.url}" target="_blank" rel="noopener" class="resource-btn">&rarr; Voir</a>
         </div>`).join('')}
     </div>
 
@@ -2714,21 +2962,21 @@ function renderRessources(){
     // Vitesse en rad/ms — visible et fluide
     const S=0.0008;
     return [
-      {base_speed:S,alpha:0.40,gears:[
+      {base_speed:S,alpha:0.18,gears:[
         {rx:0.042,ry:0.111,R:70,teeth:22,col:BRONZE},
         {rx:0.100,ry:0.111,R:42,teeth:14,col:COPPER},
         {rx:0.100,ry:0.172,R:24,teeth:8, col:BRASS},
         {rx:0.061,ry:0.172,R:50,teeth:17,col:SILVER},
         {rx:0.061,ry:0.244,R:28,teeth:10,col:COPPER},
       ]},
-      {base_speed:-S*0.9,alpha:0.38,gears:[
+      {base_speed:-S*0.9,alpha:0.16,gears:[
         {rx:0.990,ry:0.111,R:75,teeth:24,col:BRONZE},
         {rx:0.927,ry:0.111,R:45,teeth:15,col:BRASS},
         {rx:0.927,ry:0.177,R:26,teeth:9, col:COPPER},
         {rx:0.969,ry:0.177,R:55,teeth:18,col:SILVER},
         {rx:0.969,ry:0.256,R:30,teeth:10,col:BRONZE},
       ]},
-      {base_speed:S*1.1,alpha:0.35,gears:[
+      {base_speed:S*1.1,alpha:0.14,gears:[
         {rx:0.365,ry:0.981,R:62,teeth:20,col:COPPER},
         {rx:0.417,ry:0.981,R:38,teeth:12,col:BRONZE},
         {rx:0.417,ry:0.926,R:22,teeth:8, col:BRASS},
@@ -3167,7 +3415,7 @@ function renderRessources(){
       this.vx=(Math.random()-0.5)*0.1; this.vy=-(Math.random()*0.2+0.06);
       this.wobble=Math.random()*Math.PI*2;
       this.life=0; this.maxLife=Math.random()*700+400;
-      this.opacity=0; this.maxOp=Math.random()*0.35+0.18;
+      this.opacity=0; this.maxOp=Math.random()*0.14+0.06;
       if(this.type==='book'){this.w=Math.random()*16+14;this.h=Math.random()*22+18;}
     }
     update(){
@@ -3199,7 +3447,7 @@ function renderRessources(){
       this.x=wp.x; this.y=wp.y;
       this.targetWpIdx=(this.wpIdx+1)%this.wps.length;
       this.sc=type==='airship'?0.62:0.52;
-      this.opacity=0; this.targetOp=type==='airship'?0.55:0.50;
+      this.opacity=0; this.targetOp=type==='airship'?0.22:0.20;
       this.motorAngle=0;
       this.wobble=Math.random()*Math.PI*2;
       this._setTarget();
@@ -3529,7 +3777,7 @@ function renderRessources(){
         this.x=(Math.random()*1.1-0.05)*W;
         this.y=init?H-25+(Math.random()-0.5)*60:H+8;
         this.vy=-(Math.random()*0.45+0.1);this.vx=(Math.random()-0.5)*0.3;
-        this.size=Math.random()*2.8+0.5;this.maxOp=Math.random()*0.8+0.2;
+        this.size=Math.random()*2.8+0.5;this.maxOp=Math.random()*0.35+0.10;
         this.bright=Math.random()>0.4;
       }else{
         this.x=Math.random()*W;
