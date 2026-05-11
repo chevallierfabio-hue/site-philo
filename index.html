@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Philosophie de l'esprit et la machine</title>
-<link href="./Philosophie de l&#39;esprit et la machine_files/css2" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#07060400;--s1:rgba(14,11,8,0.45);--s2:rgba(18,14,9,0.52);--s3:rgba(23,19,14,0.58);--s4:rgba(30,26,18,0.62);
@@ -919,11 +919,11 @@ body{background:transparent;}
 <div id="site-noise"></div>
 <div id="site-gradient"></div>
 
-<!-- Supabase SDK -->
-<script src="./Philosophie de l&#39;esprit et la machine_files/supabase.min.js"></script>
+<!-- Supabase SDK — CDN principal jsdelivr + fallback unpkg si échec -->
+<script src="./index_files/supabase.min.js" onerror="(function(){var s=document.createElement(&#39;script&#39;);s.src=&#39;https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js&#39;;document.head.appendChild(s);})()"></script>
 
 <!-- Curseur personnalisé : Smooth Cursor (magicui port) -->
-<div id="cursor" aria-hidden="true" style="left: 876.65px; top: 368.32px; transform: translate(-50%, -50%) rotate(-52.46deg) scale(0.95); opacity: 1;">
+<div id="cursor" aria-hidden="true" style="left: 519.05px; top: 399.14px; transform: translate(-50%, -50%) rotate(-123.6deg) scale(0.8); opacity: 1;">
   <svg xmlns="http://www.w3.org/2000/svg" width="50" height="54" viewBox="0 0 50 54" fill="none">
     <g filter="url(#sc_shadow)">
       <path d="M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 38.8627 25.9422 39.0496L39.8121 44.1954C41.6849 44.8902 43.4884 42.9759 42.6817 41.1495Z" fill="black"></path>
@@ -943,7 +943,7 @@ body{background:transparent;}
     </defs>
   </svg>
 </div>
-<div id="cursor-trail" style="left: 680.87px; top: 373.31px; width: 18.1px; height: 5px; transform: translate(-50%, -50%) rotate(-80.5deg);"></div>
+<div id="cursor-trail" style="left: 519.05px; top: 399.14px; width: 8px; height: 8px; transform: translate(-50%, -50%) rotate(0deg);"></div>
 
 <!-- Lecteur audio ambiant -->
 <audio id="bg-music" loop="" preload="none">
@@ -977,41 +977,212 @@ body{background:transparent;}
 
 <!-- ── CONTENU PRINCIPAL ────────────────────────────── -->
 <div class="cs-wrapper" id="cs-wrapper">
-<div class="cs-inner" id="cs-inner" style="--scroll-rotX: 8deg; --scroll-scale: 1.1;">
+<div class="cs-inner" id="cs-inner" style="--scroll-rotX: 7.6132334818466205deg; --scroll-scale: 1.0951654185230828;">
   <div id="page-quiz" class="page active"><div id="root">
-      <div class="panel intro-box" style="--x: 496.70; --y: 213.50; --xp: 0.702; --yp: 0.498;">
-        <h2>Philosophie de l'esprit et la machine</h2>
-        <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
-
-        <!-- Onglets connexion / inscription -->
-        <div style="display:flex;border-bottom:1px solid var(--border);margin:20px 0 18px;">
-          <button id="tab-login" onclick="switchAuthTab(&#39;login&#39;)" style="flex:1;padding:9px;background:transparent;border:none;border-bottom:2px solid var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;">Se connecter</button>
-          <button id="tab-signup" onclick="switchAuthTab(&#39;signup&#39;)" style="flex:1;padding:9px;background:transparent;border:none;border-bottom:2px solid transparent;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);cursor:pointer;">Créer un compte</button>
+    <div class="panel intro-box" style="--x: 174.50; --y: 373.04; --xp: 0.246; --yp: 0.989;">
+      <h2>Philosophie de l'esprit et la machine</h2>
+      <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
+      <div class="input-group"><label>Prénom</label><input id="name-input" type="text" placeholder="Ex : Sophie…" value="Maradomarx" autocomplete="off"></div>
+      <div id="prev-score-msg" class="prev-score-msg">Bienvenue Maradomarx — meilleur score : <strong style="color:var(--gold)">20/20 (100%)</strong></div>
+      <div class="intro-stats">
+        <span class="intro-stat">41 questions</span>
+        <span class="intro-stat">20 / partie</span>
+        <span class="intro-stat">30s / question</span>
+        <span class="intro-stat">Mélangées</span>
+      </div>
+      <button class="btn-primary" id="btn-start" onclick="startQuiz()">Commencer →</button>
+      <div style="margin-top:10px;text-align:center;">
+        <button onclick="signOut()" style="background:transparent;border:none;font-family:var(--mono);font-size:8px;color:var(--dim);cursor:pointer;letter-spacing:.1em;">
+          Connecté : chevallierfabio@gmail.com · Se déconnecter
+        </button>
+      </div>
+    </div>
+    <div id="dashboard-area">
+  <div class="panel" style="padding: 20px 18px; margin-bottom: 12px; --x: 187.92; --y: -14.56; --xp: 0.265; --yp: -0.031;">
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif);font-size:36px;color:var(--gold);line-height:1;">0</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;">questions vues</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif);font-size:36px;color:var(--text);line-height:1;">0%</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;">maîtrise globale</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif);font-size:36px;color:var(--red);line-height:1;">41</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;">à réviser</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Cybernétique</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">7 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Test de Turing</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">7 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Machine de Turing</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">5 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Chambre chinoise</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">4 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Wittgenstein / Hacker</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">4 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Computationnalisme</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">5 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Externalisme (Putnam)</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">4 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
+        </div><div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--body);font-size:14px;color:var(--soft);">Synthèse</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.08em;">5 à revoir</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--red);">—</span>
+            </div>
+          </div>
+          <div style="height:3px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:var(--red);border-radius:2px;transition:width .4s;"></div>
+          </div>
         </div>
-
-        <div id="auth-msg" class="prev-score-msg" style="min-height:18px;margin-bottom:10px;"></div>
-
-        <!-- Formulaire connexion -->
-        <div id="form-login">
-          <div class="input-group"><label>Email</label><input id="login-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
-          <div class="input-group"><label>Mot de passe</label><input id="login-pwd" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-          <button class="btn-primary" onclick="doSignIn()">Se connecter →</button>
-        </div>
-
-        <!-- Formulaire inscription (caché par défaut) -->
-        <div id="form-signup" style="display:none;">
-          <div class="input-group"><label>Prénom</label><input id="signup-name" type="text" placeholder="Ex : Sophie…" autocomplete="given-name"></div>
-          <div class="input-group"><label>Email</label><input id="signup-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
-          <div class="input-group"><label>Mot de passe</label><input id="signup-pwd" type="password" placeholder="6 caractères minimum" autocomplete="new-password"></div>
-          <button class="btn-primary" onclick="doSignUp()">Créer mon compte →</button>
-        </div>
-      </div></div></div>
+    </div>
+    <button onclick="startSRQuiz()" style="width:100%;margin-top:16px;padding:10px;background:var(--gold-d);border:1px solid var(--gold-b);font-family:var(--serif);font-size:17px;color:var(--gold);cursor:pointer;">
+      Réviser les 41 questions dues →
+    </button>
+  </div></div>
+    <div class="panel" style="margin-top: 0px; --x: 192.64; --y: -451.14; --xp: 0.272; --yp: -2.837;">
+      <div class="lb-preview" style="padding:16px 18px;">
+        <div class="lb-preview-title">Classement</div>
+        <div id="lb-intro-body">
+    <div class="lb-row ">
+      <span class="lb-rank top">#1</span>
+      <span class="lb-name">Teh</span>
+      <span class="lb-pts">20</span>
+      <span class="lb-pct">100%</span>
+    </div>
+    <div class="lb-row me">
+      <span class="lb-rank top">#2</span>
+      <span class="lb-name">Maradomarx</span>
+      <span class="lb-pts">20</span>
+      <span class="lb-pct">100%</span>
+    </div></div>
+      </div>
+    </div>
+  </div></div>
   <div id="page-fiches" class="page"><div id="fiches-root"></div></div>
   <div id="page-training" class="page"><div id="training-root"></div></div>
   <div id="page-cartes" class="page"><div id="cartes-root"></div></div>
   <div id="page-dissert" class="page"><div id="dissert-root"></div></div>
   <div id="page-ressources" class="page"><div id="ressources-root"></div></div>
-  <div id="page-jeu" class="page"><div id="jeu-root"></div></div>
+  <div id="page-jeu" class="page"><div id="jeu-root">
+    <div class="section-title">Pong Philosophique</div>
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Joueur</div>
+          <div style="font-family:var(--serif);font-size:32px;color:var(--gold);" id="pong-p-score">1</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:2px 10px;border-radius:2px;" id="pong-level">Niveau 1</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:6px;display:none;" id="pong-lives">&amp;#10084; &amp;#10084; &amp;#128420; </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Machine</div>
+          <div style="font-family:var(--serif);font-size:32px;color:var(--soft);" id="pong-ai-score">1</div>
+        </div>
+      </div>
+
+      <div style="position:relative;width:100%;">
+        <canvas id="pong-canvas" style="width: 600px; border: 1px solid var(--border); display: block; border-radius: 2px; background: rgb(6, 5, 10); height: 360px;" width="1200" height="720"></canvas>
+        <div id="pong-overlay" style="position: absolute; inset: 0px; background: rgba(6, 5, 10, 0.92); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border-radius: 2px; overflow-y: auto;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Balle perdue — Sauve ta vie</div>
+      <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;margin-top:-6px;">Question sur Searle</div>
+      <div style="font-family:var(--serif);font-size:15px;color:var(--text);max-width:92%;text-align:center;line-height:1.45;">Qu'est-ce que l'intentionnalité intrinsèque versus dérivée selon Searle ?</div>
+      <div id="pong-quiz-opts" style="display:flex;flex-direction:column;gap:5px;width:94%;max-width:520px;"><button style="background: transparent; border-color: rgba(120, 200, 120, 0.5); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; color: rgb(159, 212, 159); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;" disabled="">L'intrinsèque est la propriété originale de l'esprit d'être à propos de quelque chose et la dérivée est celle que l'esprit impose à des objets qui en sont dépourvus</button><button style="background: transparent; border-color: var(--border); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; color: var(--soft); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;" disabled="">L'intrinsèque est propre aux machines et la dérivée est propre aux humains</button><button style="background: transparent; border-color: rgba(220, 90, 90, 0.7); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; color: rgb(224, 133, 133); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;" disabled="">L'intrinsèque est consciente et la dérivée est inconsciente et automatique</button><button style="background: transparent; border: 1px solid var(--border); color: var(--soft); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;" disabled="">L'intrinsèque est biologique et la dérivée est culturelle ou conventionnelle</button></div>
+      <div id="pong-quiz-banner" style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; min-height: 14px; color: rgb(224, 133, 133);">Vie perdue</div>
+    </div>
+      </div>
+
+      <div style="margin-top:10px;background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:10px 14px;min-height:48px;display:flex;align-items:center;gap:12px;">
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap;" id="pong-cite-author">Fodor</div>
+        <div style="font-family:var(--body);font-size:13px;font-style:italic;color:var(--soft);line-height:1.5;" id="pong-cite-text">« Les processus mentaux tendent à préserver la vérité. »</div>
+      </div>
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">↑ ↓ &nbsp;ou&nbsp; W S &nbsp;· La balle accélère avec les rallyes</div>
+
+      <!-- Classement permanent -->
+      <div style="margin-top:14px;background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Classement</div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);">Top 10 · Pong Philosophique</div>
+        </div>
+        <div id="pong-lb-permanent" style="font-family:var(--mono);font-size:11px;color:var(--soft);"><div style="display:grid;grid-template-columns:24px 1fr auto auto auto;gap:10px;padding:4px 6px;background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;align-items:center;border-radius:1px;">
+      <span style="color:var(--gold);font-weight:700;">1</span>
+      <span style="color:var(--gold);font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Maradomarx (toi)</span>
+      <span style="color:var(--gold);font-weight:600;">3</span>
+      <span style="color:var(--dim);font-size:9px;">lvl 1</span>
+      <span style="color:var(--dim);font-size:9px;">×0</span>
+    </div></div>
+      </div>
+    </div>
+  </div></div>
 </div>
 </div>
 
@@ -1046,16 +1217,32 @@ const SUPA_URL='https://lmngoemfxodfjztydvuu.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbmdvZW1meG9kZmp6dHlkdnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzY2MjEsImV4cCI6MjA5MzkxMjYyMX0.0Jt1E1vKvqCjB2uJ2MAAtjpmDACkuUxPeGZCpjhKEhQ';
 
 let supa = null;
-try {
-  if(typeof supabase !== 'undefined' && supabase.createClient) {
-    supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-  }
-} catch(e) { console.warn('Supabase SDK non disponible, mode local activé', e); }
+function ensureSupa(){
+  if(supa) return supa;
+  try{
+    if(typeof supabase !== 'undefined' && supabase.createClient){
+      supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+    }
+  }catch(e){ console.warn('Supabase init failed', e); }
+  return supa;
+}
+// Tentative immédiate (cas où le SDK est déjà chargé)
+ensureSupa();
+// Re-tentative décalée (cas CDN lent ou fallback unpkg)
+let _supaRetries = 0;
+const _supaRetryTimer = setInterval(()=>{
+  _supaRetries++;
+  if(ensureSupa() || _supaRetries > 20){ clearInterval(_supaRetryTimer); }
+}, 250);
 
 let supaUser = null;
 
 async function initAuth(){
-  if(!supa){ supaUser=null; return; }
+  // Attend jusqu'à ~5s que le SDK soit prêt avant d'abandonner
+  for(let i=0;i<20 && !ensureSupa();i++){
+    await new Promise(r=>setTimeout(r,250));
+  }
+  if(!ensureSupa()){ supaUser=null; return; }
   try {
     const {data:{session}} = await supa.auth.getSession();
     if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||'';}
@@ -1072,7 +1259,7 @@ async function initAuth(){
 }
 
 async function signUp(email,password,name){
-  if(!supa) throw new Error('Service non disponible');
+  if(!ensureSupa()) throw new Error('Service non disponible');
   const {data,error}=await supa.auth.signUp({email,password,options:{data:{name}}});
   if(error)throw error;
   if(data.user){
@@ -1083,7 +1270,7 @@ async function signUp(email,password,name){
 }
 
 async function signIn(email,password){
-  if(!supa) throw new Error('Service non disponible');
+  if(!ensureSupa()) throw new Error('Service non disponible');
   const {data,error}=await supa.auth.signInWithPassword({email,password});
   if(error)throw error;
   supaUser=data.user; playerName=data.user.user_metadata?.name||'';
@@ -1091,7 +1278,7 @@ async function signIn(email,password){
 }
 
 async function signOut(){
-  if(supa) await supa.auth.signOut();
+  if(ensureSupa()) await supa.auth.signOut();
   supaUser=null; playerName='';
   renderIntro();
 }
@@ -1442,7 +1629,44 @@ async function srChoose(idx){
 
 function srNext(){srCurrent++;srAnswered=false;renderSRQ();}
 async function fetchScores(){try{const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});const d=await r.json();return d.record?.scores||[];}catch{return[];}}
-async function saveScore(name,pts){try{const uid=getUID();const sc=await fetchScores();let ex=sc.findIndex(s=>s.uid===uid);if(ex<0)ex=sc.findIndex(s=>s.name.toLowerCase()===name.toLowerCase());if(ex>=0){const p=sc[ex];sc[ex]={uid,name,pts:pts>p.pts?pts:p.pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")};}else sc.push({uid,name,pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")});sc.sort((a,b)=>b.pts-a.pts);await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:sc})});return sc;}catch(e){console.error(e);return[];}}
+async function saveScore(name,pts){try{const uid=getUID();const r0=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});const d0=await r0.json();const rec=d0.record||{};const sc=rec.scores||[];const pongPreserve=rec.pong_scores||[];let ex=sc.findIndex(s=>s.uid===uid);if(ex<0)ex=sc.findIndex(s=>s.name.toLowerCase()===name.toLowerCase());if(ex>=0){const p=sc[ex];sc[ex]={uid,name,pts:pts>p.pts?pts:p.pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")};}else sc.push({uid,name,pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")});sc.sort((a,b)=>b.pts-a.pts);await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:sc,pong_scores:pongPreserve})});return sc;}catch(e){console.error(e);return[];}}
+
+// ── PONG LEADERBOARD (extension du même bin JSONBin) ─────────
+async function fetchPongScores(){
+  try{
+    const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});
+    const d=await r.json();
+    return (d.record?.pong_scores)||[];
+  }catch{return[];}
+}
+async function savePongScore(name,score,lvl,rallyM){
+  try{
+    const uid=getUID();
+    // On lit le bin entier pour préserver les scores QCM lors du PUT
+    const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});
+    const d=await r.json();
+    const rec=d.record||{};
+    const scoresQCM=rec.scores||[];
+    const ps=rec.pong_scores||[];
+    const now=new Date().toLocaleDateString("fr-FR");
+    const pseudo=(name||'Anonyme').trim()||'Anonyme';
+    let ex=ps.findIndex(s=>s.uid===uid);
+    if(ex<0)ex=ps.findIndex(s=>(s.name||'').toLowerCase()===pseudo.toLowerCase());
+    if(ex>=0){
+      const prev=ps[ex];
+      // On ne garde que le meilleur score
+      if(score>prev.score){
+        ps[ex]={uid,name:pseudo,score,level:lvl,rally:rallyM,date:now};
+      }
+    } else {
+      ps.push({uid,name:pseudo,score,level:lvl,rally:rallyM,date:now});
+    }
+    ps.sort((a,b)=>(b.score-a.score)||(b.level-a.level)||(b.rally-a.rally));
+    if(ps.length>100)ps.length=100;
+    await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:scoresQCM,pong_scores:ps})});
+    return ps;
+  }catch(e){console.error('Pong score save failed',e);return[];}
+}
 
 // ── BANQUE ───────────────────────────────────────────
 const BANK=[
@@ -2916,6 +3140,36 @@ Pistes : ${s.pistes}`;
 }
 
 // ── MINI-JEU : PONG PHILOSOPHIQUE ────────────────────
+function renderPongLeaderboard(rows){
+  const el=document.getElementById('pong-lb-permanent');
+  if(!el)return;
+  const pseudo=(typeof playerName!=='undefined'&&playerName)?playerName:'';
+  const uid=(typeof getUID==='function')?getUID():null;
+  if(!rows || !rows.length){
+    el.innerHTML='<div style="text-align:center;color:var(--dim);font-style:italic;padding:10px;">Aucun score encore — lance une partie pour inaugurer le tableau.</div>';
+    return;
+  }
+  const top=rows.slice(0,10);
+  el.innerHTML=top.map((s,i)=>{
+    const isMe=(uid&&s.uid===uid)||(s.name&&pseudo&&s.name.toLowerCase()===pseudo.toLowerCase());
+    const rankColor=i===0?'var(--gold)':(i<3?'var(--soft)':'var(--dim)');
+    const bg=isMe?'background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;':'padding-left:10px;';
+    return `<div style="display:grid;grid-template-columns:24px 1fr auto auto auto;gap:10px;padding:4px 6px;${bg}align-items:center;border-radius:1px;">
+      <span style="color:${rankColor};font-weight:${i===0?'700':'400'};">${i+1}</span>
+      <span style="color:${isMe?'var(--gold)':'var(--text)'};font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name||'—'}${isMe?' (toi)':''}</span>
+      <span style="color:${isMe?'var(--gold)':'var(--soft)'};font-weight:600;">${s.score}</span>
+      <span style="color:var(--dim);font-size:9px;">lvl ${s.level||1}</span>
+      <span style="color:var(--dim);font-size:9px;">×${s.rally||0}</span>
+    </div>`;
+  }).join('');
+}
+async function refreshPongLeaderboard(){
+  try{
+    const rows=await fetchPongScores();
+    renderPongLeaderboard(rows);
+  }catch{}
+}
+
 function renderJeu(){
   jeuInited=true;
   document.getElementById('jeu-root').innerHTML=`
@@ -2928,7 +3182,7 @@ function renderJeu(){
         </div>
         <div style="text-align:center;">
           <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:2px 10px;border-radius:2px;" id="pong-level">Niveau 1</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:6px;" id="pong-lives">&#10084; &#10084; &#10084;</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:6px;display:none;" id="pong-lives">&#10084; &#10084; &#10084;</div>
         </div>
         <div style="text-align:center;">
           <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Machine</div>
@@ -2938,7 +3192,7 @@ function renderJeu(){
 
       <div style="position:relative;width:100%;">
         <canvas id="pong-canvas" style="width:100%;border:1px solid var(--border);display:block;border-radius:2px;background:#06050a;"></canvas>
-        <div id="pong-overlay" style="position:absolute;inset:0;background:rgba(6,5,10,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border-radius:2px;">
+        <div id="pong-overlay" style="position:absolute;inset:0;background:rgba(6,5,10,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border-radius:2px;overflow-y:auto;">
           <div style="font-family:var(--serif);font-size:24px;color:var(--gold);">Pong Philosophique</div>
           <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);">Renvoie les citations — marque des points</div>
           <button onclick="pongStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Commencer &rarr;</button>
@@ -2950,9 +3204,21 @@ function renderJeu(){
         <div style="font-family:var(--body);font-size:13px;font-style:italic;color:var(--soft);line-height:1.5;" id="pong-cite-text">La balle transporte une thèse. Renvoie-la pour marquer !</div>
       </div>
       <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">&uarr; &darr; &nbsp;ou&nbsp; W S &nbsp;· La balle accélère avec les rallyes</div>
+
+      <!-- Classement permanent -->
+      <div style="margin-top:14px;background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Classement</div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);">Top 10 · Pong Philosophique</div>
+        </div>
+        <div id="pong-lb-permanent" style="font-family:var(--mono);font-size:11px;color:var(--soft);">
+          <div style="text-align:center;color:var(--dim);font-style:italic;padding:10px;">Chargement du classement…</div>
+        </div>
+      </div>
     </div>
   `;
   initPong();
+  refreshPongLeaderboard();
 }
 
 function initPong(){
@@ -2989,9 +3255,9 @@ function initPong(){
   const MARGIN=Math.round(W*0.03);
   let pY=H/2-PAD_H/2, aiY=H/2-PAD_H/2;
   let bX=W/2,bY=H/2,bVX=W*0.008,bVY=W*0.005;
-  let pScore=0,aiScore=0,lives=3,level=1,running=false,rally=0,citIdx=0;
+  let pScore=0,aiScore=0,lives=3,level=1,running=false,rally=0,citIdx=0,maxRally=0;
   let keys={},mouseY=null,raf=null;
-  let flashP=0,flashAI=0;
+  let flashP=0,flashAI=0,levelUpFlash=0;
   // IA — état pour comportement humanisé (apathie + erreur + lenteur)
   let aiAimY=H/2-PAD_H/2, aiTargetTick=0;
 
@@ -3016,13 +3282,52 @@ function initPong(){
   }
 
   window.pongStart=function(){
-    pScore=0;aiScore=0;lives=3;level=1;rally=0;citIdx=0;
+    pScore=0;aiScore=0;lives=3;level=1;rally=0;maxRally=0;citIdx=0;levelUpFlash=0;
     bX=W/2;bY=H/2;bVX=W*0.008;bVY=W*0.005;
     pY=H/2-PAD_H/2;aiY=H/2-PAD_H/2;
     setCite();updateHUD();
     cancelAnimationFrame(raf);
     // Pré-lancement : explique les contrôles + countdown
     showCountdown();
+  };
+
+  // Consultation du classement à tout moment (depuis le bouton sous le canvas)
+  window.pongShowLeaderboard=async function(){
+    if(running){ running=false; cancelAnimationFrame(raf); }
+    const o=document.getElementById('pong-overlay');
+    if(!o)return;
+    o.style.display='flex';
+    o.style.padding='18px';
+    o.innerHTML=`
+      <div style="font-family:var(--serif);font-size:22px;color:var(--gold);">Classement</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;">Pong Philosophique — Top 10</div>
+      <div id="pong-lb-rows" style="font-family:var(--mono);font-size:11px;color:var(--soft);width:94%;max-width:520px;margin-top:6px;">
+        <div style="text-align:center;color:var(--dim);font-style:italic;padding:14px;">Chargement…</div>
+      </div>
+      <button onclick="pongStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;margin-top:6px;">Jouer &rarr;</button>`;
+    const pseudo=(typeof playerName!=='undefined'&&playerName)?playerName:'';
+    const uid=(typeof getUID==='function')?getUID():null;
+    let board=[];
+    try{board=await fetchPongScores();}catch{}
+    const rowsEl=document.getElementById('pong-lb-rows');
+    if(!rowsEl)return;
+    if(!board.length){
+      rowsEl.innerHTML='<div style="text-align:center;color:var(--dim);font-style:italic;padding:14px;">Aucun score enregistré pour l\'instant.<br>Lance une partie pour inaugurer le tableau !</div>';
+      return;
+    }
+    const top=board.slice(0,10);
+    rowsEl.innerHTML=top.map((s,i)=>{
+      const isMe=(uid&&s.uid===uid)||(s.name&&pseudo&&s.name.toLowerCase()===pseudo.toLowerCase());
+      const rankColor=i===0?'var(--gold)':(i<3?'var(--soft)':'var(--dim)');
+      const bg=isMe?'background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;':'padding-left:10px;';
+      return `<div style="display:grid;grid-template-columns:30px 1fr auto auto auto;gap:10px;padding:5px 8px;${bg}align-items:center;">
+        <span style="color:${rankColor};font-weight:${i===0?'700':'400'};">${i+1}</span>
+        <span style="color:${isMe?'var(--gold)':'var(--text)'};font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name||'—'}${isMe?' (toi)':''}</span>
+        <span style="color:${isMe?'var(--gold)':'var(--soft)'};font-weight:600;">${s.score}</span>
+        <span style="color:var(--dim);font-size:9px;">lvl ${s.level||1}</span>
+        <span style="color:var(--dim);font-size:9px;">×${s.rally||0}</span>
+      </div>`;
+    }).join('');
   };
 
   function showCountdown(){
@@ -3163,11 +3468,60 @@ function initPong(){
     const o=document.getElementById('pong-overlay');
     if(!o)return;
     o.style.display='flex';
+    o.style.padding='18px';
     o.innerHTML=`
       <div style="font-family:var(--serif);font-size:22px;color:var(--gold);">${msg}</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.1em;">Score final</div>
-      <div style="font-family:var(--serif);font-size:42px;color:var(--text);">${pScore}</div>
+      <div style="display:flex;gap:28px;align-items:flex-end;margin-top:-4px;">
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Score</div>
+          <div style="font-family:var(--serif);font-size:42px;color:var(--text);line-height:1;">${pScore}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Niveau</div>
+          <div style="font-family:var(--serif);font-size:28px;color:var(--soft);line-height:1;">${level}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Rallye max</div>
+          <div style="font-family:var(--serif);font-size:28px;color:var(--soft);line-height:1;">×${maxRally}</div>
+        </div>
+      </div>
+      <div id="pong-lb-wrap" style="width:94%;max-width:520px;margin-top:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:8px;">Classement · Top 10</div>
+        <div id="pong-lb-rows" style="font-family:var(--mono);font-size:11px;color:var(--soft);">
+          <div style="text-align:center;color:var(--dim);font-style:italic;padding:14px;">Chargement…</div>
+        </div>
+      </div>
       <button onclick="pongStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Rejouer &rarr;</button>`;
+
+    // Save + Fetch leaderboard
+    const pseudo=(typeof playerName!=='undefined'&&playerName)?playerName:'Anonyme';
+    const uid=(typeof getUID==='function')?getUID():null;
+    (async()=>{
+      let board=[];
+      try{ board=await savePongScore(pseudo,pScore,level,maxRally); }
+      catch(e){ try{board=await fetchPongScores();}catch{} }
+      // Met aussi à jour le panneau permanent sous le canvas
+      try{ renderPongLeaderboard(board); }catch{}
+      const rowsEl=document.getElementById('pong-lb-rows');
+      if(!rowsEl)return;
+      if(!board.length){
+        rowsEl.innerHTML='<div style="text-align:center;color:var(--dim);font-style:italic;padding:14px;">Aucun score enregistré pour l\'instant.</div>';
+        return;
+      }
+      const top=board.slice(0,10);
+      rowsEl.innerHTML=top.map((s,i)=>{
+        const isMe=(uid&&s.uid===uid)||(s.name&&pseudo&&s.name.toLowerCase()===pseudo.toLowerCase());
+        const rankColor = i===0?'var(--gold)':(i<3?'var(--soft)':'var(--dim)');
+        const bg = isMe?'background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;':'padding-left:10px;';
+        return `<div style="display:grid;grid-template-columns:30px 1fr auto auto auto;gap:10px;padding:5px 8px;${bg}align-items:center;">
+          <span style="color:${rankColor};font-weight:${i===0?'700':'400'};">${i+1}</span>
+          <span style="color:${isMe?'var(--gold)':'var(--text)'};font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name||'—'}${isMe?' (toi)':''}</span>
+          <span style="color:${isMe?'var(--gold)':'var(--soft)'};font-weight:600;">${s.score}</span>
+          <span style="color:var(--dim);font-size:9px;">lvl ${s.level||1}</span>
+          <span style="color:var(--dim);font-size:9px;">×${s.rally||0}</span>
+        </div>`;
+      }).join('');
+    })();
   }
 
   function gameLoop(){
@@ -3208,6 +3562,7 @@ function initPong(){
       bVX=Math.abs(bVX);
       bVY=((bY-(pY+PAD_H/2))/(PAD_H/2))*W*0.008;
       rally++;
+      if(rally>maxRally) maxRally=rally;
       if(rally%3===0)bVX=Math.min(bVX*1.08,W*0.022);
       setCite();flashP=8;
     }
@@ -3226,7 +3581,12 @@ function initPong(){
     }
     if(bX>W){
       pScore+=1+Math.floor(rally/3);
-      if(pScore>0&&pScore%5===0){level=Math.min(10,level+1);}
+      // Système de niveau corrigé : monte d'un niveau tous les 5 points (jamais raté même avec gain de +2)
+      const newLevel = Math.min(10, 1 + Math.floor(pScore/5));
+      if(newLevel > level){
+        level = newLevel;
+        levelUpFlash = 70; // ~1.2s à 60fps
+      }
       updateHUD();resetBall(-1);
     }
     drawFrame();
@@ -3236,6 +3596,32 @@ function initPong(){
   // Trail de la balle — positions récentes pour effet de comète
   const ballTrail=[];
   const TRAIL_LEN=8;
+
+  // Dessine un cœur (rempli si "alive", contour seul sinon)
+  function drawHeart(ctx, x, y, size, alive){
+    ctx.save();
+    ctx.translate(x, y);
+    const s=size/16;
+    ctx.beginPath();
+    // Path d'un cœur centré, hauteur ~14
+    ctx.moveTo(8*s, 14*s);
+    ctx.bezierCurveTo(8*s,  10*s,  1*s,  9*s,  1*s,  4.5*s);
+    ctx.bezierCurveTo(1*s,  1.5*s, 4*s,  0.5*s, 8*s,  4*s);
+    ctx.bezierCurveTo(12*s, 0.5*s,15*s,  1.5*s,15*s,  4.5*s);
+    ctx.bezierCurveTo(15*s, 9*s,   8*s, 10*s,  8*s, 14*s);
+    ctx.closePath();
+    if(alive){
+      // Dégradé or chaud
+      const g=ctx.createLinearGradient(0,0,0,size);
+      g.addColorStop(0, '#e8b94a');
+      g.addColorStop(1, '#a17d22');
+      ctx.fillStyle=g;ctx.fill();
+      ctx.strokeStyle='rgba(255,240,180,0.55)';ctx.lineWidth=0.8;ctx.stroke();
+    } else {
+      ctx.strokeStyle='rgba(212,168,48,0.22)';ctx.lineWidth=1;ctx.stroke();
+    }
+    ctx.restore();
+  }
 
   function drawFrame(){
     // ── Fond : noir profond + halo radial central très doux ──
@@ -3350,6 +3736,33 @@ function initPong(){
       ctx.font=`${Math.round(W*0.022)}px 'DM Serif Display', serif`;
       ctx.fillStyle=`rgba(245,238,220,${a})`;
       ctx.fillText('×'+rally,W/2,MARGIN*0.5+30);
+      ctx.textAlign='left';
+    }
+
+    // ── Vies du joueur : cœurs dessinés au-dessus du paddle gauche ──
+    const heartSize=Math.round(W*0.014);
+    const heartGap=heartSize*0.55;
+    for(let i=0;i<3;i++){
+      const hx=MARGIN+i*(heartSize+heartGap);
+      const hy=MARGIN*0.4;
+      drawHeart(ctx, hx, hy, heartSize, i<lives);
+    }
+
+    // ── Flash "Niveau ↑" plein écran ──
+    if(levelUpFlash>0){
+      levelUpFlash--;
+      const a=Math.min(1, levelUpFlash/40);
+      // Voile doré subtil
+      ctx.fillStyle=`rgba(212,168,48,${a*0.08})`;
+      ctx.fillRect(0,0,W,H);
+      // Texte central
+      ctx.textAlign='center';
+      ctx.font=`${Math.round(W*0.012)}px 'DM Mono', monospace`;
+      ctx.fillStyle=`rgba(212,168,48,${a*0.95})`;
+      ctx.fillText('NIVEAU SUIVANT', W/2, H/2 - 18);
+      ctx.font=`bold ${Math.round(W*0.045)}px 'DM Serif Display', serif`;
+      ctx.fillStyle=`rgba(245,238,220,${a})`;
+      ctx.fillText('↑ '+level, W/2, H/2 + 18);
       ctx.textAlign='left';
     }
   }
@@ -3756,7 +4169,7 @@ function renderRessources(){
 })();
 </script>
 
-<script defer="" src="./Philosophie de l&#39;esprit et la machine_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
-
+<script defer="" src="./index_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fa2918b4964762f',t:'MTc3ODUxNzAyOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./index_files/saved_resource.html"></iframe>
 
 </body></html>
