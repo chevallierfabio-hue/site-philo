@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0073)https://kinetic-tilt-scroll.preview.emergentagent.com/index_modified.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Philosophie de l'esprit et la machine</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="./Philosophie de l&#39;esprit et la machine_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#07060400;--s1:rgba(14,11,8,0.45);--s2:rgba(18,14,9,0.52);--s3:rgba(23,19,14,0.58);--s4:rgba(30,26,18,0.62);
@@ -58,132 +58,20 @@ body{
 }
 #music-label{font-family:'DM Mono',monospace;font-size:7px;font-weight:200;letter-spacing:.1em;color:rgba(212,168,48,0.4);white-space:nowrap;}
 
-/* ── CURSEUR LIQUIDE ──────────────────────────────── */
+/* ── CURSEUR SMOOTH (magicui port — flèche-épingle physique) ─ */
 *{cursor:none!important;}
 
-/* Curseur — goutte cartoon bleu-blanc */
 #cursor{
   position:fixed;top:0;left:0;
-  width:18px;height:22px;
-  /* Forme de goutte cartoon : arrondie en haut, pointue en bas */
-  border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;
-  /* Corps principal bleu-blanc avec reflet interne */
-  background:
-    radial-gradient(
-      ellipse 48% 42% at 38% 28%,
-      rgba(255,255,255,0.95) 0%,
-      rgba(255,255,255,0.6)  30%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 90% 90% at 50% 45%,
-      rgba(190,225,255,0.82) 0%,
-      rgba(140,200,255,0.65) 45%,
-      rgba(100,175,255,0.42) 75%,
-      transparent 100%
-    );
-  /* Contour doux — pas de border, juste un box-shadow intérieur */
-  box-shadow:
-    inset 0 -2px 4px rgba(80,150,255,0.3),
-    0 2px 8px rgba(140,200,255,0.4),
-    0 0 16px 4px rgba(160,210,255,0.15);
+  width:25px;height:27px;
   pointer-events:none;
   z-index:9999;
+  will-change:transform;
   transform:translate(-50%,-50%);
-  transition:
-    width         0.22s cubic-bezier(0.16,1,0.3,1),
-    height        0.22s cubic-bezier(0.16,1,0.3,1),
-    border-radius 0.22s cubic-bezier(0.16,1,0.3,1),
-    box-shadow    0.22s cubic-bezier(0.16,1,0.3,1);
-  mix-blend-mode:normal;
-  animation:dropIdle 3.2s ease-in-out infinite;
+  opacity:0;
+  transition:opacity 0.15s linear;
 }
-@keyframes dropIdle{
-  0%,100%{
-    transform:translate(-50%,-50%) rotate(-2deg) scale(1);
-  }
-  40%{
-    transform:translate(-50%,-50%) rotate(1.5deg) scale(1.04);
-  }
-  70%{
-    transform:translate(-50%,-50%) rotate(-0.5deg) scale(0.97);
-  }
-}
-
-/* Hover bouton — goutte légèrement aplatie, plus bleue */
-#cursor.on-btn{
-  width:22px;height:20px;
-  border-radius:50% 50% 46% 46% / 52% 52% 48% 48%;
-  background:
-    radial-gradient(
-      ellipse 45% 40% at 36% 26%,
-      rgba(255,255,255,0.90) 0%,
-      rgba(255,255,255,0.45) 35%,
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 90% 90% at 50% 50%,
-      rgba(160,210,255,0.88) 0%,
-      rgba(110,180,255,0.70) 50%,
-      rgba(80,155,255,0.45) 78%,
-      transparent 100%
-    );
-  box-shadow:
-    inset 0 -2px 5px rgba(60,130,255,0.35),
-    0 3px 10px rgba(120,185,255,0.5),
-    0 0 20px 6px rgba(140,200,255,0.2);
-  animation:none;
-}
-
-/* Hover générique — goutte légèrement plus grande */
-#cursor.hovering{
-  width:20px;height:24px;
-  border-radius:50% 50% 40% 40% / 62% 62% 38% 38%;
-  background:
-    radial-gradient(
-      ellipse 48% 42% at 38% 28%,
-      rgba(255,255,255,0.92) 0%,
-      rgba(255,255,255,0.55) 32%,
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 90% 90% at 50% 45%,
-      rgba(200,230,255,0.80) 0%,
-      rgba(160,210,255,0.62) 48%,
-      rgba(120,185,255,0.38) 76%,
-      transparent 100%
-    );
-  box-shadow:
-    inset 0 -2px 4px rgba(80,150,255,0.28),
-    0 2px 9px rgba(150,205,255,0.42),
-    0 0 18px 5px rgba(170,215,255,0.14);
-  animation:none;
-}
-
-/* Clic — goutte qui s'écrase, nettement plus bleue */
-#cursor.clicking{
-  width:24px;height:14px;
-  border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
-  background:
-    radial-gradient(
-      ellipse 46% 38% at 36% 28%,
-      rgba(255,255,255,0.88) 0%,
-      rgba(255,255,255,0.40) 35%,
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 90% 90% at 50% 50%,
-      rgba(120,190,255,0.92) 0%,
-      rgba(80,160,255,0.75)  50%,
-      rgba(50,130,255,0.48)  78%,
-      transparent 100%
-    );
-  box-shadow:
-    inset 0 -2px 5px rgba(40,110,255,0.4),
-    0 3px 12px rgba(100,170,255,0.55),
-    0 0 22px 8px rgba(120,185,255,0.22);
-  animation:none;
-}
+#cursor svg{display:block;width:100%;height:100%;overflow:visible;}
 
 /* Trail — petite goutte fantôme qui suit */
 #cursor-trail{
@@ -192,14 +80,15 @@ body{
   border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;
   background:radial-gradient(
     ellipse 90% 90% at 50% 45%,
-    rgba(200,228,255,0.45) 0%,
-    rgba(170,210,255,0.22) 55%,
+    rgba(235,245,255,0.85) 0%,
+    rgba(195,225,255,0.55) 50%,
+    rgba(160,205,255,0.18) 80%,
     transparent 100%
   );
   pointer-events:none;
   z-index:9998;
   transform:translate(-50%,-50%);
-  filter:blur(1.5px);
+  filter:blur(1.1px) drop-shadow(0 0 6px rgba(180,215,255,0.55));
   mix-blend-mode:screen;
 }
 body{background:transparent;}
@@ -293,7 +182,7 @@ body{background:transparent;}
   background-color:var(--backdrop);
   background-size:calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
   background-position:50% 50%;
-  background-attachment:fixed;
+  background-attachment:scroll;
   border:var(--border-size) solid var(--backup-border);
 
   border-radius:calc(var(--radius) * 1px);
@@ -312,7 +201,7 @@ body{background:transparent;}
   inset:calc(var(--border-size) * -1);
   border:var(--border-size) solid transparent;
   border-radius:calc(var(--radius) * 1px);
-  background-attachment:fixed;
+  background-attachment:scroll;
   background-size:calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
   background-repeat:no-repeat;
   background-position:50% 50%;
@@ -830,7 +719,7 @@ body{background:transparent;}
   padding:0 16px 48px;
   transform-origin:50% 0%;
   will-change:transform;
-  transform:rotateX(var(--scroll-rotX,6deg)) scale(var(--scroll-scale,1.02));
+  transform:rotateX(var(--scroll-rotX,8deg)) scale(var(--scroll-scale,1.10));
   transition:transform 0.05s linear;
   /* Fade progressif vers le bas — fondu vers la vidéo */
   mask-image:linear-gradient(to bottom, black 0%, black 92%, transparent 100%);
@@ -1014,31 +903,50 @@ body{background:transparent;}
 <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
   <defs>
     <filter id="liquid-glass-filter" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"/>
-      <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
-      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="50" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
-      <feGaussianBlur in="displaced" stdDeviation="3" result="finalBlur"/>
-      <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+      <feturbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"></feturbulence>
+      <fegaussianblur in="turbulence" stdDeviation="2" result="blurredNoise"></fegaussianblur>
+      <fedisplacementmap in="SourceGraphic" in2="blurredNoise" scale="50" xChannelSelector="R" yChannelSelector="B" result="displaced"></fedisplacementmap>
+      <fegaussianblur in="displaced" stdDeviation="3" result="finalBlur"></fegaussianblur>
+      <fecomposite in="finalBlur" in2="finalBlur" operator="over"></fecomposite>
     </filter>
   </defs>
 </svg>
 
 <!-- ── FOND VIDÉO PERMANENT ─────────────────────── -->
-<video id="site-video-bg" autoplay loop muted playsinline>
+<video id="site-video-bg" autoplay="" loop="" muted="" playsinline="">
   <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4" type="video/mp4">
 </video>
 <div id="site-noise"></div>
 <div id="site-gradient"></div>
 
 <!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="./Philosophie de l&#39;esprit et la machine_files/supabase.min.js"></script>
 
-<!-- Curseur personnalisé -->
-<div id="cursor"></div>
-<div id="cursor-trail"></div>
+<!-- Curseur personnalisé : Smooth Cursor (magicui port) -->
+<div id="cursor" aria-hidden="true" style="left: 876.65px; top: 368.32px; transform: translate(-50%, -50%) rotate(-52.46deg) scale(0.95); opacity: 1;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="54" viewBox="0 0 50 54" fill="none">
+    <g filter="url(#sc_shadow)">
+      <path d="M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 38.8627 25.9422 39.0496L39.8121 44.1954C41.6849 44.8902 43.4884 42.9759 42.6817 41.1495Z" fill="black"></path>
+      <path d="M43.7146 40.6933L28.5431 6.34306C27.3556 3.65428 23.5772 3.69516 22.3668 6.32755L6.57226 40.6778C5.3134 43.4156 7.97238 46.298 10.803 45.2549L24.7662 40.109C25.0221 40.0147 25.2999 40.0156 25.5494 40.1082L39.4193 45.254C42.2261 46.2953 44.9254 43.4347 43.7146 40.6933Z" stroke="white" stroke-width="2.25825"></path>
+    </g>
+    <defs>
+      <filter id="sc_shadow" x="0.6" y="0.95" width="49.06" height="52.43" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feflood flood-opacity="0" result="BackgroundImageFix"></feflood>
+        <fecolormatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></fecolormatrix>
+        <feoffset dy="2.25825"></feoffset>
+        <fegaussianblur stdDeviation="2.25825"></fegaussianblur>
+        <fecomposite in2="hardAlpha" operator="out"></fecomposite>
+        <fecolormatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"></fecolormatrix>
+        <feblend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feblend>
+        <feblend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feblend>
+      </filter>
+    </defs>
+  </svg>
+</div>
+<div id="cursor-trail" style="left: 680.87px; top: 373.31px; width: 18.1px; height: 5px; transform: translate(-50%, -50%) rotate(-80.5deg);"></div>
 
 <!-- Lecteur audio ambiant -->
-<audio id="bg-music" loop preload="none">
+<audio id="bg-music" loop="" preload="none">
   <source src="https://cdn.pixabay.com/audio/2022/11/22/audio_febc508520.mp3" type="audio/mpeg">
 </audio>
 <div id="music-vol">
@@ -1046,8 +954,8 @@ body{background:transparent;}
   <input type="range" id="music-range" min="0" max="1" step="0.05" value="0.28">
 </div>
 <button id="music-btn" title="Musique de fond" onclick="toggleMusic()">
-  <svg id="music-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-  <svg id="music-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+  <svg id="music-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+  <svg id="music-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"></path></svg>
 </button>
 
 <!-- Faisceau lumineux -->
@@ -1056,27 +964,54 @@ body{background:transparent;}
   <div class="nav-pill">
     <span class="nav-pill-logo">L'esprit &amp; la machine</span>
     <nav class="nav-tabs">
-      <button class="nav-tab active" onclick="showPage('quiz',this)">QCM</button>
-      <button class="nav-tab" onclick="showPage('fiches',this)">Fiches</button>
-      <button class="nav-tab" onclick="showPage('training',this)">Entraînement</button>
-      <button class="nav-tab" onclick="showPage('cartes',this)">Cartes</button>
-      <button class="nav-tab" onclick="showPage('dissert',this)">Disserter</button>
-      <button class="nav-tab" onclick="showPage('ressources',this)">Ressources</button>
-      <button class="nav-tab" onclick="showPage('jeu',this)">⚙ Jeu</button>
+      <button class="nav-tab active" onclick="showPage(&#39;quiz&#39;,this)">QCM</button>
+      <button class="nav-tab" onclick="showPage(&#39;fiches&#39;,this)">Fiches</button>
+      <button class="nav-tab" onclick="showPage(&#39;training&#39;,this)">Entraînement</button>
+      <button class="nav-tab" onclick="showPage(&#39;cartes&#39;,this)">Cartes</button>
+      <button class="nav-tab" onclick="showPage(&#39;dissert&#39;,this)">Disserter</button>
+      <button class="nav-tab" onclick="showPage(&#39;ressources&#39;,this)">Ressources</button>
+      <button class="nav-tab" onclick="showPage(&#39;jeu&#39;,this)">⚙ Jeu</button>
     </nav>
   </div>
 </div>
 
 <!-- ── CONTENU PRINCIPAL ────────────────────────────── -->
 <div class="cs-wrapper" id="cs-wrapper">
-<div class="cs-inner" id="cs-inner">
-  <div id="page-quiz"      class="page active"><div id="root"></div></div>
-  <div id="page-fiches"    class="page"><div id="fiches-root"></div></div>
-  <div id="page-training"  class="page"><div id="training-root"></div></div>
-  <div id="page-cartes"    class="page"><div id="cartes-root"></div></div>
-  <div id="page-dissert"   class="page"><div id="dissert-root"></div></div>
-  <div id="page-ressources"class="page"><div id="ressources-root"></div></div>
-  <div id="page-jeu"       class="page"><div id="jeu-root"></div></div>
+<div class="cs-inner" id="cs-inner" style="--scroll-rotX: 8deg; --scroll-scale: 1.1;">
+  <div id="page-quiz" class="page active"><div id="root">
+      <div class="panel intro-box" style="--x: 496.70; --y: 213.50; --xp: 0.702; --yp: 0.498;">
+        <h2>Philosophie de l'esprit et la machine</h2>
+        <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
+
+        <!-- Onglets connexion / inscription -->
+        <div style="display:flex;border-bottom:1px solid var(--border);margin:20px 0 18px;">
+          <button id="tab-login" onclick="switchAuthTab(&#39;login&#39;)" style="flex:1;padding:9px;background:transparent;border:none;border-bottom:2px solid var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;">Se connecter</button>
+          <button id="tab-signup" onclick="switchAuthTab(&#39;signup&#39;)" style="flex:1;padding:9px;background:transparent;border:none;border-bottom:2px solid transparent;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);cursor:pointer;">Créer un compte</button>
+        </div>
+
+        <div id="auth-msg" class="prev-score-msg" style="min-height:18px;margin-bottom:10px;"></div>
+
+        <!-- Formulaire connexion -->
+        <div id="form-login">
+          <div class="input-group"><label>Email</label><input id="login-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
+          <div class="input-group"><label>Mot de passe</label><input id="login-pwd" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+          <button class="btn-primary" onclick="doSignIn()">Se connecter →</button>
+        </div>
+
+        <!-- Formulaire inscription (caché par défaut) -->
+        <div id="form-signup" style="display:none;">
+          <div class="input-group"><label>Prénom</label><input id="signup-name" type="text" placeholder="Ex : Sophie…" autocomplete="given-name"></div>
+          <div class="input-group"><label>Email</label><input id="signup-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
+          <div class="input-group"><label>Mot de passe</label><input id="signup-pwd" type="password" placeholder="6 caractères minimum" autocomplete="new-password"></div>
+          <button class="btn-primary" onclick="doSignUp()">Créer mon compte →</button>
+        </div>
+      </div></div></div>
+  <div id="page-fiches" class="page"><div id="fiches-root"></div></div>
+  <div id="page-training" class="page"><div id="training-root"></div></div>
+  <div id="page-cartes" class="page"><div id="cartes-root"></div></div>
+  <div id="page-dissert" class="page"><div id="dissert-root"></div></div>
+  <div id="page-ressources" class="page"><div id="ressources-root"></div></div>
+  <div id="page-jeu" class="page"><div id="jeu-root"></div></div>
 </div>
 </div>
 
@@ -3014,7 +2949,7 @@ function renderJeu(){
         <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap;" id="pong-cite-author">—</div>
         <div style="font-family:var(--body);font-size:13px;font-style:italic;color:var(--soft);line-height:1.5;" id="pong-cite-text">La balle transporte une thèse. Renvoie-la pour marquer !</div>
       </div>
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">&uarr; &darr; ou souris pour déplacer · La balle accélère avec les rallyes</div>
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">&uarr; &darr; &nbsp;ou&nbsp; W S &nbsp;· La balle accélère avec les rallyes</div>
     </div>
   `;
   initPong();
@@ -3057,6 +2992,8 @@ function initPong(){
   let pScore=0,aiScore=0,lives=3,level=1,running=false,rally=0,citIdx=0;
   let keys={},mouseY=null,raf=null;
   let flashP=0,flashAI=0;
+  // IA — état pour comportement humanisé (apathie + erreur + lenteur)
+  let aiAimY=H/2-PAD_H/2, aiTargetTick=0;
 
   function setCite(){
     citIdx=(citIdx+1)%CITES.length;
@@ -3083,12 +3020,67 @@ function initPong(){
     bX=W/2;bY=H/2;bVX=W*0.008;bVY=W*0.005;
     pY=H/2-PAD_H/2;aiY=H/2-PAD_H/2;
     setCite();updateHUD();
-    const o=document.getElementById('pong-overlay');
-    if(o)o.style.display='none';
-    running=true;
     cancelAnimationFrame(raf);
-    gameLoop();
+    // Pré-lancement : explique les contrôles + countdown
+    showCountdown();
   };
+
+  function showCountdown(){
+    const o=document.getElementById('pong-overlay');
+    if(!o){ running=true; gameLoop(); return; }
+    o.style.display='flex';
+    o.style.padding='18px';
+    o.innerHTML=`
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Préparation</div>
+      <div style="font-family:var(--serif);font-size:18px;color:var(--text);max-width:90%;text-align:center;line-height:1.45;">
+        Déplace ton pilier avec les touches&nbsp;:
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--soft);letter-spacing:.12em;">
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <kbd style="display:inline-block;min-width:22px;padding:3px 7px;border:1px solid var(--gold-b);border-radius:3px;background:rgba(212,168,48,0.08);color:var(--gold);font-family:var(--mono);">&uarr;</kbd>
+          <kbd style="display:inline-block;min-width:22px;padding:3px 7px;border:1px solid var(--gold-b);border-radius:3px;background:rgba(212,168,48,0.08);color:var(--gold);font-family:var(--mono);">&darr;</kbd>
+          <span style="color:var(--dim);">monter / descendre</span>
+        </span>
+        <span style="color:var(--dim);font-size:10px;">— ou —</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <kbd style="display:inline-block;min-width:22px;padding:3px 7px;border:1px solid var(--gold-b);border-radius:3px;background:rgba(212,168,48,0.08);color:var(--gold);font-family:var(--mono);">W</kbd>
+          <kbd style="display:inline-block;min-width:22px;padding:3px 7px;border:1px solid var(--gold-b);border-radius:3px;background:rgba(212,168,48,0.08);color:var(--gold);font-family:var(--mono);">S</kbd>
+        </span>
+      </div>
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:center;max-width:90%;">
+        Renvoie les citations · Réponds aux questions pour sauver tes vies
+      </div>
+      <div id="pong-cd-num" style="font-family:var(--serif);font-size:56px;color:var(--gold);line-height:1;margin-top:4px;transition:opacity .25s;">3</div>
+    `;
+    let n=3;
+    const numEl=document.getElementById('pong-cd-num');
+    const tick=()=>{
+      n--;
+      if(n>0){
+        if(numEl){
+          numEl.style.opacity='0';
+          setTimeout(()=>{ numEl.textContent=n; numEl.style.opacity='1'; },150);
+        }
+        setTimeout(tick,1000);
+      } else {
+        if(numEl){
+          numEl.style.opacity='0';
+          setTimeout(()=>{
+            numEl.textContent='GO';
+            numEl.style.opacity='1';
+            numEl.style.fontSize='38px';
+          },150);
+        }
+        setTimeout(()=>{
+          o.style.display='none';
+          o.style.padding='';
+          running=true;
+          raf=requestAnimationFrame(gameLoop);
+        }, 650);
+      }
+    };
+    setTimeout(tick,1000);
+  }
 
   function resetBall(dir){
     bX=W/2;bY=H/2;
@@ -3096,6 +3088,74 @@ function initPong(){
     bVX=spd*(dir||1);
     bVY=(Math.random()*2-1)*W*0.005;
     rally=0;
+  }
+
+  function showLifeChallenge(author){
+    const o=document.getElementById('pong-overlay');
+    if(!o){ // Fallback : on perd la vie comme avant
+      aiScore++;lives--;updateHUD();
+      if(lives<=0)showEndOverlay('Partie terminée');
+      else{resetBall(1);running=true;raf=requestAnimationFrame(gameLoop);}
+      return;
+    }
+    // Cherche une question dans BANK qui mentionne l'auteur (q ou exp)
+    let q=null;
+    if(typeof BANK!=='undefined'&&Array.isArray(BANK)){
+      const matches=BANK.filter(x=>
+        (x.q&&x.q.includes(author)) ||
+        (x.exp&&x.exp.includes(author)) ||
+        (x.opts&&x.opts.some(o=>o.includes(author)))
+      );
+      if(matches.length)q=matches[Math.floor(Math.random()*matches.length)];
+      else q=BANK[Math.floor(Math.random()*BANK.length)];
+    }
+    if(!q){
+      aiScore++;lives--;updateHUD();
+      if(lives<=0)showEndOverlay('Partie terminée');
+      else{resetBall(1);running=true;raf=requestAnimationFrame(gameLoop);}
+      return;
+    }
+    o.style.display='flex';
+    o.style.padding='18px';
+    o.innerHTML=`
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Balle perdue — Sauve ta vie</div>
+      <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;margin-top:-6px;">Question sur ${author}</div>
+      <div style="font-family:var(--serif);font-size:15px;color:var(--text);max-width:92%;text-align:center;line-height:1.45;">${q.q}</div>
+      <div id="pong-quiz-opts" style="display:flex;flex-direction:column;gap:5px;width:94%;max-width:520px;"></div>
+      <div id="pong-quiz-banner" style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;min-height:14px;"></div>
+    `;
+    const optsEl=o.querySelector('#pong-quiz-opts');
+    const banner=o.querySelector('#pong-quiz-banner');
+    q.opts.forEach((opt,i)=>{
+      const b=document.createElement('button');
+      b.style.cssText='background:transparent;border:1px solid var(--border);color:var(--soft);font-family:var(--body);font-size:12px;padding:7px 11px;text-align:left;cursor:pointer;border-radius:2px;transition:all .12s;line-height:1.35;';
+      b.onmouseover=()=>{if(!b.disabled){b.style.borderColor='var(--gold-b)';b.style.color='var(--gold)';}};
+      b.onmouseout =()=>{if(!b.disabled){b.style.borderColor='var(--border)';b.style.color='var(--soft)';}};
+      b.textContent=opt;
+      b.onclick=()=>{
+        const ok=(i===q.correct);
+        [...optsEl.querySelectorAll('button')].forEach(x=>x.disabled=true);
+        b.style.borderColor= ok?'rgba(120,200,120,0.7)':'rgba(220,90,90,0.7)';
+        b.style.color      = ok?'#9fd49f':'#e08585';
+        if(!ok){
+          const cb=optsEl.querySelectorAll('button')[q.correct];
+          cb.style.borderColor='rgba(120,200,120,0.5)';
+          cb.style.color='#9fd49f';
+        }
+        banner.style.color = ok?'#9fd49f':'#e08585';
+        banner.textContent = ok?'Vie sauvée — la balle repart':'Vie perdue';
+        setTimeout(()=>{
+          if(!ok){ aiScore++; lives--; updateHUD(); }
+          o.style.display='none';
+          o.style.padding='';
+          if(lives<=0){ showEndOverlay('Partie terminée'); return; }
+          resetBall(1);
+          running=true;
+          raf=requestAnimationFrame(gameLoop);
+        }, ok?1100:1700);
+      };
+      optsEl.appendChild(b);
+    });
   }
 
   function showEndOverlay(msg){
@@ -3112,16 +3172,33 @@ function initPong(){
 
   function gameLoop(){
     if(!running)return;
-    // Player
-    const spd=H*0.022;
-    if(keys['ArrowUp']||keys['w'])pY=Math.max(0,pY-spd);
-    if(keys['ArrowDown']||keys['s'])pY=Math.min(H-PAD_H,pY+spd);
-    if(mouseY!==null)pY=Math.max(0,Math.min(H-PAD_H,mouseY-PAD_H/2));
-    // AI
-    const aiSpd=H*0.012+level*H*0.0012;
-    const aiTarget=bY-PAD_H/2;
-    if(aiY<aiTarget-2)aiY=Math.min(H-PAD_H,aiY+aiSpd);
-    else if(aiY>aiTarget+2)aiY=Math.max(0,aiY-aiSpd);
+    // Player (clavier uniquement) — vitesse modérée pour un contrôle posé
+    const spd=H*0.013;
+    if(keys['ArrowUp']||keys['w']||keys['W']||keys['z']||keys['Z'])pY=Math.max(0,pY-spd);
+    if(keys['ArrowDown']||keys['s']||keys['S'])pY=Math.min(H-PAD_H,pY+spd);
+    // AI — comportement humanisé (battable)
+    // 1) Zone d'apathie : ne réagit que si la balle vient vers elle ET a passé le centre
+    // 2) Vitesse de base ~45% de l'ancienne, monte doucement avec le niveau
+    // 3) Erreur de visée aléatoire qui décroît avec le niveau (jamais < 18% pour rester battable)
+    // 4) Rafraîchit sa cible toutes les ~6 frames seulement (latence de réaction)
+    const aiBaseSpd = H*0.0058 + level*H*0.0007;
+    const ballHeadingToAI = bVX > 0;
+    const ballInAIHalf    = bX > W*0.45;
+    if(ballHeadingToAI && ballInAIHalf){
+      if(aiTargetTick % 6 === 0){
+        const errMag = (PAD_H*0.85) * Math.max(0.18, 1 - level*0.08);
+        aiAimY = (bY - PAD_H/2) + (Math.random()*2 - 1) * errMag;
+        aiAimY = Math.max(0, Math.min(H-PAD_H, aiAimY));
+      }
+      aiTargetTick++;
+      if(aiY < aiAimY - 3) aiY = Math.min(H-PAD_H, aiY + aiBaseSpd);
+      else if(aiY > aiAimY + 3) aiY = Math.max(0, aiY - aiBaseSpd);
+    } else {
+      // Dérive paresseuse vers le centre quand la balle est ailleurs
+      const centerY = H/2 - PAD_H/2;
+      if(aiY < centerY - 2) aiY = Math.min(H-PAD_H, aiY + aiBaseSpd*0.3);
+      else if(aiY > centerY + 2) aiY = Math.max(0, aiY - aiBaseSpd*0.3);
+    }
     // Ball
     bX+=bVX;bY+=bVY;
     if(bY-BALL_R<0){bY=BALL_R;bVY=Math.abs(bVY);}
@@ -3142,9 +3219,10 @@ function initPong(){
     }
     // Scoring
     if(bX<0){
-      aiScore++;lives--;updateHUD();
-      if(lives<=0){showEndOverlay('Partie terminée');}
-      else resetBall(1);
+      // Au lieu de perdre direct : challenge philo sur l'auteur de la citation portée par la balle
+      running=false; cancelAnimationFrame(raf);
+      showLifeChallenge(CITES[citIdx].a);
+      return;
     }
     if(bX>W){
       pScore+=1+Math.floor(rally/3);
@@ -3155,47 +3233,124 @@ function initPong(){
     raf=requestAnimationFrame(gameLoop);
   }
 
+  // Trail de la balle — positions récentes pour effet de comète
+  const ballTrail=[];
+  const TRAIL_LEN=8;
+
   function drawFrame(){
+    // ── Fond : noir profond + halo radial central très doux ──
     ctx.fillStyle='#06050a';ctx.fillRect(0,0,W,H);
-    // Centre dashed
-    ctx.setLineDash([5,8]);ctx.strokeStyle='rgba(212,168,48,0.06)';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
-    ctx.setLineDash([]);
-    // Glow balle
-    const g=ctx.createRadialGradient(bX,bY,0,bX,bY,BALL_R*4);
-    g.addColorStop(0,'rgba(255,220,80,0.2)');g.addColorStop(1,'rgba(255,180,30,0)');
-    ctx.fillStyle=g;ctx.beginPath();ctx.arc(bX,bY,BALL_R*4,0,Math.PI*2);ctx.fill();
-    // Balle
-    ctx.fillStyle='#d4a830';ctx.beginPath();ctx.arc(bX,bY,BALL_R,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='rgba(255,248,180,0.75)';ctx.beginPath();ctx.arc(bX-BALL_R*0.28,bY-BALL_R*0.28,BALL_R*0.35,0,Math.PI*2);ctx.fill();
-    // Paddle joueur
+    const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.55);
+    bg.addColorStop(0,'rgba(212,168,48,0.035)');
+    bg.addColorStop(1,'rgba(212,168,48,0)');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+    // ── Cadre intérieur élégant (filets dorés très fins) ──
+    ctx.strokeStyle='rgba(212,168,48,0.10)';ctx.lineWidth=1;
+    ctx.strokeRect(MARGIN*0.5,MARGIN*0.5,W-MARGIN,H-MARGIN);
+    // Ornement aux 4 coins (petits L)
+    const cornL=10;
+    ctx.strokeStyle='rgba(212,168,48,0.28)';ctx.lineWidth=1;
+    [[MARGIN*0.5,MARGIN*0.5,1,1],[W-MARGIN*0.5,MARGIN*0.5,-1,1],
+     [MARGIN*0.5,H-MARGIN*0.5,1,-1],[W-MARGIN*0.5,H-MARGIN*0.5,-1,-1]
+    ].forEach(([cx,cy,sx,sy])=>{
+      ctx.beginPath();
+      ctx.moveTo(cx,cy+sy*cornL);ctx.lineTo(cx,cy);ctx.lineTo(cx+sx*cornL,cy);
+      ctx.stroke();
+    });
+
+    // ── Axe central : fine ligne dorée + 3 ornements ──
+    ctx.strokeStyle='rgba(212,168,48,0.09)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(W/2,MARGIN);ctx.lineTo(W/2,H-MARGIN);ctx.stroke();
+    // Diamants au tiers, moitié, deux tiers
+    ctx.fillStyle='rgba(212,168,48,0.22)';
+    [H*0.25,H*0.5,H*0.75].forEach(y=>{
+      ctx.save();ctx.translate(W/2,y);ctx.rotate(Math.PI/4);
+      const s=y===H*0.5?5:3;
+      ctx.fillRect(-s/2,-s/2,s,s);
+      ctx.restore();
+    });
+
+    // ── Trail de la balle (comète dorée) ──
+    ballTrail.push({x:bX,y:bY});
+    if(ballTrail.length>TRAIL_LEN)ballTrail.shift();
+    ballTrail.forEach((p,i)=>{
+      const a=(i+1)/TRAIL_LEN;
+      const r=BALL_R*a*0.85;
+      ctx.fillStyle=`rgba(255,210,90,${a*0.18})`;
+      ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fill();
+    });
+
+    // ── Halo de la balle ──
+    const g=ctx.createRadialGradient(bX,bY,0,bX,bY,BALL_R*5);
+    g.addColorStop(0,'rgba(255,220,100,0.28)');
+    g.addColorStop(0.5,'rgba(255,180,40,0.10)');
+    g.addColorStop(1,'rgba(255,160,30,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(bX,bY,BALL_R*5,0,Math.PI*2);ctx.fill();
+
+    // ── Balle : dégradé or chaud + reflet crème ──
+    const bg2=ctx.createRadialGradient(bX-BALL_R*0.3,bY-BALL_R*0.3,0,bX,bY,BALL_R*1.1);
+    bg2.addColorStop(0,'#fff4c2');
+    bg2.addColorStop(0.45,'#e8b94a');
+    bg2.addColorStop(1,'#a17d22');
+    ctx.fillStyle=bg2;ctx.beginPath();ctx.arc(bX,bY,BALL_R,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(255,240,180,0.35)';ctx.lineWidth=0.8;
+    ctx.beginPath();ctx.arc(bX,bY,BALL_R,0,Math.PI*2);ctx.stroke();
+
+    // ── Paddles : pilastres dorés avec dégradé vertical + filets serifs ──
+    function drawPaddle(x,y,isPlayer,flash){
+      // Dégradé vertical (sombre aux bouts, lumineux au centre)
+      const grad=ctx.createLinearGradient(x,y,x,y+PAD_H);
+      const baseA=isPlayer?0.55:0.32;
+      const peakA=isPlayer?(flash>0?0.95:0.78):(flash>0?0.65:0.48);
+      const col=isPlayer?'212,168,48':'150,118,52';
+      grad.addColorStop(0,   `rgba(${col},${baseA})`);
+      grad.addColorStop(0.5, `rgba(${col},${peakA})`);
+      grad.addColorStop(1,   `rgba(${col},${baseA})`);
+      ctx.fillStyle=grad;
+      ctx.fillRect(x,y,PAD_W,PAD_H);
+      // Bordure
+      ctx.strokeStyle=`rgba(${col},${(isPlayer?0.9:0.6)})`;ctx.lineWidth=1;
+      ctx.strokeRect(x+0.5,y+0.5,PAD_W-1,PAD_H-1);
+      // Filets serifs horizontaux (en haut, milieu, bas)
+      ctx.strokeStyle=`rgba(255,240,180,${isPlayer?0.45:0.25})`;ctx.lineWidth=1;
+      [0.15,0.5,0.85].forEach(t=>{
+        const yy=y+PAD_H*t;
+        ctx.beginPath();ctx.moveTo(x+1,yy);ctx.lineTo(x+PAD_W-1,yy);ctx.stroke();
+      });
+      // Glow externe si flash
+      if(flash>0){
+        const gp=ctx.createRadialGradient(x+PAD_W/2,y+PAD_H/2,0,x+PAD_W/2,y+PAD_H/2,PAD_H*0.8);
+        gp.addColorStop(0,`rgba(255,210,90,${0.35*flash/8})`);
+        gp.addColorStop(1,'rgba(255,210,90,0)');
+        ctx.fillStyle=gp;
+        ctx.fillRect(x-PAD_H*0.5,y-PAD_H*0.4,PAD_W+PAD_H,PAD_H*1.8);
+      }
+    }
     if(flashP>0)flashP--;
-    const pA=flashP>0?0.55:0.22;
-    ctx.fillStyle=`rgba(212,168,48,${pA})`;ctx.fillRect(MARGIN,pY,PAD_W,PAD_H);
-    ctx.strokeStyle=`rgba(212,168,48,${pA+0.3})`;ctx.lineWidth=1;ctx.strokeRect(MARGIN,pY,PAD_W,PAD_H);
-    // Rivets paddle joueur
-    [pY+PAD_H*0.18,pY+PAD_H*0.82].forEach(ry=>{
-      ctx.beginPath();ctx.arc(MARGIN+PAD_W/2,ry,2,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,230,100,${pA+0.2})`;ctx.fill();
-    });
-    // Paddle AI
     if(flashAI>0)flashAI--;
-    const aA=flashAI>0?0.38:0.14;
-    ctx.fillStyle=`rgba(140,110,40,${aA})`;ctx.fillRect(W-MARGIN-PAD_W,aiY,PAD_W,PAD_H);
-    ctx.strokeStyle=`rgba(140,110,40,${aA+0.25})`;ctx.lineWidth=1;ctx.strokeRect(W-MARGIN-PAD_W,aiY,PAD_W,PAD_H);
-    [aiY+PAD_H*0.18,aiY+PAD_H*0.82].forEach(ry=>{
-      ctx.beginPath();ctx.arc(W-MARGIN-PAD_W/2,ry,2,0,Math.PI*2);
-      ctx.fillStyle=`rgba(200,170,70,${aA+0.15})`;ctx.fill();
-    });
-    // Labels
-    ctx.font=`${Math.round(W*0.016)}px sans-serif`;ctx.fillStyle='rgba(80,68,38,0.6)';
-    ctx.fillText('JOUEUR',MARGIN+PAD_W+6,H-6);
-    ctx.textAlign='right';ctx.fillText('MACHINE',W-MARGIN-PAD_W-6,H-6);ctx.textAlign='left';
-    // Rallye
+    drawPaddle(MARGIN,pY,true,flashP);
+    drawPaddle(W-MARGIN-PAD_W,aiY,false,flashAI);
+
+    // ── Labels en bas (typographie serif fine) ──
+    ctx.font=`italic ${Math.round(W*0.013)}px 'DM Serif Display', serif`;
+    ctx.fillStyle='rgba(184,170,144,0.45)';
+    ctx.fillText('Joueur',MARGIN+PAD_W+8,H-MARGIN*0.5-4);
+    ctx.textAlign='right';
+    ctx.fillText('Machine',W-MARGIN-PAD_W-8,H-MARGIN*0.5-4);
+    ctx.textAlign='left';
+
+    // ── Compteur de rallye en haut (mono caps) ──
     if(rally>1){
-      ctx.fillStyle=`rgba(212,168,48,${Math.min(0.65,rally*0.07)})`;
-      ctx.font=`${Math.round(W*0.018)}px sans-serif`;ctx.textAlign='center';
-      ctx.fillText('× '+rally,W/2,16);ctx.textAlign='left';
+      const a=Math.min(0.75,rally*0.08);
+      ctx.font=`${Math.round(W*0.011)}px 'DM Mono', monospace`;
+      ctx.fillStyle=`rgba(212,168,48,${a*0.7})`;
+      ctx.textAlign='center';
+      ctx.fillText('RALLYE',W/2,MARGIN*0.5+10);
+      ctx.font=`${Math.round(W*0.022)}px 'DM Serif Display', serif`;
+      ctx.fillStyle=`rgba(245,238,220,${a})`;
+      ctx.fillText('×'+rally,W/2,MARGIN*0.5+30);
+      ctx.textAlign='left';
     }
   }
 
@@ -3205,15 +3360,8 @@ function initPong(){
     keys[e.key]=true;
   };
   const keyUp=e=>{keys[e.key]=false;};
-  const mouseMove=e=>{
-    const r=cv.getBoundingClientRect();
-    mouseY=(e.clientY-r.top)*(H/r.height);
-  };
-  const mouseLeave=()=>{mouseY=null;};
   document.addEventListener('keydown',keyDown);
   document.addEventListener('keyup',keyUp);
-  cv.addEventListener('mousemove',mouseMove);
-  cv.addEventListener('mouseleave',mouseLeave);
 
   // Cleanup on page switch
   const origShow=window.showPage;
@@ -3375,27 +3523,98 @@ function renderRessources(){
 </script>
 
 <script>
-// ── CURSEUR SCOPE ────────────────────────────────────
+// ── SMOOTH CURSOR (port magicui en vanilla JS) ──────────
 (function(){
   const cur   = document.getElementById('cursor');
   const trail = document.getElementById('cursor-trail');
-  if(!cur||!trail) return;
+  if(!cur || !trail) return;
 
-  let mx = window.innerWidth/2, my = window.innerHeight/2;
-  // Trail : deux points d'inertie différente pour physique naturelle
-  let t1x = mx, t1y = my; // trail rapide
-  let t2x = mx, t2y = my; // trail lent (le blob)
+  // Désactiver sur appareils tactiles / sans pointeur fin
+  const fineMQ = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
+  if(!fineMQ.matches){
+    cur.style.display = 'none';
+    trail.style.display = 'none';
+    return;
+  }
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-    cur.style.left = mx + 'px';
-    cur.style.top  = my + 'px';
+  // ── État cible (souris) + état affiché (spring) ──
+  let tx = window.innerWidth/2, ty = window.innerHeight/2;   // cible
+  let cx = tx, cy = ty, vcx = 0, vcy = 0;                    // position
+  let cr = 0, vcr = 0, tr = 0;                               // rotation
+  let cs = 1, vcs = 0, ts = 1;                               // scale
+
+  // Pour trail (inchangé)
+  let mx = tx, my = ty;
+  let t1x = tx, t1y = ty, t2x = tx, t2y = ty;
+  let prevT1x = tx, prevT1y = ty;
+
+  // Suivi de vitesse pour rotation
+  let lastPos = {x: tx, y: ty};
+  let lastTime = performance.now();
+  let prevAngle = 0;
+  let accumRot = 0;
+  let scaleTimer = null;
+  let visible = false;
+
+  document.addEventListener('pointermove', e => {
+    if(e.pointerType === 'touch') return;
+    tx = e.clientX; ty = e.clientY;
+    mx = tx; my = ty;
+    if(!visible){ visible = true; cur.style.opacity = '1'; }
+
+    const now = performance.now();
+    const dt  = now - lastTime;
+    if(dt > 0){
+      const vx = (tx - lastPos.x) / dt;
+      const vy = (ty - lastPos.y) / dt;
+      const speed = Math.sqrt(vx*vx + vy*vy);
+      if(speed > 0.1){
+        // Angle de mouvement (offset +90° pour aligner la pointe SVG vers le haut)
+        const ang = Math.atan2(vy, vx) * 180/Math.PI + 90;
+        let diff = ang - prevAngle;
+        if(diff >  180) diff -= 360;
+        if(diff < -180) diff += 360;
+        accumRot += diff;
+        tr = accumRot;
+        prevAngle = ang;
+
+        ts = 0.95;
+        if(scaleTimer) clearTimeout(scaleTimer);
+        scaleTimer = setTimeout(() => { ts = 1; }, 150);
+      }
+    }
+    lastPos = {x: tx, y: ty};
+    lastTime = now;
   }, {passive:true});
 
-  // Animation trail — inertie + étirement liquide selon vitesse
-  let prevT1x = mx, prevT1y = my;
+  // ── Spring solver (semi-implicit Euler avec substeps) ──
+  // Valeurs magicui : pos {damp:45, stiff:400}, rot {damp:60, stiff:300}, scale {damp:35, stiff:500}
+  function spring(curr, vel, target, stiff, damp, dt){
+    const a = -stiff * (curr - target) - damp * vel;
+    vel += a * dt;
+    curr += vel * dt;
+    return [curr, vel];
+  }
+
+  let lastFrame = performance.now();
   (function loop(){
+    const now = performance.now();
+    let frameDt = (now - lastFrame) / 1000;
+    if(frameDt > 0.05) frameDt = 0.05;
+    lastFrame = now;
+
+    const SUBS = 4, sdt = frameDt / SUBS;
+    for(let i=0; i<SUBS; i++){
+      [cx, vcx] = spring(cx, vcx, tx, 400, 45, sdt);
+      [cy, vcy] = spring(cy, vcy, ty, 400, 45, sdt);
+      [cr, vcr] = spring(cr, vcr, tr, 300, 60, sdt);
+      [cs, vcs] = spring(cs, vcs, ts, 500, 35, sdt);
+    }
+    cur.style.left = cx.toFixed(2) + 'px';
+    cur.style.top  = cy.toFixed(2) + 'px';
+    cur.style.transform = `translate(-50%,-50%) rotate(${cr.toFixed(2)}deg) scale(${cs.toFixed(3)})`;
+
+    // ── Trail (inchangée — physique liquide d'origine) ──
     prevT1x = t1x; prevT1y = t1y;
     t1x += (mx - t1x) * 0.18;
     t1y += (my - t1y) * 0.18;
@@ -3404,12 +3623,11 @@ function renderRessources(){
     trail.style.left = t2x.toFixed(2) + 'px';
     trail.style.top  = t2y.toFixed(2) + 'px';
 
-    // Calcul vitesse → étire le trail comme une goutte
-    const vx = t1x - prevT1x;
-    const vy = t1y - prevT1y;
-    const speed = Math.sqrt(vx*vx + vy*vy);
+    const tvx = t1x - prevT1x;
+    const tvy = t1y - prevT1y;
+    const speed = Math.sqrt(tvx*tvx + tvy*tvy);
     const stretch = Math.min(speed * 0.9, 14);
-    const angle = Math.atan2(vy, vx) * 180 / Math.PI;
+    const angle = Math.atan2(tvy, tvx) * 180 / Math.PI;
     const w = 8 + stretch;
     const h = Math.max(5, 8 - stretch * 0.35);
     trail.style.width  = w.toFixed(1) + 'px';
@@ -3419,40 +3637,11 @@ function renderRessources(){
     requestAnimationFrame(loop);
   })();
 
-  // Sélecteurs séparés : boutons vs autres interactifs
-  const BTNS = 'button,.btn-primary,.btn-next,.btn-restart,.metal-btn,.fiche-tab,.nav-tab,.flashcard-nav-btn,.training-card,.dissert-card,.resource-btn,.liquid-btn,#prisma-cta';
-  const OTHER = 'a,[onclick],input,textarea,select,label,.option';
+  // Click feedback : petit punch de scale
+  document.addEventListener('mousedown', () => { ts = 0.80; });
+  document.addEventListener('mouseup',   () => { ts = 1.00; });
 
-  function setState(el){
-    if(!el){ cur.classList.remove('on-btn','hovering'); return; }
-    if(el.closest(BTNS)){
-      cur.classList.add('on-btn');
-      cur.classList.remove('hovering');
-    } else if(el.closest(OTHER)){
-      cur.classList.add('hovering');
-      cur.classList.remove('on-btn');
-    }
-  }
-
-  document.addEventListener('mouseover', e => setState(e.target), {passive:true});
-  document.addEventListener('mouseout',  e => {
-    const to = e.relatedTarget;
-    if(!to || (!to.closest(BTNS) && !to.closest(OTHER))){
-      cur.classList.remove('on-btn','hovering');
-    } else {
-      setState(to);
-    }
-  }, {passive:true});
-
-  document.addEventListener('mousedown', () => {
-    cur.classList.add('clicking');
-    cur.classList.remove('on-btn','hovering');
-  });
-  document.addEventListener('mouseup', () => {
-    cur.classList.remove('clicking');
-  });
-
-  // Mobile : masquer
+  // Masquer définitivement au premier touch
   document.addEventListener('touchstart', () => {
     cur.style.display  = 'none';
     trail.style.display = 'none';
@@ -3487,40 +3676,45 @@ function renderRessources(){
 
 <script>
 // ── GLOW CARD — spotlight pointer tracker ────────────
+// Calcule --x / --y en coordonnées LOCALES à chaque panel (et non en viewport)
+// pour rester aligné sous la souris même si l'ancêtre .cs-inner est transformé
+// (rotateX + scale). Sans cela, le glow se décale à droite/bas.
 (function(){
-  // Store last known pointer position
   let lastX = window.innerWidth / 2;
   let lastY = window.innerHeight / 2;
 
-  function applyToAll(x, y, xp, yp){
+  function applyToAll(viewX, viewY){
     document.querySelectorAll('.panel').forEach(el => {
-      el.style.setProperty('--x', x);
-      el.style.setProperty('--y', y);
-      el.style.setProperty('--xp', xp);
-      el.style.setProperty('--yp', yp);
+      const rect = el.getBoundingClientRect();
+      if(rect.width === 0 || rect.height === 0) return;
+      // Position visuelle du curseur dans le rect rendu
+      const xRel = viewX - rect.left;
+      const yRel = viewY - rect.top;
+      // Conversion en coordonnées pré-transform (le background lit dans ce repère)
+      const localX = (xRel / rect.width)  * el.offsetWidth;
+      const localY = (yRel / rect.height) * el.offsetHeight;
+      const xp = xRel / rect.width;
+      const yp = yRel / rect.height;
+      el.style.setProperty('--x',  localX.toFixed(2));
+      el.style.setProperty('--y',  localY.toFixed(2));
+      el.style.setProperty('--xp', xp.toFixed(3));
+      el.style.setProperty('--yp', yp.toFixed(3));
     });
   }
 
   function syncPointer(e){
     lastX = e.clientX;
     lastY = e.clientY;
-    const x = lastX.toFixed(2);
-    const y = lastY.toFixed(2);
-    const xp = (lastX / window.innerWidth).toFixed(2);
-    const yp = (lastY / window.innerHeight).toFixed(2);
-    applyToAll(x, y, xp, yp);
+    applyToAll(lastX, lastY);
   }
 
   document.addEventListener('pointermove', syncPointer, {passive:true});
+  // Re-sync sur scroll/resize : la position des panels change, le curseur reste fixe en viewport
+  window.addEventListener('scroll', () => applyToAll(lastX, lastY), {passive:true});
+  window.addEventListener('resize', () => applyToAll(lastX, lastY), {passive:true});
 
   // Apply to newly added panels (renderIntro, renderQuestion etc. use innerHTML)
-  const glowObserver = new MutationObserver(() => {
-    const x = lastX.toFixed(2);
-    const y = lastY.toFixed(2);
-    const xp = (lastX / window.innerWidth).toFixed(2);
-    const yp = (lastY / window.innerHeight).toFixed(2);
-    applyToAll(x, y, xp, yp);
-  });
+  const glowObserver = new MutationObserver(() => applyToAll(lastX, lastY));
   glowObserver.observe(document.body, {childList:true, subtree:true});
 })();
 </script>
@@ -3536,7 +3730,7 @@ function renderRessources(){
   const isMobile = () => window.innerWidth <= 768;
 
   function getScaleDims(){
-    return isMobile() ? [0.94, 1] : [1.02, 1];
+    return isMobile() ? [0.88, 1] : [1.10, 1];
   }
 
   function lerp(a, b, t){ return a + (b - a) * t; }
@@ -3546,10 +3740,10 @@ function renderRessources(){
     const total    = wrapper.offsetHeight;
     // progress: 0 = top of wrapper at top of viewport, 1 = bottom
     const scrolled = -rect.top;
-    const progress = Math.max(0, Math.min(1, scrolled / (total * 0.55)));
+    const progress = Math.max(0, Math.min(1, scrolled / (total * 0.70)));
 
     const [scaleFrom, scaleTo] = getScaleDims();
-    const rotX  = lerp(6, 0, progress);
+    const rotX  = lerp(8, 0, progress);
     const scale = lerp(scaleFrom, scaleTo, progress);
 
     inner.style.setProperty('--scroll-rotX',   rotX  + 'deg');
@@ -3562,5 +3756,7 @@ function renderRessources(){
 })();
 </script>
 
-</body>
-</html>
+<script defer="" src="./Philosophie de l&#39;esprit et la machine_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+</body></html>
