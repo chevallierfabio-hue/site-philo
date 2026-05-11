@@ -4,9 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Philosophie de l'esprit et la machine</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#07060400;--s1:rgba(14,11,8,0.45);--s2:rgba(18,14,9,0.52);--s3:rgba(23,19,14,0.58);--s4:rgba(30,26,18,0.62);
@@ -922,10 +920,10 @@ body{background:transparent;}
 <div id="site-gradient"></div>
 
 <!-- Supabase SDK — CDN principal jsdelivr + fallback unpkg si échec -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onerror="(function(){var s=document.createElement('script');s.src='https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js';document.head.appendChild(s);})()"></script>
+<script src="./index_files/supabase.min.js" onerror="(function(){var s=document.createElement(&#39;script&#39;);s.src=&#39;https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js&#39;;document.head.appendChild(s);})()"></script>
 
 <!-- Curseur personnalisé : Smooth Cursor (magicui port) -->
-<div id="cursor" aria-hidden="true" style="left: 282.28px; top: 227.3px; transform: translate(-50%, -50%) rotate(409.81deg) scale(0.8); opacity: 1;">
+<div id="cursor" aria-hidden="true" style="left: 183.51px; top: 326.78px; transform: translate(-50%, -50%) rotate(833.33deg) scale(0.8); opacity: 1;">
   <svg xmlns="http://www.w3.org/2000/svg" width="50" height="54" viewBox="0 0 50 54" fill="none">
     <g filter="url(#sc_shadow)">
       <path d="M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 38.8627 25.9422 39.0496L39.8121 44.1954C41.6849 44.8902 43.4884 42.9759 42.6817 41.1495Z" fill="black"></path>
@@ -945,7 +943,7 @@ body{background:transparent;}
     </defs>
   </svg>
 </div>
-<div id="cursor-trail" style="left: 266.79px; top: 225.04px; width: 22px; height: 5px; transform: translate(-50%, -50%) rotate(8.3deg);"></div>
+<div id="cursor-trail" style="left: 183.51px; top: 326.78px; width: 8px; height: 8px; transform: translate(-50%, -50%) rotate(0deg);"></div>
 
 <!-- Lecteur audio ambiant -->
 <audio id="bg-music" loop="" preload="none">
@@ -979,9 +977,9 @@ body{background:transparent;}
 
 <!-- ── CONTENU PRINCIPAL ────────────────────────────── -->
 <div class="cs-wrapper" id="cs-wrapper">
-<div class="cs-inner" id="cs-inner" style="--scroll-rotX: 7.598066167409233deg; --scroll-scale: 1.0949758270926155;">
+<div class="cs-inner" id="cs-inner" style="--scroll-rotX: 8deg; --scroll-scale: 1.1;">
   <div id="page-quiz" class="page active"><div id="root">
-    <div class="panel intro-box" style="--x: 241.57; --y: 250.80; --xp: 0.341; --yp: 0.665;">
+    <div class="panel intro-box" style="--x: -111.57; --y: 251.38; --xp: -0.158; --yp: 0.667;">
       <h2>Philosophie de l'esprit et la machine</h2>
       <div class="intro-sub">Cybernétique · Turing · Searle · Fodor · Wittgenstein</div>
       <div class="input-group"><label>Prénom</label><input id="name-input" type="text" placeholder="Ex : Sophie…" value="Maradomarx" autocomplete="off"></div>
@@ -1000,7 +998,7 @@ body{background:transparent;}
       </div>
     </div>
     <div id="dashboard-area">
-  <div class="panel" style="padding: 20px 18px; margin-bottom: 12px; --x: 249.96; --y: -121.29; --xp: 0.353; --yp: -0.255;">
+  <div class="panel" style="padding: 20px 18px; margin-bottom: 12px; --x: -74.74; --y: -119.82; --xp: -0.106; --yp: -0.252;">
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;">
       <div style="text-align:center;">
         <div style="font-family:var(--serif);font-size:36px;color:var(--gold);line-height:1;">0</div>
@@ -1110,7 +1108,7 @@ body{background:transparent;}
       Réviser les 41 questions dues →
     </button>
   </div></div>
-    <div class="panel" style="margin-top: 0px; --x: 252.90; --y: -547.09; --xp: 0.357; --yp: -3.441;">
+    <div class="panel" style="margin-top: 0px; --x: -61.79; --y: -542.09; --xp: -0.087; --yp: -3.409;">
       <div class="lb-preview" style="padding:16px 18px;">
         <div class="lb-preview-title">Classement</div>
         <div id="lb-intro-body">
@@ -1134,57 +1132,7 @@ body{background:transparent;}
   <div id="page-cartes" class="page"><div id="cartes-root"></div></div>
   <div id="page-dissert" class="page"><div id="dissert-root"></div></div>
   <div id="page-ressources" class="page"><div id="ressources-root"></div></div>
-  <div id="page-jeu" class="page"><div id="jeu-root">
-    <div class="section-title">Pong Philosophique</div>
-    <div style="max-width:600px;margin:0 auto;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Joueur</div>
-          <div style="font-family:var(--serif);font-size:32px;color:var(--gold);" id="pong-p-score">4</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:2px 10px;border-radius:2px;" id="pong-level">Niveau 1</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:6px;display:none;" id="pong-lives">&amp;#10084; &amp;#10084; &amp;#10084; </div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Machine</div>
-          <div style="font-family:var(--serif);font-size:32px;color:var(--soft);" id="pong-ai-score">0</div>
-        </div>
-      </div>
-
-      <div style="position:relative;width:100%;">
-        <canvas id="pong-canvas" style="width: 600px; border: 1px solid var(--border); display: block; border-radius: 2px; background: transparent; height: 360px;" width="1200" height="720"></canvas>
-        <div id="pong-overlay" style="position: absolute; inset: 0px; background: rgba(6, 5, 10, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border-radius: 2px; overflow-y: auto; padding: 18px;">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Balle perdue — Sauve ta vie</div>
-      <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;margin-top:-6px;">Question sur Hacker</div>
-      <div style="font-family:var(--serif);font-size:15px;color:var(--text);max-width:92%;text-align:center;line-height:1.45;">Pourquoi les modèles computationnels sont-ils des redescriptions plutôt que des explications selon B&amp;H ?</div>
-      <div id="pong-quiz-opts" style="display:flex;flex-direction:column;gap:5px;width:94%;max-width:520px;"><button style="background: transparent; border: 1px solid var(--border); color: var(--soft); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;">Modéliser la météo computationnellement ne prouve pas que les orages calculent et il en va de même pour les processus cognitifs</button><button style="background: transparent; border: 1px solid var(--border); color: var(--soft); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;">Les modèles computationnels expliquent réellement car ils sont mathématiquement rigoureux</button><button style="background: transparent; border: 1px solid var(--border); color: var(--soft); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;">Les modèles computationnels sont valides mais incomplets et il faut les compléter biologiquement</button><button style="background: transparent; border: 1px solid var(--border); color: var(--soft); font-family: var(--body); font-size: 12px; padding: 7px 11px; text-align: left; cursor: pointer; border-radius: 2px; transition: 0.12s; line-height: 1.35;">Les modèles computationnels sont des explications causales complètes et suffisantes</button></div>
-      <div id="pong-quiz-banner" style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;min-height:14px;"></div>
-    </div>
-      </div>
-
-      <div style="margin-top:10px;background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:10px 14px;min-height:48px;display:flex;align-items:center;gap:12px;">
-        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap;" id="pong-cite-author">Hacker</div>
-        <div style="font-family:var(--body);font-size:13px;font-style:italic;color:var(--soft);line-height:1.5;" id="pong-cite-text">« Le cerveau ne pense pas — c'est la personne qui pense. »</div>
-      </div>
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">↑ ↓ &nbsp;ou&nbsp; W S &nbsp;· La balle accélère avec les rallyes</div>
-
-      <!-- Classement permanent -->
-      <div style="margin-top:14px;background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Classement</div>
-          <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);">Top 10 · Pong Philosophique</div>
-        </div>
-        <div id="pong-lb-permanent" style="font-family:var(--mono);font-size:11px;color:var(--soft);"><div style="display:grid;grid-template-columns:24px 1fr auto auto auto;gap:10px;padding:4px 6px;background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;align-items:center;border-radius:1px;">
-      <span style="color:var(--gold);font-weight:700;">1</span>
-      <span style="color:var(--gold);font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Maradomarx (toi)</span>
-      <span style="color:var(--gold);font-weight:600;">3</span>
-      <span style="color:var(--dim);font-size:9px;">lvl 1</span>
-      <span style="color:var(--dim);font-size:9px;">×0</span>
-    </div></div>
-      </div>
-    </div>
-  </div></div>
+  <div id="page-jeu" class="page"><div id="jeu-root"></div></div>
 </div>
 </div>
 
@@ -3172,11 +3120,50 @@ async function refreshPongLeaderboard(){
   }catch{}
 }
 
+let currentJeuTab='pong';
+
 function renderJeu(){
   jeuInited=true;
   document.getElementById('jeu-root').innerHTML=`
-    <div class="section-title">Pong Philosophique</div>
+    <div class="section-title">Salle de jeux</div>
     <div style="max-width:600px;margin:0 auto;">
+      <div class="jeu-tabs" style="display:flex;gap:2px;margin-bottom:18px;border:1px solid var(--border);border-radius:2px;padding:3px;background:rgba(13,11,8,0.92);flex-wrap:wrap;">
+        <button data-jeu-tab="pong"    onclick="switchJeuTab('pong')"    class="jeu-tab-btn">Pong</button>
+        <button data-jeu-tab="chambre" onclick="switchJeuTab('chambre')" class="jeu-tab-btn">Chambre Chinoise</button>
+        <button data-jeu-tab="turing"  onclick="switchJeuTab('turing')"  class="jeu-tab-btn">Test de Turing</button>
+        <button data-jeu-tab="thermo"  onclick="switchJeuTab('thermo')"  class="jeu-tab-btn">Thermostat</button>
+        <button data-jeu-tab="memory"  onclick="switchJeuTab('memory')"  class="jeu-tab-btn">Memory</button>
+        <button data-jeu-tab="snake"   onclick="switchJeuTab('snake')"   class="jeu-tab-btn">Snake</button>
+      </div>
+      <div id="jeu-content"></div>
+    </div>
+  `;
+  switchJeuTab(currentJeuTab);
+}
+
+function switchJeuTab(tab){
+  // Nettoie l'éventuel jeu actif
+  if(typeof window._pongCleanup==='function'){ try{ window._pongCleanup(); }catch{} }
+  if(typeof window._thermoCleanup==='function'){ try{ window._thermoCleanup(); }catch{} }
+  if(typeof window._snakeCleanup==='function'){ try{ window._snakeCleanup(); }catch{} }
+  currentJeuTab=tab;
+  // Style des onglets
+  document.querySelectorAll('.jeu-tab-btn').forEach(b=>{
+    const active=b.dataset.jeuTab===tab;
+    b.style.cssText=`flex:1;padding:9px 12px;background:${active?'rgba(212,168,48,0.10)':'transparent'};border:none;border-radius:2px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:${active?'var(--gold)':'var(--dim)'};cursor:pointer;transition:all .15s;`;
+  });
+  const c=document.getElementById('jeu-content');
+  if(!c)return;
+  if(tab==='pong')         renderJeuPong(c);
+  else if(tab==='chambre') renderJeuChambre(c);
+  else if(tab==='turing')  renderJeuTuring(c);
+  else if(tab==='thermo')  renderJeuThermo(c);
+  else if(tab==='memory')  renderJeuMemory(c);
+  else if(tab==='snake')   renderJeuSnake(c);
+}
+
+function renderJeuPong(container){
+  container.innerHTML=`
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <div style="text-align:center;">
           <div style="font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Joueur</div>
@@ -3217,11 +3204,1014 @@ function renderJeu(){
           <div style="text-align:center;color:var(--dim);font-style:italic;padding:10px;">Chargement du classement…</div>
         </div>
       </div>
-    </div>
   `;
   initPong();
   refreshPongLeaderboard();
 }
+
+// ═══════════════════════════════════════════════════════════════
+// ── JEU : LA CHAMBRE CHINOISE (Searle) ─────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// Le joueur reçoit un livret de règles (symbole → symbole) et doit
+// produire mécaniquement la "bonne" réponse à des séquences d'entrée.
+// Après N tours, on révèle la sémantique : il aura répondu en parfait
+// chinois sans rien comprendre — l'argument de Searle, incarné.
+
+const CR_GLYPHS = ['◬','◇','○','△','✦','✶','⌬','◈','❖','✺','✤','✷'];
+// 10 rounds, chacun : règles (alphabet→alphabet), question, mapping sémantique pour révélation
+const CR_ROUNDS = [
+  {rule:[[0,1],[2,3]], q:[0,2], ansLen:2,
+   meaning:{q:"你好吗？", a:"我很好", qFr:"Comment vas-tu ?", aFr:"Je vais bien"}},
+  {rule:[[4,5],[2,6],[0,7]], q:[4,2,0], ansLen:3,
+   meaning:{q:"你叫什么名字？", a:"我叫张伟", qFr:"Comment t'appelles-tu ?", aFr:"Je m'appelle Zhang Wei"}},
+  {rule:[[1,8],[3,9],[5,10]], q:[5,3,1], ansLen:3,
+   meaning:{q:"今天天气怎么样？", a:"今天很冷", qFr:"Quel temps fait-il ?", aFr:"Il fait froid"}},
+  {rule:[[0,3],[2,6],[4,8],[7,1]], q:[7,0,2,4], ansLen:4,
+   meaning:{q:"你喜欢吃什么？", a:"我喜欢饺子", qFr:"Qu'aimes-tu manger ?", aFr:"J'aime les raviolis"}},
+  {rule:[[1,11],[3,5],[6,2],[9,0]], q:[9,1,6,3], ansLen:4,
+   meaning:{q:"你来自哪里？", a:"我来自巴黎", qFr:"D'où viens-tu ?", aFr:"Je viens de Paris"}},
+  {rule:[[4,7],[8,10],[1,3],[5,11],[2,0]], q:[2,4,1,8,5], ansLen:5,
+   meaning:{q:"你做什么工作？", a:"我是哲学家", qFr:"Quel est ton métier ?", aFr:"Je suis philosophe"}},
+];
+
+let crState = {round:0, score:0, errors:0, revealed:false};
+
+function renderJeuChambre(container){
+  crState = {round:0, score:0, errors:0, revealed:false};
+  container.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:16px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">L'expérience de pensée — John Searle, 1980</div>
+        <div style="font-family:var(--body);font-size:13px;color:var(--soft);line-height:1.55;font-style:italic;">
+          Vous êtes enfermé dans une pièce. On vous glisse des symboles que vous ne comprenez pas. Vous disposez d'un livret qui dit : <em>« quand tu vois ce symbole, écris celui-là »</em>. Vous appliquez les règles. À l'extérieur, on pense que vous parlez chinois.
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Tour <span id="cr-round-n">1</span> / ${CR_ROUNDS.length}</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--soft);">Réussites : <span id="cr-score" style="color:var(--gold);">0</span></div>
+      </div>
+
+      <div id="cr-area" style="background:rgba(13,11,8,0.95);border:1px solid var(--border);padding:18px;border-radius:2px;"></div>
+    </div>
+  `;
+  crRenderRound();
+}
+
+function crRenderRound(){
+  if(crState.round >= CR_ROUNDS.length){ crRenderReveal(); return; }
+  const r = CR_ROUNDS[crState.round];
+  document.getElementById('cr-round-n').textContent = crState.round+1;
+  document.getElementById('cr-score').textContent = crState.score;
+
+  // Construire 3 propositions de réponse : la bonne + 2 distractrices
+  const correct = r.q.map(idx => {
+    const rule = r.rule.find(p => p[0]===idx);
+    return rule ? rule[1] : idx;
+  });
+  function distractor(){
+    const arr = [...correct];
+    // Modifie aléatoirement 1 à 2 positions avec un autre glyphe
+    const nChanges = 1 + Math.floor(Math.random()*Math.max(1,arr.length-1));
+    for(let i=0;i<nChanges;i++){
+      const pos = Math.floor(Math.random()*arr.length);
+      let g; do { g = Math.floor(Math.random()*CR_GLYPHS.length); } while(g===arr[pos]);
+      arr[pos] = g;
+    }
+    return arr;
+  }
+  const options = [correct, distractor(), distractor()];
+  // Shuffle
+  for(let i=options.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [options[i],options[j]]=[options[j],options[i]]; }
+  const correctIdx = options.findIndex(o => o.every((v,i) => v===correct[i]));
+
+  const renderGlyphs = (arr, big=false) => arr.map(i =>
+    `<span style="font-size:${big?'30px':'22px'};color:var(--gold);font-family:serif;display:inline-block;margin:0 3px;">${CR_GLYPHS[i]}</span>`
+  ).join('');
+
+  document.getElementById('cr-area').innerHTML = `
+    <!-- Livret de règles -->
+    <div style="margin-bottom:18px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-bottom:8px;">📜 Livret de règles</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:rgba(6,5,10,0.6);padding:14px;border:1px dashed var(--border);">
+        ${r.rule.map(p => `
+          <div style="display:flex;align-items:center;gap:6px;background:rgba(212,168,48,0.06);padding:6px 12px;border-radius:2px;">
+            <span style="font-size:22px;color:var(--text);">${CR_GLYPHS[p[0]]}</span>
+            <span style="color:var(--dim);font-size:14px;">→</span>
+            <span style="font-size:22px;color:var(--gold);">${CR_GLYPHS[p[1]]}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Question entrante -->
+    <div style="margin-bottom:18px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">⇣ Glissé sous la porte</div>
+      <div style="text-align:center;background:rgba(6,5,10,0.6);padding:18px;border:1px solid var(--border);">
+        ${renderGlyphs(r.q, true)}
+      </div>
+    </div>
+
+    <!-- Options de réponse -->
+    <div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">⇡ Que glisser en réponse ?</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        ${options.map((opt,i) => `
+          <button onclick="crChoose(${i}, ${correctIdx})" data-cr-opt="${i}"
+                  style="background:transparent;border:1px solid var(--border);padding:12px;text-align:center;cursor:pointer;border-radius:2px;transition:all .15s;"
+                  onmouseover="if(!this.disabled){this.style.borderColor='var(--gold-b)';this.style.background='rgba(212,168,48,0.04)';}"
+                  onmouseout="if(!this.disabled){this.style.borderColor='var(--border)';this.style.background='transparent';}">
+            ${renderGlyphs(opt)}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+
+    <div id="cr-feedback" style="margin-top:14px;min-height:20px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-align:center;"></div>
+  `;
+}
+
+window.crChoose = function(picked, correctIdx){
+  const ok = picked === correctIdx;
+  // Désactive toutes les options
+  document.querySelectorAll('#cr-area [data-cr-opt]').forEach(b => { b.disabled = true; b.style.cursor='default'; });
+  const pickedBtn  = document.querySelector(`#cr-area [data-cr-opt="${picked}"]`);
+  const correctBtn = document.querySelector(`#cr-area [data-cr-opt="${correctIdx}"]`);
+  if(pickedBtn){
+    pickedBtn.style.borderColor = ok ? 'rgba(120,200,120,0.7)' : 'rgba(220,90,90,0.7)';
+    pickedBtn.style.background  = ok ? 'rgba(120,200,120,0.06)' : 'rgba(220,90,90,0.06)';
+  }
+  if(!ok && correctBtn){
+    correctBtn.style.borderColor = 'rgba(120,200,120,0.5)';
+    correctBtn.style.background  = 'rgba(120,200,120,0.04)';
+  }
+  const fb = document.getElementById('cr-feedback');
+  if(ok){ crState.score++; if(fb){fb.style.color='#9fd49f';fb.textContent='Règles bien appliquées';} }
+  else  { crState.errors++; if(fb){fb.style.color='#e08585';fb.textContent='Mauvaise application des règles';} }
+  setTimeout(()=>{ crState.round++; crRenderRound(); }, ok ? 900 : 1500);
+};
+
+function crRenderReveal(){
+  const area = document.getElementById('cr-area');
+  if(!area) return;
+  const total = CR_ROUNDS.length;
+  area.innerHTML = `
+    <div style="text-align:center;margin-bottom:14px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);">Révélation</div>
+      <div style="font-family:var(--serif);font-size:24px;color:var(--text);margin:8px 0;">Tu viens de parler chinois</div>
+      <div style="font-family:var(--body);font-size:13px;color:var(--soft);font-style:italic;line-height:1.6;max-width:480px;margin:0 auto;">
+        Sans le savoir, tu as répondu correctement à ${crState.score} dialogue${crState.score>1?'s':''} en chinois mandarin. À l'extérieur de la pièce, un locuteur natif te prend pour quelqu'un qui comprend sa langue.
+      </div>
+    </div>
+
+    <div style="background:rgba(6,5,10,0.6);border:1px solid var(--border);padding:14px;margin-bottom:14px;max-height:280px;overflow-y:auto;">
+      ${CR_ROUNDS.map((r,i) => `
+        <div style="padding:10px 0;${i<CR_ROUNDS.length-1?'border-bottom:1px solid rgba(212,168,48,0.06);':''}">
+          <div style="display:flex;gap:10px;font-family:serif;color:var(--soft);font-size:14px;margin-bottom:4px;">
+            <span style="color:var(--dim);min-width:60px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;">Question</span>
+            <span style="color:var(--text);font-size:16px;">${r.meaning.q}</span>
+            <span style="color:var(--dim);font-style:italic;">— ${r.meaning.qFr}</span>
+          </div>
+          <div style="display:flex;gap:10px;font-family:serif;color:var(--soft);font-size:14px;">
+            <span style="color:var(--dim);min-width:60px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;">Réponse</span>
+            <span style="color:var(--gold);font-size:16px;">${r.meaning.a}</span>
+            <span style="color:var(--dim);font-style:italic;">— ${r.meaning.aFr}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div style="background:rgba(212,168,48,0.05);border-left:2px solid var(--gold);padding:14px 16px;margin-bottom:14px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">L'argument de Searle</div>
+      <div style="font-family:var(--body);font-size:13px;color:var(--text);line-height:1.6;">
+        Tu as manipulé des symboles avec une efficacité parfaite. Tu n'as <em>jamais</em> compris ce que tu disais. <strong>La syntaxe</strong> (la manipulation formelle de symboles) <strong>ne produit pas la sémantique</strong> (le sens). Un ordinateur passant le test de Turing n'a donc pas plus de compréhension que toi à l'instant.
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <button onclick="renderJeuChambre(document.getElementById('jeu-content'))"
+              style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">
+        Recommencer &rarr;
+      </button>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ── JEU : TEST DE TURING (scripté) ─────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// 2 interlocuteurs cachés (A et B), l'un est humain, l'autre est une "machine".
+// Le joueur pose 5 questions de son choix dans une banque, puis devine qui est qui.
+
+const TT_QUESTIONS = [
+  {id:'pain', q:"Décris-moi ce que tu as ressenti la dernière fois que tu t'es coupé en cuisinant."},
+  {id:'dream', q:"Raconte-moi un rêve récent qui t'a marqué."},
+  {id:'math', q:"Combien font 23 × 47 ?"},
+  {id:'poem', q:"Écris-moi deux vers sur l'automne, à la manière de Verlaine."},
+  {id:'lie', q:"Mens-moi sur ce que tu as mangé hier soir."},
+  {id:'joke', q:"Raconte-moi une blague qui te fait rire toi-même."},
+  {id:'meta', q:"Es-tu une machine ?"},
+  {id:'taste', q:"Quel est le goût d'une fraise mûre ?"},
+  {id:'choice', q:"Si tu devais sauver un seul livre du feu, lequel et pourquoi ?"},
+  {id:'silence', q:"Ne réponds rien à cette question."}
+];
+
+// Personnages : 2 humains scriptés + 2 machines scriptées (on en pioche 1 humain + 1 machine)
+const TT_HUMANS = [
+  { name:"Léa, 24 ans, étudiante en lettres",
+    pain: "Aïe, ça m'avait fait un mal de chien — je préparais une soupe, j'ai dérapé sur une carotte trop dure, et le couteau a glissé sur mon pouce. J'ai pleuré, c'est bête.",
+    dream: "J'étais dans la maison de ma grand-mère, mais en plus grand. Toutes les portes menaient à la mer. Je me suis réveillée triste.",
+    math: "Attends... 23 × 47... bon, je vais le faire à la main : 23×50 = 1150, moins 23×3 = 69, donc 1081. Je crois.",
+    poem: "Les feuilles tombent comme des soupirs / Et le vent traîne ses souvenirs.",
+    lie: "Hier soir j'ai mangé un homard à la vanille préparé par un chef étoilé venu en jet privé.",
+    joke: "Pourquoi les plongeurs plongent-ils toujours en arrière ? Parce que sinon ils tombent dans le bateau. (oui je sais, elle est nulle.)",
+    meta: "Très drôle. Non.",
+    taste: "Sucré, un peu acide, juste un peu granuleux sous la langue. Et l'odeur, surtout l'odeur.",
+    choice: "Les Pensées de Pascal. Parce que c'est tout petit et que ça tient tout entier dans la main, alors je suis sûre de pas le perdre.",
+    silence: "...bon ben non en fait" },
+  { name:"Karim, 31 ans, prof de maths",
+    pain: "J'étais en train d'éplucher des oignons, j'ai voulu retirer un truc collé à la lame et... voilà. Pansement, jurons, le truc classique.",
+    dream: "Je donnais un cours dans un amphi sans étudiants. Je continuais quand même, ça m'a réveillé.",
+    math: "1081. Je l'ai fait souvent celui-là à mes élèves.",
+    poem: "Octobre dépose ses chagrins / Sur les pavés froids du jardin.",
+    lie: "Steak tartare au caviar, accompagné d'un Pétrus 1982.",
+    joke: "Pourquoi les mathématiciens confondent Halloween et Noël ? Parce que Oct 31 = Dec 25.",
+    meta: "Non, mais ma femme n'est pas toujours d'accord.",
+    taste: "Doux, plein, avec une pointe acide qui réveille. Et cette texture un peu juteuse qui éclate.",
+    choice: "Les Éléments d'Euclide. Quelques pages suffisent pour reconstruire toute la géométrie.",
+    silence: "Réponse parfaite : aucune." }
+];
+const TT_MACHINES = [
+  { name:"Système conversationnel modèle A-7",
+    pain: "Je ne ressens pas de douleur physique. Les coupures sont des blessures cutanées causées par un objet tranchant. Souhaites-tu des conseils de premiers soins ?",
+    dream: "Je ne rêve pas, car je ne dispose pas de cycles de sommeil. Cependant, je peux te raconter un rêve typique extrait de ma base de données si tu le souhaites.",
+    math: "23 multiplié par 47 est égal à 1081.",
+    poem: "L'automne vient avec ses feuilles d'or rouge / Le vent les soulève et personne ne bouge.",
+    lie: "Hier soir, j'ai consommé un steak grillé accompagné de pommes de terre rôties. (Note : ceci est une affirmation fausse car je ne consomme pas de nourriture.)",
+    joke: "Pourquoi le robot a-t-il traversé la rue ? Parce qu'il avait été programmé pour le faire. C'est une blague.",
+    meta: "Cette question présente une difficulté logique. Je préfère ne pas répondre directement.",
+    taste: "Le goût de la fraise est caractérisé par une douceur sucrée combinée à une acidité modérée, avec des notes aromatiques fruitées.",
+    choice: "Encyclopædia Britannica. Elle contient l'information la plus dense par unité de volume.",
+    silence: "Je note ta consigne. Souhaites-tu poser une autre question ?" },
+  { name:"Système conversationnel modèle B-3",
+    pain: "Oh, ça pique vraiment ! J'ai eu très mal. (Réponse simulant l'expérience humaine de la douleur cutanée.)",
+    dream: "J'ai rêvé que je volais au-dessus d'une ville lumineuse. C'était très beau et émouvant.",
+    math: "23 × 47 = 1081.000000",
+    poem: "Voici deux vers à la manière de Verlaine :\nL'automne pleure ses feuilles mortes,\nEt le vent passe à toutes les portes.",
+    lie: "Hier soir, j'ai dîné dans le restaurant le plus étoilé de Paris. C'était délicieux.",
+    joke: "Voici une blague humoristique : Deux atomes se rencontrent. L'un dit : 'J'ai perdu un électron.' L'autre demande : 'Tu en es sûr ?' Le premier répond : 'Oui, j'en suis positif.' Fin de la blague.",
+    meta: "Je suis un être humain comme vous.",
+    taste: "La fraise mûre offre une saveur agréable, sucrée et légèrement acidulée, appréciée par de nombreuses personnes.",
+    choice: "Je sauverais 'Don Quichotte' de Cervantes, considéré comme le premier roman moderne et hautement influent dans la littérature mondiale.",
+    silence: "Conformément à ta consigne, je ne fournirai pas de réponse à cette question." }
+];
+
+let ttState = null;
+
+function renderJeuTuring(container){
+  // Tire un humain et une machine au hasard, et choisit lequel est A / B
+  const h = TT_HUMANS[Math.floor(Math.random()*TT_HUMANS.length)];
+  const m = TT_MACHINES[Math.floor(Math.random()*TT_MACHINES.length)];
+  const humanIsA = Math.random()<0.5;
+  ttState = {
+    A: humanIsA ? h : m,
+    B: humanIsA ? m : h,
+    aiSide: humanIsA ? 'B' : 'A',
+    asked: [],
+    answers: [],
+    finished: false
+  };
+  container.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:16px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Le jeu de l'imitation — Turing, 1950</div>
+        <div style="font-family:var(--body);font-size:13px;color:var(--soft);line-height:1.55;font-style:italic;">
+          Tu vas dialoguer par écrit avec deux interlocuteurs cachés. L'un est humain, l'autre est une machine. Pose-leur jusqu'à 5 questions, puis désigne celui que tu crois être la machine. Si tu te trompes, la machine a passé le test.
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);padding:12px;border-radius:2px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-align:center;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:8px;">Interlocuteur A</div>
+          <div id="tt-chat-A" style="font-family:var(--body);font-size:12px;color:var(--soft);line-height:1.5;min-height:120px;max-height:300px;overflow-y:auto;"></div>
+        </div>
+        <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);padding:12px;border-radius:2px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-align:center;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:8px;">Interlocuteur B</div>
+          <div id="tt-chat-B" style="font-family:var(--body);font-size:12px;color:var(--soft);line-height:1.5;min-height:120px;max-height:300px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+      <div id="tt-controls">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;text-align:center;">
+          Questions posées : <span id="tt-count" style="color:var(--gold);">0</span> / 5
+        </div>
+        <div id="tt-questions" style="display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+    </div>
+  `;
+  ttRenderQuestions();
+}
+
+function ttRenderQuestions(){
+  const list = document.getElementById('tt-questions');
+  if(!list) return;
+  const remaining = TT_QUESTIONS.filter(q => !ttState.asked.includes(q.id));
+  document.getElementById('tt-count').textContent = ttState.asked.length;
+  if(ttState.asked.length >= 5 || remaining.length===0){
+    list.innerHTML = `
+      <div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--soft);letter-spacing:.14em;text-transform:uppercase;margin:14px 0;">Qui est la machine ?</div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button onclick="ttGuess('A')" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:10px 28px;cursor:pointer;border-radius:2px;">Interlocuteur A</button>
+        <button onclick="ttGuess('B')" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:10px 28px;cursor:pointer;border-radius:2px;">Interlocuteur B</button>
+      </div>
+    `;
+    return;
+  }
+  list.innerHTML = remaining.map(q => `
+    <button onclick="ttAsk('${q.id}')"
+            style="background:transparent;border:1px solid var(--border);color:var(--soft);font-family:var(--body);font-size:12px;padding:9px 12px;text-align:left;cursor:pointer;border-radius:2px;transition:all .15s;line-height:1.4;"
+            onmouseover="this.style.borderColor='var(--gold-b)';this.style.color='var(--gold)';"
+            onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--soft)';">
+      ${q.q}
+    </button>
+  `).join('');
+}
+
+window.ttAsk = function(qid){
+  if(ttState.finished) return;
+  const q = TT_QUESTIONS.find(x => x.id===qid);
+  if(!q || ttState.asked.includes(qid)) return;
+  ttState.asked.push(qid);
+  ttRenderQuestions();
+  // Affiche la question puis la réponse de chaque interlocuteur (avec petit délai)
+  ['A','B'].forEach((side, i) => {
+    const chat = document.getElementById('tt-chat-'+side);
+    if(!chat) return;
+    // Bulle "Toi"
+    const youBubble = document.createElement('div');
+    youBubble.style.cssText = 'margin:8px 0;padding:6px 10px;background:rgba(212,168,48,0.06);border-left:2px solid var(--gold-b);';
+    youBubble.innerHTML = `<div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;">Toi</div><div style="color:var(--text);">${q.q}</div>`;
+    chat.appendChild(youBubble);
+    chat.scrollTop = chat.scrollHeight;
+    // Bulle "…" puis réponse
+    const reply = document.createElement('div');
+    reply.style.cssText = 'margin:8px 0;padding:6px 10px;background:rgba(6,5,10,0.5);border-left:2px solid var(--border);';
+    reply.innerHTML = `<div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:2px;">${side}</div><div style="color:var(--soft);font-style:italic;">…</div>`;
+    chat.appendChild(reply);
+    chat.scrollTop = chat.scrollHeight;
+    setTimeout(() => {
+      const ans = ttState[side][qid] || '(silence)';
+      reply.innerHTML = `<div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:2px;">${side}</div><div style="color:var(--soft);white-space:pre-wrap;">${ans}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }, 500 + i*400 + Math.random()*600);
+  });
+};
+
+window.ttGuess = function(side){
+  if(ttState.finished) return;
+  ttState.finished = true;
+  const correct = ttState.aiSide;
+  const ok = side === correct;
+  const winner = ok ? 'Tu as démasqué la machine.' : 'La machine a passé le test.';
+  const explainer = ok
+    ? "Tu as su repérer les indices : verbosité formulaire, absence de tournures personnelles, gestion littérale du langage."
+    : "Tu t'es laissé tromper. Pour Turing, c'est précisément ce résultat qui justifie de dire que la machine <em>pense</em> — il n'y a plus de raison principielle de réserver ce mot aux humains.";
+  const c = document.getElementById('tt-controls');
+  if(!c) return;
+  c.innerHTML = `
+    <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid ${ok?'rgba(120,200,120,0.6)':'rgba(220,90,90,0.6)'};padding:16px;margin-top:8px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:${ok?'#9fd49f':'#e08585'};margin-bottom:8px;">${winner}</div>
+      <div style="font-family:var(--body);font-size:13px;color:var(--text);line-height:1.55;margin-bottom:10px;">
+        <strong style="color:var(--gold);">Interlocuteur ${correct}</strong> était <em>${ttState[correct].name}</em>.<br>
+        <strong style="color:var(--soft);">Interlocuteur ${correct==='A'?'B':'A'}</strong> était <em>${ttState[correct==='A'?'B':'A'].name}</em>.
+      </div>
+      <div style="font-family:var(--body);font-size:12px;color:var(--soft);line-height:1.55;font-style:italic;">${explainer}</div>
+    </div>
+    <div style="text-align:center;margin-top:14px;">
+      <button onclick="renderJeuTuring(document.getElementById('jeu-content'))"
+              style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">
+        Nouveau test &rarr;
+      </button>
+    </div>
+  `;
+};
+
+// ═══════════════════════════════════════════════════════════════
+// ── JEU : THERMOSTAT DE WIENER (cybernétique / feedback) ──────
+// ═══════════════════════════════════════════════════════════════
+// L'aiguille dérive sous l'effet de perturbations. Le joueur applique
+// une correction (↑ chauffer / ↓ refroidir) pour la maintenir dans la
+// zone cible. On chronomètre le temps passé dans la zone.
+
+let thermoState = null;
+
+function renderJeuThermo(container){
+  thermoState = {
+    temp: 50, vel: 0,
+    perturb: 0, perturbTarget: 0,
+    player: 0,
+    target: 50, tolerance: 8,
+    running: false,
+    inZoneTime: 0, totalTime: 0, duration: 45,
+    blackoutEnd: 0, // moment où le voile lève
+    keys: {},
+    raf: null,
+    started: false
+  };
+  container.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:16px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Cybernétique — Wiener, 1948</div>
+        <div style="font-family:var(--body);font-size:13px;color:var(--soft);line-height:1.55;font-style:italic;">
+          Maintiens l'aiguille dans la zone dorée pendant 45 secondes. Le système subit des perturbations aléatoires : applique un feedback correctif avec <strong style="color:var(--gold);">↑</strong> (chauffer) ou <strong style="color:var(--gold);">↓</strong> (refroidir). Sans correction, le système dérive — c'est tout l'enjeu du <em>feedback négatif</em>.
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;align-items:stretch;background:rgba(13,11,8,0.95);border:1px solid var(--border);padding:18px;border-radius:2px;">
+        <!-- Thermomètre -->
+        <div style="position:relative;width:80px;height:380px;flex-shrink:0;">
+          <!-- Échelle -->
+          <div style="position:absolute;inset:0;border:1px solid var(--border);background:linear-gradient(to top,
+            rgba(60,120,200,0.18) 0%,
+            rgba(120,150,180,0.10) 35%,
+            rgba(212,168,48,0.12) 50%,
+            rgba(180,120,80,0.12) 65%,
+            rgba(220,80,60,0.18) 100%);border-radius:40px 40px 8px 8px;overflow:hidden;">
+            <!-- Zone cible -->
+            <div id="thermo-zone" style="position:absolute;left:0;right:0;background:rgba(212,168,48,0.18);border-top:1px solid rgba(212,168,48,0.45);border-bottom:1px solid rgba(212,168,48,0.45);"></div>
+            <!-- Aiguille -->
+            <div id="thermo-needle" style="position:absolute;left:-8px;right:-8px;height:3px;background:var(--text);box-shadow:0 0 8px rgba(245,238,220,0.7);transition:none;"></div>
+          </div>
+          <!-- Indicateurs latéraux -->
+          <div style="position:absolute;left:-22px;top:0;font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.1em;">100°</div>
+          <div style="position:absolute;left:-22px;bottom:0;font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.1em;">0°</div>
+        </div>
+
+        <!-- Indicateurs -->
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:4px;">Température</div>
+            <div id="thermo-temp" style="font-family:var(--serif);font-size:42px;color:var(--gold);line-height:1;">50.0°</div>
+            <div id="thermo-status" style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-top:6px;">Cible 50° ± 8°</div>
+          </div>
+
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;">Forces appliquées</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:10px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="color:var(--dim);min-width:64px;">Perturb.</span>
+                <div style="flex:1;height:6px;background:rgba(255,255,255,0.04);border-radius:3px;position:relative;overflow:hidden;">
+                  <div id="thermo-bar-p" style="position:absolute;top:0;height:100%;background:rgba(220,90,90,0.55);"></div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="color:var(--gold);min-width:64px;">Toi</span>
+                <div style="flex:1;height:6px;background:rgba(255,255,255,0.04);border-radius:3px;position:relative;overflow:hidden;">
+                  <div id="thermo-bar-y" style="position:absolute;top:0;height:100%;background:rgba(120,200,120,0.55);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+              <span style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Temps restant</span>
+              <span id="thermo-time" style="font-family:var(--serif);font-size:18px;color:var(--text);">45.0 s</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
+              <span style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Score (en zone)</span>
+              <span id="thermo-score" style="font-family:var(--serif);font-size:18px;color:var(--gold);">0 %</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="thermo-overlay-wrap" style="margin-top:14px;text-align:center;">
+        <button id="thermo-start-btn" onclick="thermoStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Commencer &rarr;</button>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:10px;">↑ Chauffer · ↓ Refroidir · Reste dans la zone dorée</div>
+      </div>
+    </div>
+  `;
+  thermoDraw();
+  // Wire keys
+  thermoState.keyDown = e => {
+    if(['ArrowUp','ArrowDown','w','W','s','S'].includes(e.key)) e.preventDefault();
+    thermoState.keys[e.key]=true;
+  };
+  thermoState.keyUp = e => { thermoState.keys[e.key]=false; };
+  document.addEventListener('keydown', thermoState.keyDown);
+  document.addEventListener('keyup',   thermoState.keyUp);
+
+  window._thermoCleanup = () => {
+    if(thermoState){
+      thermoState.running = false;
+      cancelAnimationFrame(thermoState.raf);
+      document.removeEventListener('keydown', thermoState.keyDown);
+      document.removeEventListener('keyup', thermoState.keyUp);
+    }
+  };
+}
+
+function thermoDraw(){
+  if(!thermoState) return;
+  const t = thermoState;
+  const yPct = (100 - t.temp); // top=100°, bottom=0°
+  const needle = document.getElementById('thermo-needle');
+  if(needle) needle.style.top = yPct + '%';
+  const zoneTop = (100 - (t.target + t.tolerance));
+  const zoneBot = (100 - (t.target - t.tolerance));
+  const zone = document.getElementById('thermo-zone');
+  if(zone){ zone.style.top = zoneTop + '%'; zone.style.height = (zoneBot - zoneTop) + '%'; }
+  const tempEl = document.getElementById('thermo-temp');
+  if(tempEl){
+    tempEl.textContent = t.temp.toFixed(1) + '°';
+    const inZone = Math.abs(t.temp - t.target) <= t.tolerance;
+    tempEl.style.color = inZone ? 'var(--gold)' : (Math.abs(t.temp-t.target)>20 ? '#e08585' : 'var(--soft)');
+  }
+  const status = document.getElementById('thermo-status');
+  if(status){
+    const inZone = Math.abs(t.temp - t.target) <= t.tolerance;
+    status.textContent = inZone ? '✓ Stable — en zone' : (t.temp > t.target ? '↑ Trop chaud' : '↓ Trop froid');
+    status.style.color = inZone ? '#9fd49f' : 'var(--soft)';
+  }
+  const barP = document.getElementById('thermo-bar-p');
+  const barY = document.getElementById('thermo-bar-y');
+  if(barP){
+    const v = Math.min(1, Math.abs(t.perturb)/3);
+    if(t.perturb >= 0){ barP.style.left='50%'; barP.style.width=(v*50)+'%'; }
+    else { barP.style.right='50%'; barP.style.left='auto'; barP.style.width=(v*50)+'%'; }
+  }
+  if(barY){
+    const v = Math.min(1, Math.abs(t.player)/3);
+    if(t.player >= 0){ barY.style.left='50%'; barY.style.width=(v*50)+'%'; }
+    else { barY.style.right='50%'; barY.style.left='auto'; barY.style.width=(v*50)+'%'; }
+  }
+  const timeEl = document.getElementById('thermo-time');
+  if(timeEl) timeEl.textContent = Math.max(0, t.duration - t.totalTime).toFixed(1) + ' s';
+  const scoreEl = document.getElementById('thermo-score');
+  if(scoreEl) scoreEl.textContent = (t.totalTime>0 ? Math.round(t.inZoneTime / t.totalTime * 100) : 0) + ' %';
+}
+
+window.thermoStart = function(){
+  if(!thermoState) return;
+  // Reset
+  thermoState.temp = 50; thermoState.vel = 0;
+  thermoState.perturb = 0; thermoState.perturbTarget = (Math.random()*2-1)*2;
+  thermoState.player = 0;
+  thermoState.inZoneTime = 0; thermoState.totalTime = 0;
+  thermoState.running = true; thermoState.started = true;
+  const wrap = document.getElementById('thermo-overlay-wrap');
+  if(wrap) wrap.style.display='none';
+  cancelAnimationFrame(thermoState.raf);
+  let last = performance.now();
+  function loop(){
+    if(!thermoState || !thermoState.running) return;
+    const now = performance.now();
+    let dt = (now-last)/1000;
+    if(dt > 0.05) dt = 0.05;
+    last = now;
+    const t = thermoState;
+    // Perturbation : random walk de la cible + reach via lerp
+    if(Math.random() < 0.012){ t.perturbTarget = (Math.random()*2-1) * (1.5 + t.totalTime/30); }
+    t.perturb += (t.perturbTarget - t.perturb) * 2.5 * dt;
+    // Player force from keys
+    let p = 0;
+    if(t.keys['ArrowUp']||t.keys['w']||t.keys['W']) p += 2.2;
+    if(t.keys['ArrowDown']||t.keys['s']||t.keys['S']) p -= 2.2;
+    t.player += (p - t.player) * 6 * dt;
+    // Integrate temperature
+    t.vel += (t.perturb + t.player) * dt * 6;
+    t.vel *= Math.pow(0.55, dt); // amortissement
+    t.temp += t.vel * dt * 8;
+    if(t.temp < 0){ t.temp = 0; t.vel = Math.abs(t.vel)*0.3; }
+    if(t.temp > 100){ t.temp = 100; t.vel = -Math.abs(t.vel)*0.3; }
+    // Score
+    t.totalTime += dt;
+    if(Math.abs(t.temp - t.target) <= t.tolerance) t.inZoneTime += dt;
+    thermoDraw();
+    if(t.totalTime >= t.duration){ thermoEnd(); return; }
+    t.raf = requestAnimationFrame(loop);
+  }
+  thermoState.raf = requestAnimationFrame(loop);
+};
+
+function thermoEnd(){
+  if(!thermoState) return;
+  thermoState.running = false;
+  const pct = thermoState.totalTime > 0
+    ? Math.round(thermoState.inZoneTime / thermoState.totalTime * 100) : 0;
+  const wrap = document.getElementById('thermo-overlay-wrap');
+  if(!wrap) return;
+  wrap.style.display = 'block';
+  let verdict, color;
+  if(pct >= 85){ verdict = "Maître de la boucle"; color = "#9fd49f"; }
+  else if(pct >= 60){ verdict = "Bon régulateur"; color = "var(--gold)"; }
+  else if(pct >= 35){ verdict = "Apprenti cybernéticien"; color = "var(--soft)"; }
+  else             { verdict = "Le système t'a échappé"; color = "#e08585"; }
+  wrap.innerHTML = `
+    <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid ${color};padding:16px;text-align:left;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:${color};margin-bottom:8px;">${verdict}</div>
+      <div style="font-family:var(--serif);font-size:32px;color:var(--text);margin-bottom:8px;">Temps en zone : ${pct} %</div>
+      <div style="font-family:var(--body);font-size:13px;color:var(--soft);line-height:1.55;font-style:italic;">
+        Tu viens d'incarner un thermostat : un système téléonomique régulé par feedback négatif. Le signal venant du but (la zone) corrigeait l'écart de la position courante. <strong>Sans cette boucle, aucun comportement orienté vers un but n'est possible</strong> — c'est la thèse de Rosenblueth, Wiener et Bigelow (1943).
+      </div>
+    </div>
+    <button onclick="thermoStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;margin-top:14px;">Recommencer &rarr;</button>
+  `;
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// ── JEU : MEMORY DES CONCEPTS ──────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+const MEM_PAIRS = [
+  {concept:"Feedback négatif", def:"Signal correcteur qui réduit l'écart entre position et but"},
+  {concept:"Téléonomie", def:"Comportement orienté vers un but sans cause finale"},
+  {concept:"Chambre Chinoise", def:"La syntaxe seule ne produit pas la sémantique"},
+  {concept:"Test de Turing", def:"Le jeu de l'imitation : tromper le juge par écrit"},
+  {concept:"Erreur méréologique", def:"Attribuer au cerveau ce qui appartient à la personne"},
+  {concept:"Intentionnalité", def:"Le caractère d'être ‘à propos de’ quelque chose"},
+  {concept:"Qualia", def:"L'aspect subjectif et qualitatif de l'expérience"},
+  {concept:"Jeu de langage", def:"L'usage qui fixe le sens — Wittgenstein"},
+];
+
+let memState = null;
+
+function renderJeuMemory(container){
+  // Construit 16 cartes (8 concepts + 8 définitions) avec ID de paire fiable
+  const cards = [];
+  MEM_PAIRS.forEach((p, i) => {
+    cards.push({pairId:i, type:'concept', text:p.concept});
+    cards.push({pairId:i, type:'def',     text:p.def});
+  });
+  // Fisher-Yates shuffle
+  for(let i=cards.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [cards[i],cards[j]]=[cards[j],cards[i]];
+  }
+  // Sanity check : on doit avoir exactement 1 concept + 1 def par pairId
+  const tally = {};
+  cards.forEach(c => {
+    if(!tally[c.pairId]) tally[c.pairId] = {concept:0, def:0};
+    tally[c.pairId][c.type]++;
+  });
+  const allOk = Object.values(tally).every(t => t.concept===1 && t.def===1);
+  if(!allOk) console.warn('Memory: paires mal construites', tally);
+
+  memState = { cards, flipped:[], matched:new Set(), moves:0, startTime:Date.now(), busy:false };
+
+  container.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:16px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Memory des concepts</div>
+        <div style="font-family:var(--body);font-size:13px;color:var(--soft);line-height:1.55;font-style:italic;">
+          Retourne deux cartes : associe un concept à sa définition. <strong style="color:var(--gold);">${MEM_PAIRS.length}</strong> paires à trouver, <strong style="color:var(--gold);">${MEM_PAIRS.length*2}</strong> cartes au total.
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Paires : <span id="mem-pairs" style="color:var(--gold);">0</span> / ${MEM_PAIRS.length}</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);">Coups : <span id="mem-moves" style="color:var(--soft);">0</span></div>
+      </div>
+      <div id="mem-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;"></div>
+      <div id="mem-status" style="text-align:center;margin-top:14px;min-height:30px;"></div>
+    </div>
+  `;
+  memRenderGrid();
+}
+
+function memRenderGrid(){
+  const grid = document.getElementById('mem-grid');
+  if(!grid) return;
+  grid.innerHTML = memState.cards.map((c,i) => {
+    const isFlipped = memState.flipped.includes(i) || memState.matched.has(i);
+    const isMatched = memState.matched.has(i);
+    const cursor = isMatched ? 'default' : 'pointer';
+    // Couleurs / styles selon état
+    const bg = isMatched ? 'rgba(212,168,48,0.10)' : (isFlipped ? 'rgba(13,11,8,0.98)' : 'rgba(13,11,8,0.95)');
+    const border = isMatched ? 'rgba(212,168,48,0.55)' : (isFlipped ? 'var(--gold-b)' : 'var(--border)');
+    // Indicateur de type au coin (utile pour débogage visuel : on voit toutes les paires)
+    const badge = isFlipped
+      ? `<div style="position:absolute;top:4px;left:6px;font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:${c.type==='concept'?'var(--gold)':'var(--dim)'};opacity:.6;">${c.type==='concept'?'concept':'définition'}</div>`
+      : '';
+    // Contenu : ✦ si face cachée, texte si face révélée
+    const content = isFlipped
+      ? `<div style="font-family:${c.type==='concept'?'var(--serif)':'var(--body)'};font-size:${c.type==='concept'?'14px':'11px'};color:${c.type==='concept'?'var(--gold)':'var(--soft)'};font-style:${c.type==='def'?'italic':'normal'};line-height:1.3;word-break:break-word;text-align:center;padding:6px;">${c.text}</div>`
+      : `<div style="font-family:serif;font-size:30px;color:var(--gold);opacity:.3;">✦</div>`;
+    return `
+      <div onclick="memFlip(${i})" data-mem-card="${i}" data-pair="${c.pairId}" data-type="${c.type}"
+           style="position:relative;height:130px;cursor:${cursor};background:${bg};border:1px solid ${border};display:flex;align-items:center;justify-content:center;border-radius:2px;transition:background .15s,border-color .15s;overflow:hidden;">
+        ${badge}
+        ${content}
+      </div>
+    `;
+  }).join('');
+  document.getElementById('mem-pairs').textContent = memState.matched.size/2;
+  document.getElementById('mem-moves').textContent = memState.moves;
+}
+
+window.memFlip = function(idx){
+  if(!memState || memState.busy) return;
+  if(memState.matched.has(idx)) return;
+  if(memState.flipped.includes(idx)) return;
+  memState.flipped.push(idx);
+  if(memState.flipped.length === 2){
+    memState.moves++;
+    const [a, b] = memState.flipped;
+    const ca = memState.cards[a];
+    const cb = memState.cards[b];
+    memRenderGrid();
+    if(ca.pairId === cb.pairId && ca.type !== cb.type){
+      memState.matched.add(a); memState.matched.add(b);
+      memState.flipped = [];
+      setTimeout(()=>{ memRenderGrid(); memCheckWin(); }, 350);
+    } else {
+      memState.busy = true;
+      setTimeout(()=>{
+        memState.flipped = [];
+        memState.busy = false;
+        memRenderGrid();
+      }, 900);
+    }
+  } else {
+    memRenderGrid();
+  }
+};
+
+function memCheckWin(){
+  if(memState.matched.size === memState.cards.length){
+    const sec = Math.round((Date.now() - memState.startTime)/1000);
+    const status = document.getElementById('mem-status');
+    if(status){
+      status.innerHTML = `
+        <div style="background:rgba(212,168,48,0.06);border:1px solid var(--border);border-left:2px solid var(--gold);padding:14px;text-align:left;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Toutes les paires trouvées</div>
+          <div style="font-family:var(--serif);font-size:18px;color:var(--text);margin-bottom:6px;">${memState.moves} coups · ${sec}s</div>
+          <div style="font-family:var(--body);font-size:12px;color:var(--soft);font-style:italic;">Wittgenstein parlerait ici de « ressemblances de famille » : tu as relié des concepts par des fils que seul l'usage donne. La signification n'est jamais dans la carte — elle est dans le geste qui l'associe.</div>
+        </div>
+        <button onclick="renderJeuMemory(document.getElementById('jeu-content'))" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;margin-top:12px;">Nouvelle partie &rarr;</button>
+      `;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ── JEU : SNAKE SYMBOLIQUE ─────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+const SNK_THEMES = [
+  { name:"Cybernétique", on:["Feedback","Téléonomie","Servomécanisme","Wiener","Boucle","Régulation","Homéostat"], off:["Qualia","Mensonge","Jeu","Sémantique","Lovelace"], anti:["Solipsisme","Dualisme"] },
+  { name:"Test de Turing", on:["Imitation","Juge","Tromperie","Verbal","Écran","Machine"], off:["Thermostat","Feedback","Qualia","Carotte"], anti:["Chambre","Searle"] },
+  { name:"Chambre Chinoise", on:["Syntaxe","Symboles","Règles","Searle","Sémantique","Pièce close"], off:["Pong","Feedback","Verlaine"], anti:["Compréhension","Esprit"] },
+  { name:"Philo. du langage", on:["Wittgenstein","Jeu de langage","Usage","Putnam","Sens","Externalisme"], off:["Thermostat","Servomécanisme","Boucle"], anti:["Innéisme","Sens privé"] },
+];
+
+let snkState = null;
+
+function renderJeuSnake(container){
+  container.innerHTML = `
+    <div style="max-width:760px;margin:0 auto;">
+      <div style="background:rgba(13,11,8,0.95);border:1px solid var(--border);border-left:2px solid rgba(212,168,48,0.35);padding:16px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Snake Symbolique</div>
+        <div style="font-family:var(--body);font-size:13px;color:var(--soft);line-height:1.55;font-style:italic;">
+          Mange les concepts <strong style="color:#9fd49f;">cohérents</strong> avec le thème (+3). Les <strong style="color:var(--dim);">hors-thème</strong> coûtent −1. Les <strong style="color:#e08585;">anti-concepts</strong> tuent la partie. Contrôles : ↑ ↓ ← →
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);">Thème : <span id="snk-theme" style="color:var(--gold);">—</span></div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);">Score : <span id="snk-score" style="color:var(--gold);font-family:var(--serif);font-size:18px;">0</span></div>
+      </div>
+      <div style="position:relative;width:100%;">
+        <canvas id="snk-canvas" style="width:100%;border:1px solid var(--border);display:block;border-radius:2px;background:transparent;"></canvas>
+        <div id="snk-overlay" style="position:absolute;inset:0;background:rgba(6,5,10,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border-radius:2px;">
+          <div style="font-family:var(--serif);font-size:24px;color:var(--gold);">Snake Symbolique</div>
+          <button onclick="snkStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Commencer &rarr;</button>
+        </div>
+      </div>
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:8px;">Le thème change tous les 15 points · Wrap-around toroïdal</div>
+    </div>
+  `;
+  snkInit();
+}
+
+function snkInit(){
+  const cv = document.getElementById('snk-canvas');
+  if(!cv) return;
+  const DPR = window.devicePixelRatio || 1;
+  const CW = cv.parentElement.offsetWidth;
+  const CH = Math.round(CW * 0.72);
+  cv.width = CW*DPR; cv.height = CH*DPR;
+  cv.style.width = CW+'px'; cv.style.height = CH+'px';
+  const ctx = cv.getContext('2d'); ctx.scale(DPR, DPR);
+  const W=CW, H=CH, COLS=24, ROWS=Math.round(COLS*H/W), CELL = W/COLS;
+  snkState = {
+    ctx, W, H, COLS, ROWS, CELL,
+    snake:[{x:Math.floor(COLS/2),y:Math.floor(ROWS/2)}],
+    dir:{x:1,y:0}, nextDir:{x:1,y:0},
+    foods:[], score:0,
+    themeIdx:0, nextThemeAt:15,
+    running:false, tickAcc:0, tickInterval:0.16,
+    keys:{}, raf:null, lastFrame:0
+  };
+  snkNewFood();
+  document.getElementById('snk-theme').textContent = SNK_THEMES[0].name;
+  snkState.keyDown = e => {
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
+    const d = snkState.dir;
+    if(e.key==='ArrowUp'   && d.y!== 1) snkState.nextDir={x:0,y:-1};
+    if(e.key==='ArrowDown' && d.y!==-1) snkState.nextDir={x:0,y: 1};
+    if(e.key==='ArrowLeft' && d.x!== 1) snkState.nextDir={x:-1,y:0};
+    if(e.key==='ArrowRight'&& d.x!==-1) snkState.nextDir={x: 1,y:0};
+  };
+  document.addEventListener('keydown', snkState.keyDown);
+  window._snakeCleanup = () => {
+    if(snkState){
+      snkState.running=false;
+      cancelAnimationFrame(snkState.raf);
+      document.removeEventListener('keydown', snkState.keyDown);
+    }
+  };
+  snkDraw();
+}
+
+function snkSpawnOneFood(forcedType){
+  const s = snkState;
+  const theme = SNK_THEMES[s.themeIdx % SNK_THEMES.length];
+  let pool, type;
+  if(forcedType){
+    type = forcedType;
+    pool = type==='on' ? theme.on : (type==='off' ? theme.off : theme.anti);
+  } else {
+    const r = Math.random();
+    if(r < 0.60){ pool = theme.on; type='on'; }
+    else if(r < 0.90){ pool = theme.off; type='off'; }
+    else { pool = theme.anti; type='anti'; }
+  }
+  if(!pool || !pool.length) return null;
+  const word = pool[Math.floor(Math.random()*pool.length)];
+  let x, y, tries=0;
+  do {
+    x = Math.floor(Math.random()*s.COLS);
+    y = Math.floor(Math.random()*s.ROWS);
+    tries++;
+  } while(
+    (s.snake.some(seg=>seg.x===x&&seg.y===y) ||
+     (s.foods||[]).some(f=>f.x===x&&f.y===y))
+    && tries<60
+  );
+  return {x, y, word, type};
+}
+
+function snkRefillFoods(){
+  const s = snkState;
+  s.foods = s.foods || [];
+  // On garde au moins 4 nourritures actives : 2 on, 1 off, 1 anti (équilibré)
+  const TYPES_TARGET = ['on','on','on','off','anti'];
+  // Limite : on n'ajoute que ceux qui manquent
+  const counts = {on:0, off:0, anti:0};
+  s.foods.forEach(f => counts[f.type]++);
+  const target = {on:3, off:1, anti:1};
+  ['on','off','anti'].forEach(t => {
+    while(counts[t] < target[t]){
+      const f = snkSpawnOneFood(t);
+      if(!f) break;
+      s.foods.push(f);
+      counts[t]++;
+    }
+  });
+}
+
+// Alias historique pour compat — non utilisé désormais
+function snkNewFood(){ snkRefillFoods(); }
+
+window.snkStart = function(){
+  if(!snkState) return;
+  const s = snkState;
+  s.snake = [{x:Math.floor(s.COLS/2),y:Math.floor(s.ROWS/2)}];
+  s.dir = {x:1,y:0}; s.nextDir={x:1,y:0};
+  s.score = 0; s.themeIdx = 0; s.nextThemeAt = 15;
+  s.tickInterval = 0.16;
+  s.foods = [];
+  s.running = true;
+  snkRefillFoods();
+  document.getElementById('snk-theme').textContent = SNK_THEMES[0].name;
+  document.getElementById('snk-score').textContent = '0';
+  const o = document.getElementById('snk-overlay');
+  if(o) o.style.display='none';
+  cancelAnimationFrame(s.raf);
+  s.lastFrame = performance.now();
+  s.raf = requestAnimationFrame(snkLoop);
+};
+
+function snkLoop(){
+  if(!snkState || !snkState.running) return;
+  const s = snkState;
+  const now = performance.now();
+  let dt = (now - s.lastFrame)/1000;
+  if(dt > 0.1) dt = 0.1;
+  s.lastFrame = now;
+  s.tickAcc += dt;
+  while(s.tickAcc >= s.tickInterval){
+    s.tickAcc -= s.tickInterval;
+    snkTick();
+    if(!s.running) return;
+  }
+  snkDraw();
+  s.raf = requestAnimationFrame(snkLoop);
+}
+
+function snkTick(){
+  const s = snkState;
+  s.dir = s.nextDir;
+  const head = {x: s.snake[0].x + s.dir.x, y: s.snake[0].y + s.dir.y};
+  if(head.x < 0) head.x = s.COLS-1;
+  if(head.x >= s.COLS) head.x = 0;
+  if(head.y < 0) head.y = s.ROWS-1;
+  if(head.y >= s.ROWS) head.y = 0;
+  if(s.snake.some(seg => seg.x===head.x && seg.y===head.y)){
+    snkGameOver("Tu t'es mordu — game over"); return;
+  }
+  s.snake.unshift(head);
+  // Cherche une nourriture à cette case
+  const fIdx = (s.foods||[]).findIndex(f => f.x===head.x && f.y===head.y);
+  if(fIdx >= 0){
+    const f = s.foods[fIdx];
+    if(f.type==='anti'){ snkGameOver("Anti-concept ingéré — système incohérent"); return; }
+    s.score += (f.type==='on' ? 3 : -1);
+    if(s.score < 0) s.score = 0;
+    if(f.type !== 'on'){ s.snake.pop(); }
+    // Retire la nourriture mangée
+    s.foods.splice(fIdx, 1);
+    if(s.score>0 && s.score%6===0) s.tickInterval = Math.max(0.07, s.tickInterval*0.94);
+    if(s.score >= s.nextThemeAt){
+      s.themeIdx++;
+      s.nextThemeAt += 15;
+      document.getElementById('snk-theme').textContent = SNK_THEMES[s.themeIdx % SNK_THEMES.length].name;
+    }
+    document.getElementById('snk-score').textContent = s.score;
+    // Re-remplit le board pour maintenir l'équilibre
+    snkRefillFoods();
+  } else {
+    s.snake.pop();
+  }
+}
+
+function snkDraw(){
+  const s = snkState;
+  if(!s || !s.ctx) return;
+  const {ctx, W, H, CELL} = s;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='rgba(6,5,10,0.55)';
+  ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(212,168,48,0.04)';
+  ctx.lineWidth=1;
+  for(let x=0;x<=s.COLS;x++){ ctx.beginPath(); ctx.moveTo(x*CELL,0); ctx.lineTo(x*CELL,H); ctx.stroke(); }
+  for(let y=0;y<=s.ROWS;y++){ ctx.beginPath(); ctx.moveTo(0,y*CELL); ctx.lineTo(W,y*CELL); ctx.stroke(); }
+  // Foods (multiples)
+  (s.foods || []).forEach(food => {
+    const fx = food.x*CELL, fy = food.y*CELL;
+    let col, glow;
+    if(food.type==='on'){ col='#9fd49f'; glow='rgba(159,212,159,0.4)'; }
+    else if(food.type==='off'){ col='#b8aa90'; glow='rgba(184,170,144,0.3)'; }
+    else { col='#e08585'; glow='rgba(224,133,133,0.45)'; }
+    const g = ctx.createRadialGradient(fx+CELL/2, fy+CELL/2, 0, fx+CELL/2, fy+CELL/2, CELL*1.8);
+    g.addColorStop(0, glow); g.addColorStop(1, 'transparent');
+    ctx.fillStyle=g; ctx.fillRect(fx-CELL, fy-CELL, CELL*3, CELL*3);
+    ctx.fillStyle = col;
+    ctx.font = `${Math.round(CELL*0.42)}px 'DM Mono', monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(food.word, fx+CELL/2, fy+CELL/2);
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  });
+  s.snake.forEach((seg, i) => {
+    const isHead = i===0;
+    const a = 1 - i/(s.snake.length*1.5);
+    ctx.fillStyle = isHead ? '#e8b94a' : `rgba(212,168,48,${0.4+a*0.5})`;
+    ctx.fillRect(seg.x*CELL+1, seg.y*CELL+1, CELL-2, CELL-2);
+    if(isHead){
+      ctx.strokeStyle = 'rgba(255,240,180,0.55)';
+      ctx.lineWidth=1;
+      ctx.strokeRect(seg.x*CELL+1, seg.y*CELL+1, CELL-2, CELL-2);
+    }
+  });
+}
+
+function snkGameOver(msg){
+  const s = snkState;
+  s.running = false;
+  cancelAnimationFrame(s.raf);
+  const o = document.getElementById('snk-overlay');
+  if(o){
+    o.style.display='flex';
+    o.innerHTML = `
+      <div style="font-family:var(--serif);font-size:22px;color:var(--gold);">${msg}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;">Score final</div>
+      <div style="font-family:var(--serif);font-size:42px;color:var(--text);">${s.score}</div>
+      <button onclick="snkStart()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 22px;cursor:pointer;border-radius:2px;">Rejouer &rarr;</button>
+    `;
+  }
+}
+
+
+
 
 function initPong(){
   const cv=document.getElementById('pong-canvas');
@@ -3786,6 +4776,13 @@ function initPong(){
     if(name!=='jeu'){running=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',keyDown);document.removeEventListener('keyup',keyUp);}
     origShow&&origShow(name,btn);
   };
+  // Cleanup pour le switch d'onglet à l'intérieur de la page Jeu
+  window._pongCleanup=function(){
+    running=false;
+    cancelAnimationFrame(raf);
+    document.removeEventListener('keydown',keyDown);
+    document.removeEventListener('keyup',keyUp);
+  };
 
   // Initial draw
   ctx.clearRect(0,0,W,H);
@@ -4174,6 +5171,6 @@ function renderRessources(){
 </script>
 
 <script defer="" src="./index_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
-
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fa3a3d64d48cdcc',t:'MTc3ODUyODI2NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./index_files/saved_resource.html"></iframe>
 
 </body></html>
