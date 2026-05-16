@@ -1156,11 +1156,6 @@ function showPage(name,btn){
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
 function buildQ(q){const o=shuffle([...q.opts]);return{...q,shuffledOpts:o,newCorrect:o.indexOf(q.opts[q.correct])};}
 
-// ── JSONBIN ──────────────────────────────────────────
-const BIN_ID="69fe9453250b1311c323f5b9";
-const API_KEY="$2a$10$spcARoTIDS68iE/PlwGAd.GZczTQ3q52Y0ZzyBDCS9ys76m4XYkLW";
-const BASE="https://api.jsonbin.io/v3/b/"+BIN_ID;
-const JH={"Content-Type":"application/json","X-Master-Key":API_KEY};
 const TOTAL=20,TIMER_SEC=30;
 function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('machine2_uid',u);}return u;}catch{return'g_'+Date.now();}}
 
@@ -1580,44 +1575,42 @@ async function srChoose(idx){
 }
 
 function srNext(){srCurrent++;srAnswered=false;renderSRQ();}
-async function fetchScores(){try{const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});const d=await r.json();return d.record?.scores||[];}catch{return[];}}
-async function saveScore(name,pts){try{const uid=getUID();const r0=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});const d0=await r0.json();const rec=d0.record||{};const sc=rec.scores||[];const pongPreserve=rec.pong_scores||[];let ex=sc.findIndex(s=>s.uid===uid);if(ex<0)ex=sc.findIndex(s=>s.name.toLowerCase()===name.toLowerCase());if(ex>=0){const p=sc[ex];sc[ex]={uid,name,pts:pts>p.pts?pts:p.pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")};}else sc.push({uid,name,pts,total:TOTAL,date:new Date().toLocaleDateString("fr-FR")});sc.sort((a,b)=>b.pts-a.pts);await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:sc,pong_scores:pongPreserve})});return sc;}catch(e){console.error(e);return[];}}
+async function fetchScores(){
+  try{
+    if(!ensureSupa())return[];
+    const {data,error}=await supa.from('scores').select('user_id,pseudo,score,created_at').eq('game','qcm').order('score',{ascending:false}).limit(100);
+    if(error||!data)return[];
+    const best={};
+    data.forEach(r=>{if(!best[r.user_id]||r.score>best[r.user_id].score)best[r.user_id]=r;});
+    return Object.values(best).sort((a,b)=>b.score-a.score).map(r=>({uid:r.user_id,name:r.pseudo,pts:r.score,total:TOTAL,date:new Date(r.created_at).toLocaleDateString('fr-FR')}));
+  }catch{return[];}
+}
+async function saveScore(name,pts){
+  if(!supaUser||!ensureSupa())return[];
+  try{
+    await supa.from('scores').insert({user_id:supaUser.id,pseudo:name,score:pts,game:'qcm'});
+    return await fetchScores();
+  }catch(e){console.error(e);return await fetchScores();}
+}
 
-// ── PONG LEADERBOARD (extension du même bin JSONBin) ─────────
+// ── PONG LEADERBOARD ─────────────────────────────────
 async function fetchPongScores(){
   try{
-    const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});
-    const d=await r.json();
-    return (d.record?.pong_scores)||[];
+    if(!ensureSupa())return[];
+    const {data,error}=await supa.from('scores').select('user_id,pseudo,score,created_at').eq('game','pong').order('score',{ascending:false}).limit(100);
+    if(error||!data)return[];
+    const best={};
+    data.forEach(r=>{if(!best[r.user_id]||r.score>best[r.user_id].score)best[r.user_id]=r;});
+    return Object.values(best).sort((a,b)=>b.score-a.score).map(r=>({uid:r.user_id,name:r.pseudo,score:r.score,date:new Date(r.created_at).toLocaleDateString('fr-FR')}));
   }catch{return[];}
 }
 async function savePongScore(name,score,lvl,rallyM){
+  if(!supaUser||!ensureSupa())return[];
+  const pseudo=(name||'Anonyme').trim()||'Anonyme';
   try{
-    const uid=getUID();
-    // On lit le bin entier pour préserver les scores QCM lors du PUT
-    const r=await fetch(BASE+"/latest",{headers:{"X-Master-Key":API_KEY}});
-    const d=await r.json();
-    const rec=d.record||{};
-    const scoresQCM=rec.scores||[];
-    const ps=rec.pong_scores||[];
-    const now=new Date().toLocaleDateString("fr-FR");
-    const pseudo=(name||'Anonyme').trim()||'Anonyme';
-    let ex=ps.findIndex(s=>s.uid===uid);
-    if(ex<0)ex=ps.findIndex(s=>(s.name||'').toLowerCase()===pseudo.toLowerCase());
-    if(ex>=0){
-      const prev=ps[ex];
-      // On ne garde que le meilleur score
-      if(score>prev.score){
-        ps[ex]={uid,name:pseudo,score,level:lvl,rally:rallyM,date:now};
-      }
-    } else {
-      ps.push({uid,name:pseudo,score,level:lvl,rally:rallyM,date:now});
-    }
-    ps.sort((a,b)=>(b.score-a.score)||(b.level-a.level)||(b.rally-a.rally));
-    if(ps.length>100)ps.length=100;
-    await fetch(BASE,{method:"PUT",headers:JH,body:JSON.stringify({scores:scoresQCM,pong_scores:ps})});
-    return ps;
-  }catch(e){console.error('Pong score save failed',e);return[];}
+    await supa.from('scores').insert({user_id:supaUser.id,pseudo,score,game:'pong'});
+    return await fetchPongScores();
+  }catch(e){console.error('Pong score save failed',e);return await fetchPongScores();}
 }
 
 // ── BANQUE ───────────────────────────────────────────
@@ -2539,8 +2532,13 @@ async function renderResults(){
     </div>
   `;
   let scores=[];
-  try{scores=await saveScore(playerName,score);}catch(e){console.error(e);}
-  const m2=document.getElementById('saving-msg');if(m2)m2.textContent=scores&&scores.length?'Score enregistré.':'Erreur.';
+  if(!supaUser){
+    const m2=document.getElementById('saving-msg');if(m2)m2.textContent='Connecte-toi pour entrer dans le classement.';
+    try{scores=await fetchScores();}catch(e){console.error(e);}
+  }else{
+    try{scores=await saveScore(playerName,score);}catch(e){console.error(e);}
+    const m2=document.getElementById('saving-msg');if(m2)m2.textContent=scores&&scores.length?'Score enregistré.':'Erreur.';
+  }
   const uid=getUID(),lb=document.getElementById('lb-body');
   if(lb)lb.innerHTML=(scores||[]).slice(0,10).map((s,i)=>`
     <div class="lb-full-row ${s.uid===uid?'mine':''}">
@@ -3121,12 +3119,11 @@ function renderPongLeaderboard(rows){
     const isMe=(uid&&s.uid===uid)||(s.name&&pseudo&&s.name.toLowerCase()===pseudo.toLowerCase());
     const rankColor=i===0?'var(--gold)':(i<3?'var(--soft)':'var(--dim)');
     const bg=isMe?'background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;':'padding-left:10px;';
-    return `<div style="display:grid;grid-template-columns:24px 1fr auto auto auto;gap:10px;padding:4px 6px;${bg}align-items:center;border-radius:1px;">
+    return `<div style="display:grid;grid-template-columns:24px 1fr auto auto;gap:10px;padding:4px 6px;${bg}align-items:center;border-radius:1px;">
       <span style="color:${rankColor};font-weight:${i===0?'700':'400'};">${i+1}</span>
       <span style="color:${isMe?'var(--gold)':'var(--text)'};font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name||'—'}${isMe?' (toi)':''}</span>
       <span style="color:${isMe?'var(--gold)':'var(--soft)'};font-weight:600;">${s.score}</span>
-      <span style="color:var(--dim);font-size:9px;">lvl ${s.level||1}</span>
-      <span style="color:var(--dim);font-size:9px;">×${s.rally||0}</span>
+      <span style="color:var(--dim);font-size:9px;">${s.date||''}</span>
     </div>`;
   }).join('');
 }
@@ -4329,12 +4326,11 @@ function initPong(){
       const isMe=(uid&&s.uid===uid)||(s.name&&pseudo&&s.name.toLowerCase()===pseudo.toLowerCase());
       const rankColor=i===0?'var(--gold)':(i<3?'var(--soft)':'var(--dim)');
       const bg=isMe?'background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;':'padding-left:10px;';
-      return `<div style="display:grid;grid-template-columns:30px 1fr auto auto auto;gap:10px;padding:5px 8px;${bg}align-items:center;">
+      return `<div style="display:grid;grid-template-columns:30px 1fr auto auto;gap:10px;padding:5px 8px;${bg}align-items:center;">
         <span style="color:${rankColor};font-weight:${i===0?'700':'400'};">${i+1}</span>
         <span style="color:${isMe?'var(--gold)':'var(--text)'};font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name||'—'}${isMe?' (toi)':''}</span>
         <span style="color:${isMe?'var(--gold)':'var(--soft)'};font-weight:600;">${s.score}</span>
-        <span style="color:var(--dim);font-size:9px;">lvl ${s.level||1}</span>
-        <span style="color:var(--dim);font-size:9px;">×${s.rally||0}</span>
+        <span style="color:var(--dim);font-size:9px;">${s.date||''}</span>
       </div>`;
     }).join('');
   };
@@ -4507,8 +4503,12 @@ function initPong(){
     const uid=(typeof getUID==='function')?getUID():null;
     (async()=>{
       let board=[];
-      try{ board=await savePongScore(pseudo,pScore,level,maxRally); }
-      catch(e){ try{board=await fetchPongScores();}catch{} }
+      if(supaUser){
+        try{ board=await savePongScore(pseudo,pScore,level,maxRally); }
+        catch(e){ try{board=await fetchPongScores();}catch{} }
+      }else{
+        try{board=await fetchPongScores();}catch{}
+      }
       // Met aussi à jour le panneau permanent sous le canvas
       try{ renderPongLeaderboard(board); }catch{}
       const rowsEl=document.getElementById('pong-lb-rows');
@@ -4522,12 +4522,11 @@ function initPong(){
         const isMe=(uid&&s.uid===uid)||(s.name&&pseudo&&s.name.toLowerCase()===pseudo.toLowerCase());
         const rankColor = i===0?'var(--gold)':(i<3?'var(--soft)':'var(--dim)');
         const bg = isMe?'background:rgba(212,168,48,0.10);border-left:2px solid var(--gold);padding-left:8px;':'padding-left:10px;';
-        return `<div style="display:grid;grid-template-columns:30px 1fr auto auto auto;gap:10px;padding:5px 8px;${bg}align-items:center;">
+        return `<div style="display:grid;grid-template-columns:30px 1fr auto auto;gap:10px;padding:5px 8px;${bg}align-items:center;">
           <span style="color:${rankColor};font-weight:${i===0?'700':'400'};">${i+1}</span>
           <span style="color:${isMe?'var(--gold)':'var(--text)'};font-family:var(--body);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name||'—'}${isMe?' (toi)':''}</span>
           <span style="color:${isMe?'var(--gold)':'var(--soft)'};font-weight:600;">${s.score}</span>
-          <span style="color:var(--dim);font-size:9px;">lvl ${s.level||1}</span>
-          <span style="color:var(--dim);font-size:9px;">×${s.rally||0}</span>
+          <span style="color:var(--dim);font-size:9px;">${s.date||''}</span>
         </div>`;
       }).join('');
     })();
