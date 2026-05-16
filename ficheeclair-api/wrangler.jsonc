@@ -1,0 +1,16 @@
+{
+  "name": "ficheeclair-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-05-09",
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "SUPABASE_URL": "https://lmngoemfxodfjztydvuu.supabase.co",
+    "ALLOWED_ORIGIN": "https://site-philo.chevallierfabio.workers.dev",
+    "QUOTA_PAR_JOUR": "10"
+  }
+  // Secrets à ajouter via le dashboard Cloudflare (wrangler secret put) :
+  //   SUPABASE_ANON_KEY
+  //   ANTHROPIC_API_KEY  (mission ultérieure)
+}
