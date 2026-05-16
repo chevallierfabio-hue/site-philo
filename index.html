@@ -3014,6 +3014,12 @@ async function sendDissert(){
   const label=document.getElementById('dissert-prompt-label');
   const text=ta.value.trim();
 
+  if(!supaUser){renderDissertMsg('assistant','Tu dois être connecté pour utiliser cette fonctionnalité.');return;}
+
+  const {data:{session}}=await supa.auth.getSession();
+  const jwtToken=session?.access_token;
+  if(!jwtToken){renderDissertMsg('assistant','Session perdue, reconnecte-toi.');return;}
+
   if(text.length<30){ta.style.borderColor='var(--red)';setTimeout(()=>ta.style.borderColor='var(--border2)',2000);return;}
 
   // Add user message to chat
@@ -3058,7 +3064,7 @@ Pistes : ${s.pistes}`;
     const messages=dissertConv.map(m=>({role:m.role,content:m.content}));
     const r=await fetch('https://claude-proxy.chevallierfabio.workers.dev',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwtToken},
       body:JSON.stringify({
         model:'claude-sonnet-4-5',
         max_tokens:1000,
@@ -3066,6 +3072,15 @@ Pistes : ${s.pistes}`;
         messages
       })
     });
+    if(r.status===401){
+      const t=document.getElementById('dissert-typing');
+      if(t)t.remove();
+      dissertConv.pop();
+      ta.value=text;
+      ta.disabled=false;btn.disabled=false;btn.textContent='Envoyer &rarr;';btn.style.opacity='1';
+      renderDissertMsg('assistant','Ta session a expiré. Copie ton texte avant de te reconnecter pour ne pas le perdre.');
+      return;
+    }
     const d=await r.json();
     const reply=d.content?.filter(c=>c.type==='text').map(c=>c.text).join('')||'Erreur de réponse.';
 
