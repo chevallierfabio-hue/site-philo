@@ -1020,6 +1020,46 @@ body{background:transparent;}
   padding:5px 10px;border-radius:4px;cursor:pointer;transition:all 0.15s;
 }
 .fe-carte-renommer:hover{border-color:var(--gold-b);color:var(--gold);}
+.fe-modal-overlay{
+  position:fixed;inset:0;background:rgba(6,5,10,0.72);
+  z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.fe-modal{
+  background:var(--s1);border:1px solid var(--border);border-radius:10px;
+  padding:26px 24px;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,0.5);
+}
+.fe-modal-titre{
+  font-family:var(--serif);font-size:20px;color:var(--text);margin-bottom:20px;
+}
+.fe-modal-label{
+  font-family:var(--mono);font-size:9px;color:var(--dim);
+  text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:6px;
+}
+.fe-modal-input{
+  width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;
+  padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);
+  outline:none;box-sizing:border-box;transition:border-color 0.15s;
+}
+.fe-modal-input:focus{border-color:var(--gold);}
+.fe-modal-erreur{
+  display:none;margin-top:12px;font-size:12px;color:var(--red);
+  text-align:center;padding:8px;background:var(--red-d);border-radius:5px;
+}
+.fe-modal-actions{
+  display:flex;justify-content:flex-end;gap:10px;margin-top:22px;
+}
+.fe-modal-btn-annuler{
+  padding:9px 18px;background:transparent;border:1px solid var(--border2);
+  border-radius:6px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  color:var(--soft);cursor:pointer;transition:all 0.15s;
+}
+.fe-modal-btn-annuler:hover{border-color:var(--gold-b);color:var(--gold);}
+.fe-modal-btn-valider{
+  padding:9px 20px;background:var(--gold-d);border:1px solid var(--gold-b);
+  border-radius:6px;font-family:var(--serif);font-size:14px;color:var(--gold);
+  cursor:pointer;transition:all 0.15s;
+}
+.fe-modal-btn-valider:hover{background:rgba(201,169,110,0.22);}
 
 </style>
 </head>
@@ -3269,9 +3309,7 @@ function feResetUpload(){
   feSelectedImages=[];
   feRenderPreviews();
   const titre=document.getElementById('fe-titre');
-  const disc=document.getElementById('fe-discipline');
   if(titre) titre.value='';
-  if(disc) disc.value=feCoursCourant?.discipline||'';
   const err=document.getElementById('fe-upload-error');
   if(err) err.style.display='none';
   feMajAriane('upload',[
@@ -3401,6 +3439,7 @@ function feRenderListeCours(cours){
     const idS=escHTML(c.id);
     const titreJ=escHTML(JSON.stringify(c.titre||''));
     const discJ=escHTML(JSON.stringify(c.discipline||''));
+    const niveauJ=escHTML(JSON.stringify(c.niveau||''));
     return `
     <div class="fe-carte" onclick="feOpenCours('${idS}',${titreJ},${discJ})">
       <div style="flex:1;min-width:0;">
@@ -3408,7 +3447,7 @@ function feRenderListeCours(cours){
         ${meta?`<div class="fe-carte-meta">${escHTML(meta)}</div>`:''}
       </div>
       <div class="fe-carte-actions">
-        <button class="fe-carte-renommer" onclick="event.stopPropagation();feRenommerCours('${idS}',${titreJ})">Renommer</button>
+        <button class="fe-carte-renommer" onclick="event.stopPropagation();feEditerCours('${idS}',${titreJ},${discJ},${niveauJ})">Modifier</button>
         <button class="fe-carte-supprimer" onclick="event.stopPropagation();feSupprimerCours('${idS}',${titreJ})">Supprimer</button>
       </div>
     </div>`;
@@ -3429,30 +3468,90 @@ function feOpenCours(id,titre,discipline){
   feLoadFichesDuCours(id);
 }
 
-async function feCreerCours(){
-  const titre=(prompt('Titre du nouveau cours :','')??'').trim();
-  if(!titre) return;
+// ── MODALE COURS ─────────────────────────────────────
+
+let feModaleCoursCourant=null; // null = création, objet = édition
+
+function feOuvrirModaleCours(cours){
+  feModaleCoursCourant=cours||null;
+  const overlay=document.getElementById('fe-modal-cours-overlay');
+  const titreMod=document.getElementById('fe-modal-cours-titre');
+  const btnValider=document.getElementById('fe-modal-cours-btn-valider');
+  const inputTitre=document.getElementById('fe-modal-cours-titre-input');
+  const inputDisc=document.getElementById('fe-modal-cours-discipline');
+  const inputNiveau=document.getElementById('fe-modal-cours-niveau');
+  const erreur=document.getElementById('fe-modal-cours-erreur');
+  if(!overlay) return;
+  // Remplissage selon le mode
+  if(cours){
+    titreMod.textContent='Modifier le cours';
+    btnValider.textContent='Enregistrer';
+    inputTitre.value=cours.titre||'';
+    inputDisc.value=cours.discipline||'';
+    inputNiveau.value=cours.niveau||'';
+  } else {
+    titreMod.textContent='Nouveau cours';
+    btnValider.textContent='Créer';
+    inputTitre.value='';
+    inputDisc.value='';
+    inputNiveau.value='';
+  }
+  erreur.style.display='none';
+  overlay.style.display='flex';
+  inputTitre.focus();
+}
+
+function feFermerModaleCours(){
+  const overlay=document.getElementById('fe-modal-cours-overlay');
+  if(overlay) overlay.style.display='none';
+  feModaleCoursCourant=null;
+}
+
+async function feValiderModaleCours(){
+  const titre=(document.getElementById('fe-modal-cours-titre-input')?.value||'').trim();
+  const discipline=(document.getElementById('fe-modal-cours-discipline')?.value||'').trim();
+  const niveau=(document.getElementById('fe-modal-cours-niveau')?.value||'').trim();
+  const erreur=document.getElementById('fe-modal-cours-erreur');
+  // Validation
+  if(!titre||!discipline){
+    erreur.textContent='Le titre et la discipline sont obligatoires.';
+    erreur.style.display='block';
+    return;
+  }
+  erreur.style.display='none';
+  const btnValider=document.getElementById('fe-modal-cours-btn-valider');
+  btnValider.disabled=true;
   try{
-    const {error}=await supa.from('cours').insert({titre, user_id: supaUser.id});
-    if(error) throw error;
+    if(feModaleCoursCourant){
+      // Mode édition
+      const {error}=await supa.from('cours')
+        .update({titre, discipline, niveau:niveau||null})
+        .eq('id',feModaleCoursCourant.id);
+      if(error) throw error;
+    } else {
+      // Mode création
+      const {error}=await supa.from('cours')
+        .insert({titre, discipline, niveau:niveau||null, user_id:supaUser.id});
+      if(error) throw error;
+    }
+    feFermerModaleCours();
     feLoadCours();
   }catch(e){
-    console.error('Erreur création cours :',e);
-    alert('Erreur lors de la création du cours.');
+    console.error('Erreur modale cours :',e);
+    erreur.textContent='Erreur lors de l\'enregistrement. Réessaie.';
+    erreur.style.display='block';
+  }finally{
+    btnValider.disabled=false;
   }
 }
 
-async function feRenommerCours(id,titreActuel){
-  const nouveau=(prompt('Nouveau titre du cours :',titreActuel)??'').trim();
-  if(!nouveau||nouveau===titreActuel) return;
-  try{
-    const {error}=await supa.from('cours').update({titre:nouveau}).eq('id',id);
-    if(error) throw error;
-    feLoadCours();
-  }catch(e){
-    console.error('Erreur renommage cours :',e);
-    alert('Erreur lors du renommage du cours.');
-  }
+// Appelée depuis les onclicks des cartes (paramètres string, pas objet)
+function feEditerCours(id,titre,discipline,niveau){
+  feOuvrirModaleCours({id,titre,discipline,niveau});
+}
+
+function feCreerCours(){
+  feOuvrirModaleCours(null);
 }
 
 async function feSupprimerCours(id,titre){
@@ -3517,15 +3616,9 @@ function renderFichesEclair(){
           <button class="fe-add-btn" id="fe-add-btn" onclick="document.getElementById('fe-file-input').click()">Choisir des images</button>
         </div>
         <div id="fe-previews" class="fe-previews" style="display:none;"></div>
-        <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
-          <div>
-            <label style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:6px;">Titre suggéré <span style="font-weight:normal;">(optionnel)</span></label>
-            <input type="text" id="fe-titre" placeholder="Ex : Philo de l'esprit — Turing" style="width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'">
-          </div>
-          <div>
-            <label style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:6px;">Discipline <span style="font-weight:normal;">(optionnel)</span></label>
-            <input type="text" id="fe-discipline" placeholder="Ex : Philosophie" style="width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'">
-          </div>
+        <div style="margin-top:16px;">
+          <label style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:6px;">Titre suggéré <span style="font-weight:normal;">(optionnel)</span></label>
+          <input type="text" id="fe-titre" placeholder="Ex : Philo de l'esprit — Turing" style="width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'">
         </div>
         <div style="margin-top:16px;text-align:right;">
           <button id="fe-generate-btn" onclick="sendFicheEclair()" disabled
@@ -3551,6 +3644,42 @@ function renderFichesEclair(){
     <div id="fe-zone-fiche" style="display:none;">
       <div id="fe-ariane-fiche" class="fe-ariane"></div>
       <div id="fe-zone-fiche-contenu"></div>
+    </div>
+
+    <!-- Modale création / édition de cours -->
+    <div id="fe-modal-cours-overlay" class="fe-modal-overlay" style="display:none;" onclick="if(event.target===this)feFermerModaleCours()">
+      <div class="fe-modal">
+        <div id="fe-modal-cours-titre" class="fe-modal-titre">Nouveau cours</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <label class="fe-modal-label" for="fe-modal-cours-titre-input">Titre *</label>
+            <input type="text" id="fe-modal-cours-titre-input" class="fe-modal-input" placeholder="Ex : Épistémologie L3">
+          </div>
+          <div>
+            <label class="fe-modal-label" for="fe-modal-cours-discipline">Discipline *</label>
+            <input type="text" id="fe-modal-cours-discipline" class="fe-modal-input" placeholder="Ex : Philosophie" list="fe-disciplines-list" autocomplete="off">
+            <datalist id="fe-disciplines-list">
+              <option value="Philosophie">
+              <option value="Anthropologie">
+              <option value="Esthétique">
+              <option value="Histoire">
+              <option value="Lettres">
+              <option value="Linguistique">
+              <option value="Sociologie">
+              <option value="Théorie politique">
+            </datalist>
+          </div>
+          <div>
+            <label class="fe-modal-label" for="fe-modal-cours-niveau">Niveau (optionnel)</label>
+            <input type="text" id="fe-modal-cours-niveau" class="fe-modal-input" placeholder="Ex : L3, M1, Prépa B/L…">
+          </div>
+        </div>
+        <div id="fe-modal-cours-erreur" class="fe-modal-erreur"></div>
+        <div class="fe-modal-actions">
+          <button class="fe-modal-btn-annuler" onclick="feFermerModaleCours()">Annuler</button>
+          <button id="fe-modal-cours-btn-valider" class="fe-modal-btn-valider" onclick="feValiderModaleCours()">Créer</button>
+        </div>
+      </div>
     </div>
   `;
   document.getElementById('fe-file-input').addEventListener('change',e=>feHandleFiles(e.target.files));
@@ -3646,7 +3775,7 @@ async function sendFicheEclair(){
   try{images=await Promise.all(feSelectedImages.map(feResizeImage));}
   catch(e){feBackToUpload(e.message||'Erreur lors du redimensionnement des images.');return;}
   const titre=(document.getElementById('fe-titre')?.value||'').trim();
-  const discipline=(document.getElementById('fe-discipline')?.value||'').trim();
+  const discipline=feCoursCourant?.discipline||'';
   try{
     const r=await fetch(FICHEECLAIR_API,{
       method:'POST',
