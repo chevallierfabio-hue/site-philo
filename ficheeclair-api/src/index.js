@@ -74,8 +74,12 @@ export default {
         return json({ error: 'Corps de requête JSON invalide' }, 400, corsHeaders);
       }
 
-      const { images, discipline, titre_suggere } = body;
+      const { images, discipline, titre_suggere, cours_id } = body;
       const TYPES_AUTORISES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+      if (!cours_id || typeof cours_id !== 'string') {
+        return json({ error: 'Le champ "cours_id" est requis' }, 400, corsHeaders);
+      }
 
       if (!Array.isArray(images) || images.length < 1 || images.length > 5) {
         return json({ error: 'Le champ "images" doit contenir entre 1 et 5 images' }, 400, corsHeaders);
@@ -97,6 +101,27 @@ export default {
         if (img.data.length * 0.75 > 5 * 1024 * 1024) {
           return json({ error: `Image ${i + 1} : taille estimée dépasse 5 Mo` }, 400, corsHeaders);
         }
+      }
+
+      // 3b. Vérification que le cours appartient à l'utilisateur
+      // La RLS filtre automatiquement : si le cours n'existe pas ou n'appartient pas
+      // à l'utilisateur, Supabase renvoie un tableau vide.
+      const coursRes = await fetch(
+        `${env.SUPABASE_URL}/rest/v1/cours?id=eq.${cours_id}&select=id`,
+        {
+          headers: {
+            'Authorization': `Bearer ${jwt}`,
+            'apikey': env.SUPABASE_ANON_KEY,
+          },
+        }
+      );
+      if (!coursRes.ok) {
+        console.error('[ficheeclair-api] Erreur vérification cours :', coursRes.status);
+        return json({ error: 'Erreur lors de la vérification du cours' }, 500, corsHeaders);
+      }
+      const coursData = await coursRes.json();
+      if (!Array.isArray(coursData) || coursData.length === 0) {
+        return json({ error: 'Cours introuvable ou accès non autorisé' }, 403, corsHeaders);
       }
 
       // 4. Appel à l'API Anthropic avec vision
@@ -231,6 +256,7 @@ RAPPEL : préférer toujours un tableau vide à un contenu approximatif, forcé 
         },
         body: JSON.stringify({
           user_id: userId,
+          cours_id: cours_id,
           titre: fiche.titre,
           discipline: fiche.discipline || null,
           contenu: fiche,
