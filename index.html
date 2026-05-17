@@ -3586,6 +3586,7 @@ async function feLoadCours(){
   try{
     const {data,error}=await supa.from('cours')
       .select('id,titre,discipline,niveau,updated_at,est_public,fiches(count)')
+      .eq('user_id',supaUser.id)
       .order('updated_at',{ascending:false});
     if(error) throw error;
     feRenderListeCours(data||[]);
