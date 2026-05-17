@@ -3646,41 +3646,6 @@ function renderFichesEclair(){
       <div id="fe-zone-fiche-contenu"></div>
     </div>
 
-    <!-- Modale création / édition de cours -->
-    <div id="fe-modal-cours-overlay" class="fe-modal-overlay" style="display:none;" onclick="if(event.target===this)feFermerModaleCours()">
-      <div class="fe-modal">
-        <div id="fe-modal-cours-titre" class="fe-modal-titre">Nouveau cours</div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
-          <div>
-            <label class="fe-modal-label" for="fe-modal-cours-titre-input">Titre *</label>
-            <input type="text" id="fe-modal-cours-titre-input" class="fe-modal-input" placeholder="Ex : Épistémologie L3">
-          </div>
-          <div>
-            <label class="fe-modal-label" for="fe-modal-cours-discipline">Discipline *</label>
-            <input type="text" id="fe-modal-cours-discipline" class="fe-modal-input" placeholder="Ex : Philosophie" list="fe-disciplines-list" autocomplete="off">
-            <datalist id="fe-disciplines-list">
-              <option value="Philosophie">
-              <option value="Anthropologie">
-              <option value="Esthétique">
-              <option value="Histoire">
-              <option value="Lettres">
-              <option value="Linguistique">
-              <option value="Sociologie">
-              <option value="Théorie politique">
-            </datalist>
-          </div>
-          <div>
-            <label class="fe-modal-label" for="fe-modal-cours-niveau">Niveau (optionnel)</label>
-            <input type="text" id="fe-modal-cours-niveau" class="fe-modal-input" placeholder="Ex : L3, M1, Prépa B/L…">
-          </div>
-        </div>
-        <div id="fe-modal-cours-erreur" class="fe-modal-erreur"></div>
-        <div class="fe-modal-actions">
-          <button class="fe-modal-btn-annuler" onclick="feFermerModaleCours()">Annuler</button>
-          <button id="fe-modal-cours-btn-valider" class="fe-modal-btn-valider" onclick="feValiderModaleCours()">Créer</button>
-        </div>
-      </div>
-    </div>
   `;
   document.getElementById('fe-file-input').addEventListener('change',e=>feHandleFiles(e.target.files));
   const area=document.getElementById('fe-upload-area');
@@ -5975,4 +5940,39 @@ function renderRessources(){
 <script defer="" src="./index_files/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7f7b0fd8732c4326aae4b9d58d5c514a&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fa3a3d64d48cdcc',t:'MTc3ODUyODI2NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./index_files/saved_resource.html"></iframe>
 
+<!-- Modale création / édition de cours — placée en enfant direct de body pour éviter les conflits avec transform/filter des ancêtres -->
+<div id="fe-modal-cours-overlay" class="fe-modal-overlay" style="display:none;" onclick="if(event.target===this)feFermerModaleCours()">
+  <div class="fe-modal">
+    <div id="fe-modal-cours-titre" class="fe-modal-titre">Nouveau cours</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label class="fe-modal-label" for="fe-modal-cours-titre-input">Titre *</label>
+        <input type="text" id="fe-modal-cours-titre-input" class="fe-modal-input" placeholder="Ex : Épistémologie L3">
+      </div>
+      <div>
+        <label class="fe-modal-label" for="fe-modal-cours-discipline">Discipline *</label>
+        <input type="text" id="fe-modal-cours-discipline" class="fe-modal-input" placeholder="Ex : Philosophie" list="fe-disciplines-list" autocomplete="off">
+        <datalist id="fe-disciplines-list">
+          <option value="Philosophie">
+          <option value="Anthropologie">
+          <option value="Esthétique">
+          <option value="Histoire">
+          <option value="Lettres">
+          <option value="Linguistique">
+          <option value="Sociologie">
+          <option value="Théorie politique">
+        </datalist>
+      </div>
+      <div>
+        <label class="fe-modal-label" for="fe-modal-cours-niveau">Niveau (optionnel)</label>
+        <input type="text" id="fe-modal-cours-niveau" class="fe-modal-input" placeholder="Ex : L3, M1, Prépa B/L…">
+      </div>
+    </div>
+    <div id="fe-modal-cours-erreur" class="fe-modal-erreur"></div>
+    <div class="fe-modal-actions">
+      <button class="fe-modal-btn-annuler" onclick="feFermerModaleCours()">Annuler</button>
+      <button id="fe-modal-cours-btn-valider" class="fe-modal-btn-valider" onclick="feValiderModaleCours()">Créer</button>
+    </div>
+  </div>
+</div>
 </body></html>
