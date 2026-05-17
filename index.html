@@ -898,6 +898,88 @@ body{background:transparent;}
 }
 .resource-card--inpanel:last-child{border-bottom:none;}
 
+/* ── MES FICHES ÉCLAIR ───────── */
+.fe-empty-state{padding:50px 20px;text-align:center;}
+.fe-upload-area{
+  border:1px dashed var(--border2);border-radius:8px;
+  padding:28px 20px;text-align:center;
+  transition:border-color 0.2s,background 0.2s;
+}
+.fe-upload-area.fe-drag-over{border-color:var(--gold-b);background:var(--gold-d);}
+.fe-add-btn{
+  padding:8px 20px;background:var(--s3);border:1px solid var(--border2);
+  border-radius:5px;font-family:var(--mono);font-size:10px;
+  color:var(--soft);letter-spacing:.08em;cursor:pointer;transition:all 0.15s;
+}
+.fe-add-btn:hover{border-color:var(--gold-b);color:var(--gold);}
+.fe-previews{display:flex;flex-wrap:wrap;gap:10px;padding:14px 0 4px;}
+.fe-thumb{
+  width:80px;height:80px;border-radius:5px;overflow:hidden;
+  border:1px solid var(--border2);position:relative;flex-shrink:0;
+}
+.fe-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.fe-thumb-remove{
+  position:absolute;top:2px;right:2px;width:18px;height:18px;
+  border-radius:50%;background:rgba(12,10,7,0.82);border:1px solid var(--border2);
+  color:var(--soft);font-size:13px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background 0.15s,color 0.15s;
+}
+.fe-thumb-remove:hover{background:rgba(176,96,80,0.7);color:var(--text);border-color:transparent;}
+.fe-spinner{
+  width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--gold);
+  border-radius:50%;margin:0 auto;animation:fe-spin 0.9s linear infinite;
+}
+@keyframes fe-spin{to{transform:rotate(360deg);}}
+.fe-accordion{
+  margin-bottom:10px;border:1px solid var(--border);border-radius:7px;
+  overflow:hidden;background:var(--s1);
+}
+.fe-acc-head{
+  width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;background:transparent;border:none;
+  font-family:var(--mono);font-size:10px;color:var(--soft);
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:color 0.15s,background 0.15s;
+}
+.fe-acc-head:hover{color:var(--gold);background:var(--gold-d);}
+.fe-acc-arrow{font-size:12px;transition:transform 0.2s;}
+.fe-acc-closed .fe-acc-arrow{transform:rotate(-90deg);}
+.fe-acc-body{padding:14px 16px;border-top:1px solid var(--border);}
+.fe-acc-closed .fe-acc-body{display:none;}
+.fe-fiche-header{padding:20px 2px 16px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.fe-fiche-titre{font-family:var(--serif);font-size:clamp(20px,3.5vw,26px);color:var(--text);line-height:1.3;margin-bottom:6px;}
+.fe-fiche-sous{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;}
+.fe-list{padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--soft);line-height:1.7;}
+.fe-list li{padding-left:4px;}
+.fe-notion{margin-bottom:12px;}
+.fe-notion-terme{font-family:var(--body);font-weight:600;font-size:14px;color:var(--text);margin-bottom:3px;}
+.fe-notion-def{font-size:13px;color:var(--soft);line-height:1.7;}
+.fe-section-titre{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;margin-top:14px;}
+.fe-section-titre:first-child{margin-top:0;}
+.fe-section-contenu{font-size:13px;color:var(--soft);line-height:1.8;margin-bottom:10px;}
+.fe-tableau-titre{font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;margin-top:12px;}
+.fe-tableau-titre:first-child{margin-top:0;}
+.fe-tableau-wrap{overflow-x:auto;margin-bottom:10px;}
+.fe-tableau{width:100%;border-collapse:collapse;font-size:12px;}
+.fe-tableau th{
+  background:var(--s3);border:1px solid var(--border2);padding:7px 10px;
+  text-align:left;font-family:var(--mono);font-size:9px;color:var(--soft);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.fe-tableau td{border:1px solid var(--border);padding:7px 10px;color:var(--soft);line-height:1.6;}
+.fe-frise-row{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;
+}
+.fe-frise-row:last-child{border-bottom:none;}
+.fe-frise-date{flex-shrink:0;width:110px;font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.06em;padding-top:2px;}
+.fe-frise-ev{color:var(--soft);line-height:1.65;}
+.fe-citations{display:flex;flex-direction:column;gap:14px;}
+.fe-citation blockquote{
+  font-family:var(--body);font-style:italic;font-size:14px;color:var(--text);
+  line-height:1.75;padding-left:14px;border-left:2px solid var(--gold-b);margin-bottom:5px;
+}
+.fe-citation cite{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em;}
+
 </style>
 </head>
 <body>
@@ -966,6 +1048,7 @@ body{background:transparent;}
   <div class="nav-pill">
     <span class="nav-pill-logo">L'esprit &amp; la machine</span>
     <nav class="nav-tabs">
+      <button class="nav-tab" onclick="showPage(&#39;mesficheseclair&#39;,this)">Mes fiches</button>
       <button class="nav-tab active" onclick="showPage(&#39;quiz&#39;,this)">QCM</button>
       <button class="nav-tab" onclick="showPage(&#39;fiches&#39;,this)">Fiches</button>
       <button class="nav-tab" onclick="showPage(&#39;training&#39;,this)">Entraînement</button>
@@ -1135,12 +1218,13 @@ body{background:transparent;}
   <div id="page-dissert" class="page"><div id="dissert-root"></div></div>
   <div id="page-ressources" class="page"><div id="ressources-root"></div></div>
   <div id="page-jeu" class="page"><div id="jeu-root"></div></div>
+  <div id="page-mesficheseclair" class="page"><div id="mesficheseclair-root"></div></div>
 </div>
 </div>
 
 <script>
 // ── UTILS ────────────────────────────────────────────
-let fichesInited=false,trainingInited=false,cartesInited=false,dissertInited=false,ressourcesInited=false,jeuInited=false;
+let fichesInited=false,trainingInited=false,cartesInited=false,dissertInited=false,ressourcesInited=false,jeuInited=false,fichesEclairInited=false;
 function showPage(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
@@ -1152,6 +1236,7 @@ function showPage(name,btn){
   if(name==='dissert'&&!dissertInited)renderDissert();
   if(name==='ressources'&&!ressourcesInited)renderRessources();
   if(name==='jeu'&&!jeuInited)renderJeu();
+  if(name==='mesficheseclair'&&!fichesEclairInited)renderFichesEclair();
 }
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
 function buildQ(q){const o=shuffle([...q.opts]);return{...q,shuffledOpts:o,newCorrect:o.indexOf(q.opts[q.correct])};}
@@ -1162,6 +1247,7 @@ function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+M
 // ── SUPABASE ──────────────────────────────────────────
 const SUPA_URL='https://lmngoemfxodfjztydvuu.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbmdvZW1meG9kZmp6dHlkdnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzY2MjEsImV4cCI6MjA5MzkxMjYyMX0.0Jt1E1vKvqCjB2uJ2MAAtjpmDACkuUxPeGZCpjhKEhQ';
+const FICHEECLAIR_API='https://ficheeclair-api.chevallierfabio.workers.dev/generate-fiche';
 
 let supa = null;
 function ensureSupa(){
@@ -1192,7 +1278,7 @@ async function initAuth(){
   if(!ensureSupa()){ supaUser=null; return; }
   try {
     const {data:{session}} = await supa.auth.getSession();
-    if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||'';}
+    if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||''; gotoMesFichesIfConnected();}
     supa.auth.onAuthStateChange(async(_,s)=>{
       const wasNull = !supaUser;
       supaUser=s?.user||null;
@@ -1221,6 +1307,7 @@ async function signIn(email,password){
   const {data,error}=await supa.auth.signInWithPassword({email,password});
   if(error)throw error;
   supaUser=data.user; playerName=data.user.user_metadata?.name||'';
+  gotoMesFichesIfConnected();
   return data;
 }
 
@@ -3102,6 +3189,285 @@ Pistes : ${s.pistes}`;
   btn.textContent='Envoyer &rarr;';
   btn.style.opacity='1';
   ta.focus();
+}
+
+// ── MES FICHES ÉCLAIR ────────────────────────────────
+let feSelectedImages=[];
+
+function gotoMesFichesIfConnected(){
+  if(!supaUser) return;
+  const btn=Array.from(document.querySelectorAll('.nav-tab')).find(b=>b.textContent.trim()==='Mes fiches');
+  showPage('mesficheseclair', btn||null);
+}
+
+function renderFichesEclair(){
+  fichesEclairInited=true;
+  const root=document.getElementById('mesficheseclair-root');
+  if(!supaUser){
+    root.innerHTML=`
+      <div class="section-title">Mes fiches de révision</div>
+      <div class="fe-empty-state">
+        <div style="font-family:var(--serif);font-size:22px;color:var(--text);margin-bottom:14px;">Bienvenue sur FicheÉclair</div>
+        <div style="font-size:13px;color:var(--soft);line-height:1.8;max-width:400px;margin:0 auto;">
+          Connecte-toi pour générer des fiches de révision à partir de photos de tes cours.
+        </div>
+      </div>
+    `;
+    return;
+  }
+  feSelectedImages=[];
+  root.innerHTML=`
+    <div class="section-title">Mes fiches de révision</div>
+    <div id="fe-zone-upload">
+      <div class="panel" style="padding:20px 18px;margin-bottom:14px;">
+        <div class="fe-upload-area" id="fe-upload-area">
+          <input type="file" id="fe-file-input" accept="image/jpeg,image/png,image/webp,image/gif" multiple style="display:none">
+          <div style="font-family:var(--serif);font-size:18px;color:var(--text);margin-bottom:8px;">Ajouter des photos de cours</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:14px;">JPEG, PNG, WebP — jusqu'à 5 images</div>
+          <button class="fe-add-btn" id="fe-add-btn" onclick="document.getElementById('fe-file-input').click()">Choisir des images</button>
+        </div>
+        <div id="fe-previews" class="fe-previews" style="display:none;"></div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <label style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:6px;">Titre suggéré <span style="font-weight:normal;">(optionnel)</span></label>
+            <input type="text" id="fe-titre" placeholder="Ex : Philo de l'esprit — Turing" style="width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'">
+          </div>
+          <div>
+            <label style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:6px;">Discipline <span style="font-weight:normal;">(optionnel)</span></label>
+            <input type="text" id="fe-discipline" placeholder="Ex : Philosophie" style="width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border2)'">
+          </div>
+        </div>
+        <div style="margin-top:16px;text-align:right;">
+          <button id="fe-generate-btn" onclick="sendFicheEclair()" disabled
+            style="padding:10px 24px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;font-family:var(--serif);font-size:16px;color:var(--gold);cursor:pointer;opacity:0.4;transition:all 0.15s;"
+            onmouseover="if(!this.disabled)this.style.background='rgba(201,169,110,0.22)'"
+            onmouseout="if(!this.disabled)this.style.background='var(--gold-d)'">Générer ma fiche →</button>
+        </div>
+        <div id="fe-upload-error" style="display:none;margin-top:10px;font-size:12px;color:var(--red);text-align:center;padding:8px;background:var(--red-d);border-radius:5px;"></div>
+      </div>
+    </div>
+    <div id="fe-zone-generation" style="display:none;">
+      <div class="panel" style="padding:40px 20px;text-align:center;">
+        <div class="fe-spinner"></div>
+        <div style="font-family:var(--serif);font-size:18px;color:var(--text);margin-top:18px;margin-bottom:10px;">Analyse en cours…</div>
+        <div style="font-size:12px;color:var(--soft);line-height:1.8;max-width:380px;margin:0 auto;">Claude analyse tes images, ça prend habituellement 20 à 30 secondes. Tu peux laisser cette fenêtre ouverte.</div>
+      </div>
+    </div>
+    <div id="fe-zone-fiche" style="display:none;"></div>
+  `;
+  document.getElementById('fe-file-input').addEventListener('change',e=>feHandleFiles(e.target.files));
+  const area=document.getElementById('fe-upload-area');
+  area.addEventListener('dragover',e=>{e.preventDefault();area.classList.add('fe-drag-over');});
+  area.addEventListener('dragleave',()=>area.classList.remove('fe-drag-over'));
+  area.addEventListener('drop',e=>{e.preventDefault();area.classList.remove('fe-drag-over');feHandleFiles(e.dataTransfer.files);});
+}
+
+function feHandleFiles(fileList){
+  const allowed=['image/jpeg','image/png','image/webp','image/gif'];
+  const files=Array.from(fileList).filter(f=>allowed.includes(f.type));
+  const toAdd=files.slice(0, 5-feSelectedImages.length);
+  feSelectedImages=feSelectedImages.concat(toAdd);
+  feRenderPreviews();
+}
+
+function feRenderPreviews(){
+  const previewsEl=document.getElementById('fe-previews');
+  const btn=document.getElementById('fe-generate-btn');
+  const addBtn=document.getElementById('fe-add-btn');
+  if(!previewsEl) return;
+  if(feSelectedImages.length===0){
+    previewsEl.style.display='none';
+    previewsEl.innerHTML='';
+    btn.disabled=true; btn.style.opacity='0.4';
+    return;
+  }
+  previewsEl.style.display='flex';
+  previewsEl.innerHTML=feSelectedImages.map((f,i)=>{
+    const url=URL.createObjectURL(f);
+    return `<div class="fe-thumb"><img src="${url}" alt="Image ${i+1}"><button class="fe-thumb-remove" onclick="feRemoveImage(${i})">&times;</button></div>`;
+  }).join('');
+  if(addBtn) addBtn.style.display=feSelectedImages.length>=5?'none':'';
+  btn.disabled=false; btn.style.opacity='1';
+}
+
+function feRemoveImage(idx){
+  feSelectedImages.splice(idx,1);
+  feRenderPreviews();
+}
+
+async function feResizeImage(file){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    const reader=new FileReader();
+    reader.onload=e=>{img.src=e.target.result;};
+    reader.onerror=reject;
+    img.onload=()=>{
+      const MAX=2000;
+      let w=img.width, h=img.height;
+      if(Math.max(w,h)>MAX){
+        if(w>h){h=Math.round(h*MAX/w);w=MAX;}
+        else{w=Math.round(w*MAX/h);h=MAX;}
+      }
+      const canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const tryEncode=(quality,attempt)=>{
+        canvas.toBlob(blob=>{
+          if(!blob){reject(new Error('Encodage échoué'));return;}
+          const r2=new FileReader();
+          r2.onload=e2=>{
+            const b64=e2.target.result.split(',')[1];
+            if(b64.length*0.75<=5*1024*1024){resolve(b64);return;}
+            if(attempt>=2){reject(new Error('Image trop volumineuse même après compression.'));return;}
+            tryEncode([0.85,0.7,0.5][attempt+1],attempt+1);
+          };
+          r2.readAsDataURL(blob);
+        },'image/jpeg',quality);
+      };
+      tryEncode(0.85,0);
+    };
+    img.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function sendFicheEclair(){
+  if(!supaUser){feShowUploadError('Connecte-toi pour générer des fiches.');return;}
+  const {data:{session}}=await supa.auth.getSession();
+  const jwt=session?.access_token;
+  if(!jwt){feShowUploadError('Session expirée, reconnecte-toi.');return;}
+  document.getElementById('fe-zone-upload').style.display='none';
+  document.getElementById('fe-zone-generation').style.display='block';
+  let images;
+  try{images=await Promise.all(feSelectedImages.map(feResizeImage));}
+  catch(e){feBackToUpload(e.message||'Erreur lors du redimensionnement des images.');return;}
+  const titre=(document.getElementById('fe-titre')?.value||'').trim();
+  const discipline=(document.getElementById('fe-discipline')?.value||'').trim();
+  try{
+    const r=await fetch(FICHEECLAIR_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwt},
+      body:JSON.stringify({images:images.map(b64=>({data:b64,media_type:'image/jpeg'})),discipline,titre_suggere:titre})
+    });
+    if(r.status===200){
+      const d=await r.json();
+      document.getElementById('fe-zone-generation').style.display='none';
+      document.getElementById('fe-zone-fiche').style.display='block';
+      renderFicheEclair(d.fiche.contenu);
+    } else if(r.status===401){
+      feBackToUpload('Session expirée, reconnecte-toi.');
+    } else if(r.status===429){
+      feBackToUpload('Tu as atteint ton quota journalier de 10 fiches. Reviens demain.');
+    } else if(r.status===400){
+      const d=await r.json().catch(()=>({error:'Requête invalide.'}));
+      feBackToUpload(d.error||'Requête invalide.');
+    } else if(r.status===502){
+      feBackToUpload('Le modèle a rencontré un problème. Réessaie.');
+    } else {
+      feBackToUpload('Erreur inattendue. Réessaie plus tard.');
+    }
+  }catch(e){
+    feBackToUpload('Erreur de connexion. Vérifie ta connexion et réessaie.');
+  }
+}
+
+function feBackToUpload(msg){
+  document.getElementById('fe-zone-generation').style.display='none';
+  document.getElementById('fe-zone-upload').style.display='block';
+  if(msg) feShowUploadError(msg);
+}
+
+function feShowUploadError(msg){
+  const el=document.getElementById('fe-upload-error');
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+
+function escHTML(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderFicheEclair(contenu){
+  const zone=document.getElementById('fe-zone-fiche');
+  if(!zone) return;
+  const dateStr=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  const auteurs=(contenu.auteurs||[]).join(', ');
+  const sous=[contenu.discipline,auteurs,'généré le '+dateStr].filter(Boolean).join(' · ');
+  let html=`
+    <div class="fe-fiche-header">
+      <div class="fe-fiche-titre">${escHTML(contenu.titre||'Fiche sans titre')}</div>
+      ${sous?`<div class="fe-fiche-sous">${escHTML(sous)}</div>`:''}
+    </div>
+  `;
+  const acc=(id,label,inner)=>`
+    <div class="fe-accordion" id="fe-acc-${id}">
+      <button class="fe-acc-head" onclick="feToggleAcc('${id}')">
+        <span>${label}</span><span class="fe-acc-arrow">▾</span>
+      </button>
+      <div class="fe-acc-body">${inner}</div>
+    </div>
+  `;
+  const ul=items=>`<ul class="fe-list">${items.map(t=>`<li>${escHTML(t)}</li>`).join('')}</ul>`;
+  if((contenu.problematiques||[]).length) html+=acc('prob','Problématiques',ul(contenu.problematiques));
+  if((contenu.enjeux||[]).length) html+=acc('enjeux','Enjeux',ul(contenu.enjeux));
+  if((contenu.controverses||[]).length) html+=acc('controv','Controverses',ul(contenu.controverses));
+  if((contenu.notions_cles||[]).length){
+    html+=acc('notions','Notions clés',contenu.notions_cles.map(n=>`
+      <div class="fe-notion">
+        <div class="fe-notion-terme">${escHTML(n.terme)}</div>
+        <div class="fe-notion-def">${escHTML(n.definition)}</div>
+      </div>`).join(''));
+  }
+  if((contenu.sections||[]).length){
+    html+=acc('sections','Sections du cours',contenu.sections.map(s=>`
+      <h3 class="fe-section-titre">${escHTML(s.titre)}</h3>
+      <div class="fe-section-contenu">${escHTML(s.contenu).replace(/\n/g,'<br>')}</div>`).join(''));
+  }
+  if((contenu.tableaux||[]).length){
+    html+=acc('tableaux','Tableaux',contenu.tableaux.map(t=>`
+      ${t.titre?`<div class="fe-tableau-titre">${escHTML(t.titre)}</div>`:''}
+      <div class="fe-tableau-wrap"><table class="fe-tableau">
+        <thead><tr>${(t.en_tetes||[]).map(c=>`<th>${escHTML(c)}</th>`).join('')}</tr></thead>
+        <tbody>${(t.lignes||[]).map(row=>`<tr>${row.map(cell=>`<td>${escHTML(cell)}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table></div>`).join(''));
+  }
+  if((contenu.frises||[]).length){
+    html+=acc('frises','Frises chronologiques',contenu.frises.map(f=>`
+      ${f.titre?`<div class="fe-tableau-titre">${escHTML(f.titre)}</div>`:''}
+      ${(f.evenements||[]).map(ev=>`
+        <div class="fe-frise-row">
+          <span class="fe-frise-date">${escHTML(ev.date)}</span>
+          <span class="fe-frise-ev">${escHTML(ev.evenement)}</span>
+        </div>`).join('')}`).join(''));
+  }
+  if((contenu.citations||[]).length){
+    html+=acc('citations','Citations',`<div class="fe-citations">${contenu.citations.map(c=>`
+      <div class="fe-citation">
+        <blockquote>${escHTML(c.texte)}</blockquote>
+        ${(c.auteur||c.source)?`<cite>— ${escHTML([c.auteur,c.source].filter(Boolean).join(', '))}</cite>`:''}
+      </div>`).join('')}</div>`);
+  }
+  if((contenu.questions_revision||[]).length) html+=acc('qr','Questions de révision',ul(contenu.questions_revision));
+  html+=`<div style="text-align:center;margin-top:24px;padding-bottom:10px;">
+    <button onclick="feNouvellesFiche()"
+      style="padding:10px 22px;background:transparent;border:1px solid var(--border2);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--soft);cursor:pointer;letter-spacing:.08em;transition:all 0.15s;"
+      onmouseover="this.style.borderColor='var(--gold-b)';this.style.color='var(--gold)'"
+      onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--soft)'">← Nouvelle fiche</button>
+  </div>`;
+  zone.innerHTML=html;
+}
+
+function feToggleAcc(id){
+  document.getElementById('fe-acc-'+id)?.classList.toggle('fe-acc-closed');
+}
+
+function feNouvellesFiche(){
+  document.getElementById('fe-zone-fiche').style.display='none';
+  document.getElementById('fe-zone-generation').style.display='none';
+  document.getElementById('fe-zone-upload').style.display='block';
+  feSelectedImages=[];
+  feRenderPreviews();
+  const el=document.getElementById('fe-upload-error');
+  if(el) el.style.display='none';
 }
 
 // ── MINI-JEU : PONG PHILOSOPHIQUE ────────────────────
