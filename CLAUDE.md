@@ -1,57 +1,202 @@
-# FicheÉclair — Projet de génération de fiches de révision
+Parfait. Voici la nouvelle version de CLAUDE.md, structurée comme convenu.
+markdown# FicheÉclair — Document de projet
+
+> **Note pour Claude** : ce document est lu automatiquement par Claude Code à
+> chaque session, et fourni en tête de chaque nouvelle conversation
+> stratégique sur claude.ai. Il a deux parties : une partie **stable**
+> (identité, vision, stack, conventions) qui change rarement, et une partie
+> **vivante** (état actuel, roadmap) à mettre à jour à chaque fin de mission.
+
+---
+
+# PARTIE STABLE
 
 ## Identité du projet
-Web app de génération de fiches de révision à partir de photos ou PDF
-de cours, spécialement pensée pour les sciences humaines et la philosophie.
-Construite sur la base d'un site QCM de philo existant (anciennement "site-philo").
+
+FicheÉclair n'est pas un générateur de fiches isolées, c'est un **transformateur
+de cours en environnement de révision complet**. Un étudiant uploade
+progressivement les chapitres de son cours universitaire (en photo ou en PDF).
+Pour chaque chapitre, une fiche structurée est générée. À mesure que le cours
+s'enrichit, des outils de révision (QCM, cartes, entraînement, dissertation,
+ressources, mini-jeu) s'adaptent automatiquement au contenu accumulé.
+
+L'unité naturelle d'étude est le **cours**, pas la fiche isolée. Une fiche est
+un fragment de contenu qu'on ajoute à un cours. Les outils opèrent au niveau
+du cours et se mettent à jour quand on lui ajoute une fiche.
 
 ## Cible
-Étudiants en sciences humaines, philosophie, prépa littéraire, classes prépa
-B/L. Les outils existants (NotebookLM, Mindgrasp) sont génériques et conçus
-pour les sciences. FicheÉclair est conçu spécifiquement pour les disciplines
-littéraires.
+
+Étudiants en sciences humaines : philosophie, classes prépa littéraire et B/L,
+masters de lettres et de philosophie. Les outils existants (NotebookLM,
+Mindgrasp) sont génériques et conçus pour les sciences. FicheÉclair est
+spécifiquement conçu pour les disciplines littéraires (problématiques, enjeux,
+controverses, notions, citations).
 
 ## Auteur
+
 Étudiant en master de philosophie, pas développeur. Bagage technique :
-HTML/CSS basique, expérience de code généré par IA, vient d'apprendre Git,
-VS Code, Cursor/Claude Code, déploiement Cloudflare.
+HTML/CSS basique au départ, expérience de code généré par IA, a appris
+récemment Git, VS Code, Cursor/Claude Code, déploiement Cloudflare.
 
 ## Stack technique
-- HTML/CSS/JS vanilla, tout dans index.html
-- Hébergement : Cloudflare Workers (déploiement auto depuis GitHub)
-- Base de données : Supabase (auth + table `scores` + table `fiches` à venir)
-- API IA : Anthropic Claude (via proxy Cloudflare Worker authentifié JWT)
-- Compte API perso utilisé pour le proxy, abonnement Claude Pro pour le dev
 
-## État au début de la nouvelle conversation
-- Site QCM de philo fonctionnel
-- Authentification Supabase opérationnelle
-- Classements QCM et Pong sur Supabase avec RLS (migration JSONBin terminée)
-- Proxy Claude pour Disserter sécurisé avec JWT Supabase
-- Limite de dépense Anthropic configurée
+- **Frontend** : HTML/CSS/JS vanilla, tout dans `index.html` (~5500 lignes),
+  servi par un Worker Cloudflare nommé `site-philo` (déploiement auto depuis
+  GitHub à chaque push sur `main`).
+- **Backend** : trois Workers Cloudflare distincts.
+  - `site-philo` : sert le HTML statique. Lié au repo GitHub
+    `chevallierfabio-hue/site-philo`.
+  - `claude-proxy` : proxy authentifié vers l'API Anthropic, utilisé par la
+    fonctionnalité Disserter. Édité directement dans l'interface Cloudflare
+    (pas dans le repo Git).
+  - `ficheeclair-api` : Worker dédié à FicheÉclair. Endpoint
+    `POST /generate-fiche` authentifié par JWT Supabase, avec quota
+    journalier, qui appelle Claude Vision pour générer une fiche structurée
+    et l'insérer dans Supabase. Code dans le sous-dossier `ficheeclair-api/`
+    du repo, déployé automatiquement.
+- **Base de données** : Supabase. Tables actuelles :
+  - `scores` : classements QCM et Pong (avec RLS)
+  - `sr_data` : données de répétition espacée pour l'entraînement
+  - `fiches` : fiches générées (avec RLS, colonnes id/user_id/created_at/
+    titre/discipline/contenu jsonb)
+- **API IA** : API Anthropic. Modèle Sonnet 4.6 (`claude-sonnet-4-6`) pour
+  les fiches et les dissertations. Clés API distinctes par Worker pour
+  suivre les coûts par fonctionnalité. Limite de dépense configurée.
+- **Dev** : VS Code + Claude Code, mode "Claude propose, l'utilisateur
+  valide chaque modification".
 
-## Ce qui reste à construire (FicheÉclair)
-1. Worker API séparé pour traitement des uploads
-2. PWA (manifest.json, sw.js, balises iOS)
-3. Page d'upload photos/PDF dans index.html
-4. Génération de fiches par Claude Vision
-5. Table `fiches` dans Supabase + page "Mes fiches"
-6. Génération de QCM à partir des fiches (V2)
+## Vision architecturale
+
+Hiérarchie cible :
+Site
+└─ Mes cours (écran principal pour les connectés)
+├─ Cours "Épistémologie L3"
+│   ├─ Onglet "Fiches" : la liste des fiches du cours
+│   ├─ Onglet "QCM" : opère sur l'ensemble des fiches
+│   ├─ Onglet "Cartes"
+│   ├─ Onglet "Entraînement"
+│   ├─ Onglet "Disserter"
+│   ├─ Onglet "Ressources"
+│   └─ Onglet "Pong"
+└─ Cours "Philosophie de l'esprit" (ancien contenu, migré dans la base)
+└─ Pour les non-connectés : page d'accueil / présentation
+
+Niveau 1 (nav globale, pour les connectés) : Mes cours, Mon compte.
+Niveau 2 (à l'intérieur d'un cours) : Fiches + les outils qui ont été
+rebranchés sur les fiches du cours.
+
+Règle pour la transition : un onglet n'apparaît dans la nav du cours que
+quand il est effectivement rebranché sur les fiches. Tant qu'il n'est pas
+prêt, il est invisible (pas grisé).
 
 ## Conventions de code
+
 - JavaScript vanilla uniquement, pas de framework, pas d'outil de build
-- Variables courtes acceptables (style existant), à refactoriser plus tard
-- Commentaires en français
 - Indentation 2 espaces
+- Commentaires en français
+- Variables courtes acceptables (cohérence avec le style existant)
+- Préfixe `fe-` pour les classes CSS de FicheÉclair (évite les collisions
+  avec le CSS existant)
+- Fonction `escHTML()` (qui échappe `&`, `<`, `>`, `"`, et `'`) à utiliser
+  systématiquement pour toute interpolation de chaîne dans du HTML construit
+  par template string
 
 ## Décisions techniques actées
-- Photos envoyées directement à Claude Vision (pas d'OCR séparé)
-- PDF : extraction côté client avec PDF.js
-- Fiches stockées en JSON structuré (pas HTML) pour permettre QCM auto
-- Modèle Haiku 4.5 pour fiches, Sonnet 4.6 pour dissertations (à confirmer par tests)
-- Limite par utilisateur stockée en Supabase (ex : 10 fiches/jour)
+
+- Photos envoyées directement à Claude Vision en base64, pas d'OCR séparé
+- Redimensionnement côté navigateur avant envoi (max 2000px, JPEG 0.85 avec
+  fallback 0.7 puis 0.5 si la taille dépasse 5 Mo)
+- Fiches stockées en JSON structuré dans la colonne `contenu jsonb` de la
+  table `fiches` (pas en HTML), pour permettre les outils dérivés
+- Modèle Sonnet 4.6 pour les fiches (Haiku envisagé au départ, mais Sonnet
+  validé après test sur cas réel d'un cours de philo)
+- Quota journalier de 10 fiches par utilisateur, calculé en UTC (pas en
+  fuseau Europe/Paris — simple et prévisible)
+- Vérification du JWT côté Worker en interrogeant `/auth/v1/user` de
+  Supabase (plutôt que de vérifier la signature avec le secret JWT)
+- Vérification du quota via la table `fiches` avec le JWT de l'utilisateur
+  (pas la clé service_role), pour bénéficier des politiques RLS
+- Prompt système calibré pour privilégier **fidélité** sur exhaustivité
+  formelle : préférer un tableau vide à un contenu inventé
 
 ## Méthodologie
-Réflexion stratégique et revue de code via Claude.ai (cette conversation).
-Exécution dans Claude Code avec Sonnet par défaut, Opus exceptionnel.
-Une mission = une session ciblée. Validation des plans avant exécution.
+
+- **Réflexion stratégique et revue de code via Claude.ai** (claude.ai) :
+  conversation longue qui sert d'architecte, prépare les prompts pour
+  Claude Code, et relit le code généré.
+- **Exécution dans Claude Code** (VS Code) : Sonnet par défaut, Opus
+  exceptionnel. L'utilisateur valide chaque modification proposée.
+- **Une mission = une session ciblée.** Validation des plans avant
+  exécution. Pas d'enchaînement de plusieurs missions dans une même
+  session sans pause.
+- **Une branche Git par mission.** Format `mission-<id>-<description>`,
+  par exemple `mission-3a-2-liste-fiches`. Travail sur la branche, push,
+  fusion dans `main` seulement après test en local et accord explicite.
+- **Relecture systématique du code généré** avant déploiement. Pas de
+  "commit-puis-on-verra".
+
+---
+
+# PARTIE VIVANTE
+
+> **À mettre à jour à la fin de chaque mission.** Garde à jour cette
+> section et seulement celle-ci. La date est utile pour situer la dernière
+> mise à jour.
+
+## État au [17/05]
+
+**Worker `ficheeclair-api`** déployé et opérationnel :
+- Authentification JWT Supabase, quota 10 fiches/jour/utilisateur (UTC)
+- Appel Claude Sonnet 4.6 Vision avec prompt système calibré
+- Insertion automatique en base, retour de la fiche au client
+- Code dans le repo (sous-dossier `ficheeclair-api/`)
+
+**Frontend** dans `index.html`, onglet "Mes fiches" :
+- Upload de 1 à 5 images avec redimensionnement côté client
+- État liste / upload / generation / detail, géré par `feShowState()`
+- Liste persistante des fiches passées (lecture Supabase, ordre
+  antichronologique, date relative)
+- Suppression avec confirmation native
+- Affichage en accordéons dépliés par défaut, un par grand champ
+- Bascule auto vers "Mes fiches" pour les connectés (chargement + login)
+
+**Supabase** :
+- Table `fiches` avec RLS (lecture/écriture/suppression : auth.uid() = user_id)
+- Données : quelques fiches de test générées sur cours de philo
+
+## Roadmap
+
+### Refonte vers la nouvelle architecture (séquentiel)
+
+- **R1** — ajouter la notion de "cours" dans Supabase + adapter le Worker
+  `ficheeclair-api` pour qu'il accepte un `cours_id`. Migration douce des
+  fiches existantes (rattachement à un cours par défaut). Backend pur,
+  pas de changement d'UI.
+- **R2** — refonte UI : "Mes cours" remplace "Mes fiches" comme écran
+  principal. Navigation Mes cours → Cours → Fiches. Pour l'instant un
+  cours ne contient que l'onglet "Fiches".
+- **R3** — nav interne au cours avec les onglets prévus, mais seul
+  "Fiches" est visible (les autres restent invisibles tant qu'ils ne sont
+  pas rebranchés). Nav globale minimaliste (Mes cours / Mon compte).
+- **R4** — migration du contenu de l'ancien cours (philo de l'esprit) en
+  cours dans la base, accessible comme démo aux non-connectés et comme
+  cours dans le compte de l'auteur.
+- **R5** — rebrancher l'outil QCM sur les fiches du cours courant.
+- **R6+** — rebrancher les autres outils un par un : Cartes, Entraînement,
+  Disserter, Ressources, Pong. Ordre à décider au fil de l'eau selon
+  l'utilité ressentie.
+
+### Pool de missions annexes (à piocher quand le besoin se fait sentir)
+
+- **3b** — amélioration UX d'affichage des fiches (design, gestion fine
+  des erreurs, indicateur de progression plus poussé)
+- **3c** — prise photo directement depuis téléphone (permissions, PWA)
+- **3d** — extraction PDF côté client avec PDF.js
+- **2B** — recherche web pour générer un "Pour aller plus loin"
+  (vidéos YouTube, podcasts, lectures) sans hallucinations
+- **PWA** — manifest.json, sw.js, balises iOS pour installation comme app
+
+## Prochaine mission
+
+**R1** : ajouter la notion de "cours" dans Supabase + adapter le Worker
+`ficheeclair-api`. Branche Git locale `mission-r1-cours` déjà créée.
