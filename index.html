@@ -979,6 +979,28 @@ body{background:transparent;}
   line-height:1.75;padding-left:14px;border-left:2px solid var(--gold-b);margin-bottom:5px;
 }
 .fe-citation cite{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em;}
+.fe-carte{
+  padding:14px 16px;border:1px solid var(--border);border-radius:7px;
+  background:var(--s1);margin-bottom:10px;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  transition:border-color 0.15s,background 0.15s;
+}
+.fe-carte:hover{border-color:var(--gold-b);background:var(--gold-d);}
+.fe-carte-titre{font-family:var(--serif);font-size:15px;color:var(--text);margin-bottom:3px;}
+.fe-carte-meta{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;}
+.fe-carte-supprimer{
+  flex-shrink:0;background:transparent;border:1px solid var(--border2);
+  color:var(--dim);font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+  padding:5px 10px;border-radius:4px;cursor:pointer;transition:all 0.15s;
+}
+.fe-carte-supprimer:hover{border-color:rgba(176,96,80,0.6);color:rgba(220,150,140,1);}
+.fe-liste-vide{text-align:center;padding:50px 20px;color:var(--soft);font-size:13px;line-height:1.8;}
+.fe-bouton-nouvelle{
+  display:block;margin:0 auto 18px;padding:10px 22px;
+  background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;
+  font-family:var(--serif);font-size:14px;color:var(--gold);cursor:pointer;transition:all 0.15s;
+}
+.fe-bouton-nouvelle:hover{background:rgba(201,169,110,0.22);}
 
 </style>
 </head>
@@ -1236,7 +1258,16 @@ function showPage(name,btn){
   if(name==='dissert'&&!dissertInited)renderDissert();
   if(name==='ressources'&&!ressourcesInited)renderRessources();
   if(name==='jeu'&&!jeuInited)renderJeu();
-  if(name==='mesficheseclair'&&!fichesEclairInited)renderFichesEclair();
+  if(name==='mesficheseclair'){
+    if(!fichesEclairInited){
+      renderFichesEclair();
+    } else if(supaUser){
+      const zoneListe=document.getElementById('fe-zone-liste');
+      if(zoneListe && zoneListe.style.display!=='none'){
+        feLoadFiches();
+      }
+    }
+  }
 }
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
 function buildQ(q){const o=shuffle([...q.opts]);return{...q,shuffledOpts:o,newCorrect:o.indexOf(q.opts[q.correct])};}
@@ -3194,8 +3225,102 @@ Pistes : ${s.pistes}`;
 // ── MES FICHES ÉCLAIR ────────────────────────────────
 let feSelectedImages=[];
 
+function feShowState(state){
+  ['liste','upload','generation','detail'].forEach(s=>{
+    const el=document.getElementById('fe-zone-'+s);
+    if(el) el.style.display=(s===state)?'block':'none';
+  });
+}
+
+function feResetUpload(){
+  feSelectedImages=[];
+  feRenderPreviews();
+  const titre=document.getElementById('fe-titre');
+  const disc=document.getElementById('fe-discipline');
+  if(titre) titre.value='';
+  if(disc) disc.value='';
+  const err=document.getElementById('fe-upload-error');
+  if(err) err.style.display='none';
+}
+
+async function feLoadFiches(){
+  const container=document.getElementById('fe-liste-container');
+  if(!container) return;
+  container.innerHTML='<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement de tes fiches…</div>';
+  try{
+    const {data,error}=await supa.from('fiches').select('id,titre,discipline,created_at').order('created_at',{ascending:false});
+    if(error) throw error;
+    feRenderListe(data||[]);
+  }catch(e){
+    console.error('Erreur chargement fiches :',e);
+    container.innerHTML='<div style="text-align:center;padding:30px;color:var(--red);font-size:13px;">Erreur lors du chargement de tes fiches.</div>';
+  }
+}
+
+function feDateRelative(isoString){
+  const diff=Date.now()-new Date(isoString).getTime();
+  const min=Math.floor(diff/60000);
+  if(min<1) return 'à l\'instant';
+  if(min<60) return `il y a ${min} min`;
+  const h=Math.floor(min/60);
+  if(h<24) return `il y a ${h} h`;
+  const d=Math.floor(h/24);
+  if(d<7) return `il y a ${d} jour${d>1?'s':''}`;
+  return new Date(isoString).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function feRenderListe(fiches){
+  const container=document.getElementById('fe-liste-container');
+  if(!container) return;
+  if(!fiches.length){
+    container.innerHTML=`<div class="fe-liste-vide">Tu n'as pas encore créé de fiche.<br>Clique sur <strong>+ Nouvelle fiche</strong> pour commencer.</div>`;
+    return;
+  }
+  container.innerHTML=fiches.map(f=>`
+    <div class="fe-carte" onclick="feOpenFiche('${escHTML(f.id)}')">
+      <div style="flex:1;min-width:0;">
+        <div class="fe-carte-titre">${escHTML(f.titre||'Fiche sans titre')}</div>
+        <div class="fe-carte-meta">${[f.discipline,feDateRelative(f.created_at)].filter(Boolean).join(' · ')}</div>
+      </div>
+      <button class="fe-carte-supprimer" onclick="event.stopPropagation();feDeleteFiche('${escHTML(f.id)}','${escHTML(f.titre||'Fiche sans titre')}')">Supprimer</button>
+    </div>
+  `).join('');
+}
+
+async function feOpenFiche(id){
+  feShowState('generation');
+  try{
+    const {data,error}=await supa.from('fiches').select('contenu').eq('id',id).single();
+    if(error) throw error;
+    renderFicheEclair(data.contenu);
+    feShowState('detail');
+  }catch(e){
+    console.error('Erreur ouverture fiche :',e);
+    alert('Erreur lors du chargement de la fiche.');
+    feShowState('liste');
+  }
+}
+
+async function feDeleteFiche(id,titre){
+  if(!confirm(`Supprimer la fiche "${titre}" ? Cette action est irréversible.`)) return;
+  try{
+    const {error}=await supa.from('fiches').delete().eq('id',id);
+    if(error) throw error;
+    feLoadFiches();
+  }catch(e){
+    console.error('Erreur suppression :',e);
+    alert('Erreur lors de la suppression de la fiche.');
+  }
+}
+
+function feRetourListe(){
+  feShowState('liste');
+  feLoadFiches();
+}
+
 function gotoMesFichesIfConnected(){
   if(!supaUser) return;
+  fichesEclairInited=false;
   const btn=Array.from(document.querySelectorAll('.nav-tab')).find(b=>b.textContent.trim()==='Mes fiches');
   showPage('mesficheseclair', btn||null);
 }
@@ -3218,7 +3343,11 @@ function renderFichesEclair(){
   feSelectedImages=[];
   root.innerHTML=`
     <div class="section-title">Mes fiches de révision</div>
-    <div id="fe-zone-upload">
+    <div id="fe-zone-liste">
+      <button class="fe-bouton-nouvelle" onclick="feResetUpload();feShowState('upload')">+ Nouvelle fiche</button>
+      <div id="fe-liste-container"><div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement de tes fiches…</div></div>
+    </div>
+    <div id="fe-zone-upload" style="display:none;">
       <div class="panel" style="padding:20px 18px;margin-bottom:14px;">
         <div class="fe-upload-area" id="fe-upload-area">
           <input type="file" id="fe-file-input" accept="image/jpeg,image/png,image/webp,image/gif" multiple style="display:none">
@@ -3253,13 +3382,15 @@ function renderFichesEclair(){
         <div style="font-size:12px;color:var(--soft);line-height:1.8;max-width:380px;margin:0 auto;">Claude analyse tes images, ça prend habituellement 20 à 30 secondes. Tu peux laisser cette fenêtre ouverte.</div>
       </div>
     </div>
-    <div id="fe-zone-fiche" style="display:none;"></div>
+    <div id="fe-zone-detail" style="display:none;"></div>
   `;
   document.getElementById('fe-file-input').addEventListener('change',e=>feHandleFiles(e.target.files));
   const area=document.getElementById('fe-upload-area');
   area.addEventListener('dragover',e=>{e.preventDefault();area.classList.add('fe-drag-over');});
   area.addEventListener('dragleave',()=>area.classList.remove('fe-drag-over'));
   area.addEventListener('drop',e=>{e.preventDefault();area.classList.remove('fe-drag-over');feHandleFiles(e.dataTransfer.files);});
+  feShowState('liste');
+  feLoadFiches();
 }
 
 function feHandleFiles(fileList){
@@ -3336,8 +3467,7 @@ async function sendFicheEclair(){
   const {data:{session}}=await supa.auth.getSession();
   const jwt=session?.access_token;
   if(!jwt){feShowUploadError('Session expirée, reconnecte-toi.');return;}
-  document.getElementById('fe-zone-upload').style.display='none';
-  document.getElementById('fe-zone-generation').style.display='block';
+  feShowState('generation');
   let images;
   try{images=await Promise.all(feSelectedImages.map(feResizeImage));}
   catch(e){feBackToUpload(e.message||'Erreur lors du redimensionnement des images.');return;}
@@ -3351,9 +3481,8 @@ async function sendFicheEclair(){
     });
     if(r.status===200){
       const d=await r.json();
-      document.getElementById('fe-zone-generation').style.display='none';
-      document.getElementById('fe-zone-fiche').style.display='block';
       renderFicheEclair(d.fiche.contenu);
+      feShowState('detail');
     } else if(r.status===401){
       feBackToUpload('Session expirée, reconnecte-toi.');
     } else if(r.status===429){
@@ -3372,8 +3501,7 @@ async function sendFicheEclair(){
 }
 
 function feBackToUpload(msg){
-  document.getElementById('fe-zone-generation').style.display='none';
-  document.getElementById('fe-zone-upload').style.display='block';
+  feShowState('upload');
   if(msg) feShowUploadError(msg);
 }
 
@@ -3383,11 +3511,11 @@ function feShowUploadError(msg){
 }
 
 function escHTML(s){
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function renderFicheEclair(contenu){
-  const zone=document.getElementById('fe-zone-fiche');
+  const zone=document.getElementById('fe-zone-detail');
   if(!zone) return;
   const dateStr=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
   const auteurs=(contenu.auteurs||[]).join(', ');
@@ -3448,10 +3576,10 @@ function renderFicheEclair(contenu){
   }
   if((contenu.questions_revision||[]).length) html+=acc('qr','Questions de révision',ul(contenu.questions_revision));
   html+=`<div style="text-align:center;margin-top:24px;padding-bottom:10px;">
-    <button onclick="feNouvellesFiche()"
+    <button onclick="feRetourListe()"
       style="padding:10px 22px;background:transparent;border:1px solid var(--border2);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--soft);cursor:pointer;letter-spacing:.08em;transition:all 0.15s;"
       onmouseover="this.style.borderColor='var(--gold-b)';this.style.color='var(--gold)'"
-      onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--soft)'">← Nouvelle fiche</button>
+      onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--soft)'">← Retour aux fiches</button>
   </div>`;
   zone.innerHTML=html;
 }
@@ -3460,15 +3588,6 @@ function feToggleAcc(id){
   document.getElementById('fe-acc-'+id)?.classList.toggle('fe-acc-closed');
 }
 
-function feNouvellesFiche(){
-  document.getElementById('fe-zone-fiche').style.display='none';
-  document.getElementById('fe-zone-generation').style.display='none';
-  document.getElementById('fe-zone-upload').style.display='block';
-  feSelectedImages=[];
-  feRenderPreviews();
-  const el=document.getElementById('fe-upload-error');
-  if(el) el.style.display='none';
-}
 
 // ── MINI-JEU : PONG PHILOSOPHIQUE ────────────────────
 function renderPongLeaderboard(rows){
