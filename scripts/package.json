@@ -1,0 +1,9 @@
+{
+  "name": "ficheeclair-scripts",
+  "version": "1.0.0",
+  "description": "Scripts utilitaires FicheÉclair",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  }
+}

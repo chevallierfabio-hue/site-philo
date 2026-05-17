@@ -1105,6 +1105,81 @@ body{background:transparent;}
   .fe-onglets-select{display:none;}
 }
 
+/* ── BADGE PUBLIC ─────────────────────────────────── */
+.fe-badge-public{
+  display:inline-block;padding:2px 7px;margin-left:8px;vertical-align:middle;
+  background:rgba(201,169,110,0.12);border:1px solid rgba(201,169,110,0.3);
+  border-radius:3px;font-family:var(--mono);font-size:8px;letter-spacing:.1em;
+  color:var(--gold);text-transform:uppercase;
+}
+
+/* ── BANDEAU DÉMO ─────────────────────────────────── */
+.fe-bandeau-demo{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  padding:10px 16px;margin-bottom:18px;
+  background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.25);
+  border-radius:7px;font-size:12px;color:var(--soft);
+}
+.fe-bandeau-demo-texte{flex:1;min-width:0;line-height:1.5;}
+.fe-bandeau-demo-btn{
+  flex-shrink:0;padding:6px 14px;
+  background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;
+  font-family:var(--serif);font-size:13px;color:var(--gold);cursor:pointer;
+  white-space:nowrap;transition:background .15s;
+}
+.fe-bandeau-demo-btn:hover{background:rgba(201,169,110,0.22);}
+
+/* ── LANDING ─────────────────────────────────────── */
+.fe-landing{max-width:580px;margin:0 auto;padding:0 0 48px;}
+.fe-landing-hero{padding:48px 0 36px;text-align:center;}
+.fe-landing-logo{font-family:var(--serif);font-size:34px;color:var(--text);margin-bottom:12px;letter-spacing:-.01em;}
+.fe-landing-sous-titre{font-size:15px;color:var(--soft);line-height:1.7;margin-bottom:8px;}
+.fe-landing-qualification{
+  font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.09em;
+  line-height:1.8;margin-bottom:32px;text-transform:uppercase;
+}
+.fe-landing-actions{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.fe-landing-btn-demo{
+  padding:12px 32px;background:var(--gold-d);border:1px solid var(--gold-b);
+  border-radius:7px;font-family:var(--serif);font-size:17px;color:var(--gold);
+  cursor:pointer;transition:background .15s;
+}
+.fe-landing-btn-demo:hover{background:rgba(201,169,110,0.22);}
+.fe-landing-btn-demo:disabled{opacity:.5;cursor:default;}
+.fe-landing-btn-compte{
+  padding:10px 28px;background:transparent;border:1px solid var(--border2);
+  border-radius:7px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  color:var(--soft);cursor:pointer;transition:all .15s;
+}
+.fe-landing-btn-compte:hover{border-color:var(--gold-b);color:var(--gold);}
+.fe-landing-lien-connexion{
+  font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+  background:none;border:none;
+}
+.fe-landing-lien-connexion:hover{color:var(--soft);}
+.fe-landing-comment{margin-bottom:32px;}
+.fe-landing-comment-titre{
+  font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.14em;
+  text-transform:uppercase;text-align:center;margin-bottom:20px;
+}
+.fe-landing-etapes{display:flex;flex-direction:column;gap:0;}
+.fe-landing-etape{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--border);
+}
+.fe-landing-etape:last-child{border-bottom:none;}
+.fe-landing-etape-num{
+  flex-shrink:0;width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border2);border-radius:50%;
+  font-family:var(--mono);font-size:9px;color:var(--dim);
+}
+.fe-landing-etape-texte{font-size:13px;color:var(--soft);line-height:1.6;}
+.fe-landing-footer{
+  text-align:center;font-family:var(--mono);font-size:9px;color:var(--dim);
+  letter-spacing:.09em;line-height:1.8;padding-top:16px;border-top:1px solid var(--border);
+}
+
 </style>
 </head>
 <body>
@@ -1421,6 +1496,11 @@ async function initAuth(){
   try {
     const {data:{session}} = await supa.auth.getSession();
     if(session){supaUser=session.user; playerName=session.user.user_metadata?.name||''; gotoMesCoursIfConnected();}
+    else {
+      feAfficherNavConnecte();
+      const btn=document.getElementById('fe-btn-mes-cours');
+      showPage('mesficheseclair', btn||null);
+    }
     supa.auth.onAuthStateChange(async(_,s)=>{
       const wasNull = !supaUser;
       supaUser=s?.user||null;
@@ -1456,10 +1536,11 @@ async function signIn(email,password){
 async function signOut(){
   if(ensureSupa()) await supa.auth.signOut();
   supaUser=null; playerName='';
-  feAfficherNavAncienne();
+  feModeDemo=false;
   fichesEclairInited=false;
-  const qcmBtn=Array.from(document.querySelectorAll('.nav-tab-ancien')).find(b=>b.textContent.includes('QCM'));
-  showPage('quiz', qcmBtn||null);
+  feAfficherNavConnecte();
+  const btn=document.getElementById('fe-btn-mes-cours');
+  showPage('mesficheseclair', btn||null);
   await renderIntro();
 }
 
@@ -3340,6 +3421,7 @@ Pistes : ${s.pistes}`;
 // ── MES FICHES ÉCLAIR ────────────────────────────────
 let feSelectedImages=[];
 let feCoursCourant=null;      // {id, titre, discipline} ou null
+let feModeDemo=false;          // true quand non-connecté explore un cours public
 let feTitreFicheCourante=''; // pour le fil d'Ariane dans la zone fiche
 
 function feShowState(state){
@@ -3347,6 +3429,20 @@ function feShowState(state){
     const el=document.getElementById('fe-zone-'+s);
     if(el) el.style.display=(s===state)?'block':'none';
   });
+}
+
+function feGoAccueil(){
+  feCoursCourant=null;
+  feModeDemo=false;
+  feShowState('cours');
+  if(supaUser) feLoadCours();
+}
+
+function feBandeauDemoHTML(){
+  return `<div class="fe-bandeau-demo">
+    <span class="fe-bandeau-demo-texte">Vous explorez un cours démo. Créez un compte pour créer vos propres cours.</span>
+    <button class="fe-bandeau-demo-btn" onclick="feOuvrirInscription()">Créer un compte</button>
+  </div>`;
 }
 
 // Met à jour le fil d'Ariane d'une zone.
@@ -3369,7 +3465,7 @@ function feResetUpload(){
   const err=document.getElementById('fe-upload-error');
   if(err) err.style.display='none';
   feMajAriane('upload',[
-    {label:'Mes cours',onclick:'feShowState(\'cours\');feLoadCours();feCoursCourant=null;'},
+    {label:'Mes cours',onclick:'feGoAccueil()'},
     {label:feCoursCourant?.titre||'Cours',onclick:'feRetourDetailCours()'},
     {label:'Nouvelle fiche',current:true}
   ]);
@@ -3381,11 +3477,17 @@ async function feLoadFichesDuCours(coursId){
   container.innerHTML='<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement des fiches…</div>';
   try{
     const {data,error}=await supa.from('fiches')
-      .select('id,titre,discipline,created_at')
-      .eq('cours_id',coursId)
-      .order('created_at',{ascending:false});
+      .select('id,titre,discipline,created_at,ordre')
+      .eq('cours_id',coursId);
     if(error) throw error;
-    feRenderListe(data||[]);
+    const fiches=(data||[]).sort((a,b)=>{
+      const aOrd=a.ordre!=null, bOrd=b.ordre!=null;
+      if(aOrd && bOrd) return a.ordre-b.ordre;
+      if(aOrd) return -1;
+      if(bOrd) return 1;
+      return new Date(b.created_at)-new Date(a.created_at);
+    });
+    feRenderListe(fiches);
   }catch(e){
     console.error('Erreur chargement fiches :',e);
     container.innerHTML='<div style="text-align:center;padding:30px;color:var(--red);font-size:13px;">Erreur lors du chargement des fiches.</div>';
@@ -3421,7 +3523,7 @@ function feRenderListe(fiches){
         <div class="fe-carte-titre">${escHTML(titre)}</div>
         <div class="fe-carte-meta">${escHTML([f.discipline,feDateRelative(f.created_at)].filter(Boolean).join(' · '))}</div>
       </div>
-      <button class="fe-carte-supprimer" onclick="event.stopPropagation();feDeleteFiche('${idS}',${titreJ})">Supprimer</button>
+      ${!feModeDemo?`<button class="fe-carte-supprimer" onclick="event.stopPropagation();feDeleteFiche('${idS}',${titreJ})">Supprimer</button>`:''}
     </div>`;
   }).join('');
 }
@@ -3433,8 +3535,17 @@ async function feOpenFiche(id,titre){
     const {data,error}=await supa.from('fiches').select('contenu').eq('id',id).single();
     if(error) throw error;
     renderFicheEclair(data.contenu);
+    if(feModeDemo){
+      const ficheZone=document.getElementById('fe-zone-fiche-contenu');
+      if(ficheZone){
+        const div=document.createElement('div');
+        div.innerHTML=feBandeauDemoHTML();
+        ficheZone.insertBefore(div.firstChild,ficheZone.firstChild);
+      }
+    }
+    const labelAccueilFiche=feModeDemo?'Présentation':'Mes cours';
     feMajAriane('fiche',[
-      {label:'Mes cours',onclick:'feShowState(\'cours\');feLoadCours();feCoursCourant=null;'},
+      {label:labelAccueilFiche,onclick:'feGoAccueil()'},
       {label:feCoursCourant?.titre||'Cours',onclick:'feRetourDetailCours()'},
       {label:feTitreFicheCourante,current:true}
     ]);
@@ -3474,7 +3585,7 @@ async function feLoadCours(){
   container.innerHTML='<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement de tes cours…</div>';
   try{
     const {data,error}=await supa.from('cours')
-      .select('id,titre,discipline,niveau,updated_at,fiches(count)')
+      .select('id,titre,discipline,niveau,updated_at,est_public,fiches(count)')
       .order('updated_at',{ascending:false});
     if(error) throw error;
     feRenderListeCours(data||[]);
@@ -3501,7 +3612,7 @@ function feRenderListeCours(cours){
     return `
     <div class="fe-carte" onclick="feOpenCours('${idS}',${titreJ},${discJ})">
       <div style="flex:1;min-width:0;">
-        <div class="fe-carte-titre">${escHTML(c.titre||'Cours sans titre')}</div>
+        <div class="fe-carte-titre">${escHTML(c.titre||'Cours sans titre')}${c.est_public?'<span class="fe-badge-public">Public</span>':''}</div>
         ${meta?`<div class="fe-carte-meta">${escHTML(meta)}</div>`:''}
       </div>
       <div class="fe-carte-actions">
@@ -3514,13 +3625,17 @@ function feRenderListeCours(cours){
 
 function feOpenCours(id,titre,discipline){
   feCoursCourant={id,titre,discipline};
+  feModeDemo=!supaUser;
   feOngletCoursCourant='fiches';
+  const labelAccueil=feModeDemo?'Présentation':'Mes cours';
   const header=document.getElementById('fe-cours-header');
   if(header){
-    header.innerHTML=`<div class="fe-fiche-titre">${escHTML(titre||'Cours sans titre')}</div>`;
+    let html=`<div class="fe-fiche-titre">${escHTML(titre||'Cours sans titre')}</div>`;
+    if(feModeDemo) html+=feBandeauDemoHTML();
+    header.innerHTML=html;
   }
   feMajAriane('detail-cours',[
-    {label:'Mes cours',onclick:'feShowState(\'cours\');feLoadCours();feCoursCourant=null;'},
+    {label:labelAccueil,onclick:'feGoAccueil()'},
     {label:titre||'Cours sans titre',current:true}
   ]);
   feShowState('detail-cours');
@@ -3642,9 +3757,10 @@ function feAfficherNavAncienne(){
 
 function feGoMesCours(){
   feCoursCourant=null;
+  feModeDemo=false;
   if(fichesEclairInited){
     feShowState('cours');
-    feLoadCours();
+    if(supaUser) feLoadCours();
   }
 }
 
@@ -3659,25 +3775,13 @@ function gotoMesCoursIfConnected(){
 function renderFichesEclair(){
   fichesEclairInited=true;
   const root=document.getElementById('mesficheseclair-root');
-  if(!supaUser){
-    root.innerHTML=`
-      <div class="section-title">Mes cours</div>
-      <div class="fe-empty-state">
-        <div style="font-family:var(--serif);font-size:22px;color:var(--text);margin-bottom:14px;">Bienvenue sur FicheÉclair</div>
-        <div style="font-size:13px;color:var(--soft);line-height:1.8;max-width:400px;margin:0 auto;">
-          Connecte-toi pour créer tes cours et générer des fiches de révision.
-        </div>
-      </div>
-    `;
-    return;
-  }
   feSelectedImages=[];
   root.innerHTML=`
     <!-- Zone 1 : liste des cours -->
     <div id="fe-zone-cours">
-      <div class="section-title">Mes cours</div>
-      <button class="fe-bouton-nouvelle" onclick="feCreerCours()">+ Nouveau cours</button>
-      <div id="fe-liste-cours-container"><div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement de tes cours…</div></div>
+      ${supaUser?`<div class="section-title">Mes cours</div>
+      <button class="fe-bouton-nouvelle" onclick="feCreerCours()">+ Nouveau cours</button>`:''}
+      <div id="fe-liste-cours-container"></div>
     </div>
 
     <!-- Zone 2 : détail d'un cours (liste des fiches) -->
@@ -3730,6 +3834,11 @@ function renderFichesEclair(){
     </div>
 
   `;
+  if(!supaUser){
+    feRenderLanding(document.getElementById('fe-liste-cours-container'));
+    feShowState('cours');
+    return;
+  }
   document.getElementById('fe-file-input').addEventListener('change',e=>feHandleFiles(e.target.files));
   const area=document.getElementById('fe-upload-area');
   area.addEventListener('dragover',e=>{e.preventDefault();area.classList.add('fe-drag-over');});
@@ -3737,6 +3846,72 @@ function renderFichesEclair(){
   area.addEventListener('drop',e=>{e.preventDefault();area.classList.remove('fe-drag-over');feHandleFiles(e.dataTransfer.files);});
   feShowState('cours');
   feLoadCours();
+}
+
+// ── LANDING NON-CONNECTÉE ────────────────────────────
+function feRenderLanding(container){
+  container.innerHTML=`
+    <div class="fe-landing">
+      <div class="fe-landing-hero">
+        <div class="fe-landing-logo">FicheÉclair</div>
+        <div class="fe-landing-sous-titre">Transformez vos cours universitaires en environnement de révision complet.</div>
+        <div class="fe-landing-qualification">Conçu pour les disciplines littéraires · philosophie · prépas littéraires et B/L · masters de lettres et de philosophie</div>
+        <div class="fe-landing-actions">
+          <button id="fe-landing-btn-demo" class="fe-landing-btn-demo" onclick="feOuvrirCoursPublic()">Essayer la démo →</button>
+          <button class="fe-landing-btn-compte" onclick="feOuvrirInscription()">Créer un compte</button>
+          <button class="fe-landing-lien-connexion" onclick="feOuvrirConnexion()">J'ai déjà un compte, me connecter.</button>
+        </div>
+      </div>
+      <div class="panel fe-landing-comment">
+        <div class="fe-landing-comment-titre">Comment ça marche</div>
+        <div class="fe-landing-etapes">
+          <div class="fe-landing-etape">
+            <div class="fe-landing-etape-num">1</div>
+            <div class="fe-landing-etape-texte">Téléversez vos chapitres de cours — photos ou PDF.</div>
+          </div>
+          <div class="fe-landing-etape">
+            <div class="fe-landing-etape-num">2</div>
+            <div class="fe-landing-etape-texte">Obtenez une fiche structurée par chapitre : notions, problématiques, enjeux, controverses, citations.</div>
+          </div>
+          <div class="fe-landing-etape">
+            <div class="fe-landing-etape-num">3</div>
+            <div class="fe-landing-etape-texte">Révisez avec des outils (QCM, cartes, entraînement…) qui s'adaptent automatiquement à votre cours.</div>
+          </div>
+        </div>
+      </div>
+      <div class="fe-landing-footer">
+        FicheÉclair · fait pour les sciences humaines
+      </div>
+    </div>
+  `;
+}
+
+async function feOuvrirCoursPublic(){
+  if(!ensureSupa()) return;
+  const btn=document.getElementById('fe-landing-btn-demo');
+  if(btn){ btn.disabled=true; btn.textContent='Chargement…'; }
+  try{
+    const {data,error}=await supa.from('cours')
+      .select('id,titre,discipline')
+      .eq('est_public',true)
+      .order('created_at',{ascending:true})
+      .limit(1)
+      .single();
+    if(error) throw error;
+    feOpenCours(data.id, data.titre, data.discipline);
+  }catch(e){
+    console.error('Erreur chargement cours public :', e);
+    if(btn){ btn.disabled=false; btn.textContent='Essayer la démo →'; }
+  }
+}
+
+function feOuvrirInscription(){
+  showPage('quiz', null);
+  setTimeout(()=>{ if(typeof switchAuthTab==='function') switchAuthTab('signup'); },50);
+}
+
+function feOuvrirConnexion(){
+  showPage('quiz', null);
 }
 
 // ── ONGLETS COURS ────────────────────────────────────
@@ -3777,7 +3952,7 @@ function feRenderContenuOnglet(id){
   if(!zone) return;
   if(id==='fiches'){
     zone.innerHTML=`
-      <button class="fe-bouton-nouvelle" onclick="feResetUpload();feShowState('upload')">+ Nouvelle fiche</button>
+      ${!feModeDemo?`<button class="fe-bouton-nouvelle" onclick="feResetUpload();feShowState('upload')">+ Nouvelle fiche</button>`:''}
       <div id="fe-liste-fiches-container"><div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement des fiches…</div></div>
     `;
   } else {
@@ -3979,7 +4154,7 @@ async function sendFicheEclair(){
   const jwt=session?.access_token;
   if(!jwt){feShowUploadError('Session expirée, reconnecte-toi.');return;}
   feMajAriane('generation',[
-    {label:'Mes cours',onclick:'feShowState(\'cours\');feLoadCours();feCoursCourant=null;'},
+    {label:'Mes cours',onclick:'feGoAccueil()'},
     {label:feCoursCourant?.titre||'Cours',onclick:'feRetourDetailCours()'},
     {label:'Génération en cours…',current:true}
   ]);
