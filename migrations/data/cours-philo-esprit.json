@@ -1,0 +1,446 @@
+{
+  "cours": {
+    "titre": "Philosophie de l'esprit et la machine",
+    "discipline": "Philosophie",
+    "niveau": "Master / Prépa littéraire",
+    "description": "Cybernétique, Turing, Searle, Fodor, Putnam, Wittgenstein. Un parcours dans les principales tentatives de penser le rapport entre l'esprit et la machine, et leurs critiques.",
+    "est_public": true
+  },
+  "fiches": [
+    {
+      "ordre": 1,
+      "titre": "Cybernétique",
+      "discipline": "Philosophie",
+      "contenu": {
+        "titre": "Cybernétique",
+        "discipline": "Philosophie",
+        "auteurs": [
+          "Rosenblueth, Wiener et Bigelow",
+          "Monod",
+          "Shanker",
+          "Kenny"
+        ],
+        "problematiques": [
+          "À quelles conditions peut-on dire d'un comportement qu'il est orienté vers un but ?",
+          "Peut-on attribuer un but à une machine sans présupposer conscience ni volition ?"
+        ],
+        "enjeux": [
+          "La cybernétique tente une naturalisation des concepts mentaux (but, intention) par leur réduction à des concepts mécaniques (feedback). Cette tentative ouvre la possibilité d'une science unifiée du comportement, qu'il soit biologique ou artificiel.",
+          "L'enjeu critique est de savoir si cette naturalisation conserve ou détruit les liens internes entre but, conscience et volition — c'est-à-dire si elle décrit encore le phénomène qu'elle prétend expliquer."
+        ],
+        "controverses": [
+          "Rosenblueth, Wiener et Bigelow soutiennent qu'un comportement orienté vers un but se définit objectivement par le feedback négatif, indépendamment de toute conscience ou choix. Shanker et Kenny objectent qu'on introduit alors un homonyme trompeur de 'suivre un but' : un système ainsi décrit serait dit orienté vers un but même sans choix, sans essai et sans conscience, ce qui rompt les relations internes entre but, conscience et volition qui caractérisaient le concept ordinaire."
+        ],
+        "notions_cles": [
+          {
+            "terme": "Feedback négatif",
+            "definition": "Rétroaction correctrice. Les signaux venant du but réduisent l'erreur entre la position actuelle et l'objectif. Toute machine intrinsèquement dirigée vers un but en requiert un. Exemple paradigmatique : le thermostat."
+          },
+          {
+            "terme": "Servomécanisme",
+            "definition": "Machine intrinsèquement dirigée vers un but via feedback négatif. S'oppose aux machines à comportement régulier mais non orienté (horloge) et aux machines conçues pour l'absence de but (roulette)."
+          },
+          {
+            "terme": "Téléonomie",
+            "definition": "Concept introduit par Monod pour conserver la notion de but comme concept opératoire sans cause finale. Le postulat d'objectivité (Galilée, Descartes) interdit les causes finales ; la téléonomie permet d'analyser un comportement dirigé vers un but sans supposer qu'une cause postérieure agit sur l'effet."
+          },
+          {
+            "terme": "Bifurcation conditionnelle",
+            "definition": "Opération du type « si C, alors A, sinon B » introduite dans la machine analytique de Babbage. Elle confère à la machine l'universalité : celle-ci peut choisir entre procédures en fonction de résultats qu'elle a elle-même calculés."
+          }
+        ],
+        "sections": [
+          {
+            "titre": "Le comportement orienté vers un but (RWB, 1943)",
+            "contenu": "Rosenblueth, Wiener et Bigelow définissent le comportement comme toute modification d'une entité relativement à son environnement, et le but comme la condition finale vers laquelle le système est dirigé. Toutes les machines ne sont pas dirigées vers un but : une roulette est conçue pour l'absence de but, une horloge a un comportement régulier mais non intrinsèquement dirigé vers un but. Le concept central est celui de feedback négatif : les signaux venant du but réduisent l'écart entre position actuelle et objectif. C'est la rétroaction correctrice qui définit le servomécanisme et qui distingue la torpille (intrinsèquement dirigée vers sa cible) de l'horloge. Le feedback positif, au contraire, amplifie la perturbation et peut conduire à l'instabilité.\n\nMonod prolonge cette analyse en introduisant le concept de téléonomie, distinct de la téléologie classique. Le postulat d'objectivité hérité de Galilée et Descartes interdit les causes finales ; la téléonomie garde la notion de but comme concept opératoire sans cause subséquente. La téléologie classique avait été discréditée pour avoir supposé une cause postérieure à l'effet."
+          },
+          {
+            "titre": "Les objections de Shanker et Kenny",
+            "contenu": "Shanker objecte que RWB introduisent un homonyme trompeur de l'expression « suivre un but ». Dans leur cadre, un système est dit orienté vers un but même sans choix, sans essai, sans conscience du but. Les relations qui étaient internes entre but, conscience et volition deviennent purement externes — relationnelles et mécaniques. Le concept perd ce qui le constituait dans son usage ordinaire.\n\nKenny développe une objection parallèle au niveau de l'action. Seules les créatures capables de donner des raisons — c'est-à-dire les créatures langagières — peuvent agir pour des raisons. Le lien entre intention et motif est interne seulement pour les êtres langagiers, déductible réciproquement dans le raisonnement pratique. Un chimpanzé qui utilise un bâton fait X pour Y, mais pas pour une raison. Une intention n'est pas une cause interne de l'action — c'est l'action elle-même qui est cause.\n\nDe ces objections se dégage une distinction cruciale : être en accord avec une règle n'est pas la même chose que suivre une règle. Un chat qui court vers une souris a un comportement prédictif sans être raisonné. Une intention n'est pas un pilote mental de l'action."
+          },
+          {
+            "titre": "Babbage et les origines historiques du calcul universel",
+            "contenu": "La machine analytique de Babbage (1834-1836) introduit la bifurcation conditionnelle (« si C, alors A, sinon B »), qui confère à la machine l'universalité : elle peut choisir entre procédures en fonction de résultats qu'elle a elle-même calculés. Ada Lovelace en tire en 1843 le premier algorithme connu. L'essentiel ne réside pas dans les opérations de base mais dans leur enchaînement systématique.\n\nLe second théorème de Gödel (1931) montre que, quels que soient les axiomes choisis, il existe des énoncés indécidables. Le programme de Hilbert est réfuté. Cela ouvre la question de l'Entscheidungsproblem : peut-on décider mécaniquement si un énoncé est démontrable ? Turing répondra par la négative en 1936, en s'appuyant sur la définition formelle d'une machine de calcul."
+          }
+        ],
+        "tableaux": [],
+        "frises": [
+          {
+            "titre": "Origines historiques de la cybernétique et du calcul",
+            "evenements": [
+              { "date": "1834-1836", "evenement": "Machine analytique de Babbage : introduction de la bifurcation conditionnelle." },
+              { "date": "1843", "evenement": "Ada Lovelace : premier algorithme." },
+              { "date": "1931", "evenement": "Théorèmes d'incomplétude de Gödel : existence d'énoncés indécidables." },
+              { "date": "1936", "evenement": "Turing : machine de Turing et réponse négative à l'Entscheidungsproblem." },
+              { "date": "1943", "evenement": "Rosenblueth, Wiener et Bigelow : article fondateur de la cybernétique sur le comportement orienté vers un but." }
+            ]
+          }
+        ],
+        "citations": [],
+        "questions_revision": [
+          "En quoi la définition cybernétique du but par le feedback négatif transforme-t-elle le concept ordinaire de comportement orienté ?",
+          "L'objection de Shanker sur l'homonyme trompeur suffit-elle à disqualifier la naturalisation cybernétique des concepts mentaux ?",
+          "Comment la distinction de Kenny entre agir pour une raison et agir en vue d'un but recoupe-t-elle la distinction entre suivre une règle et être en accord avec une règle ?",
+          "Pourquoi Monod insiste-t-il sur la téléonomie plutôt que sur la téléologie pour décrire les organismes vivants ?"
+        ]
+      }
+    },
+    {
+      "ordre": 2,
+      "titre": "Turing",
+      "discipline": "Philosophie",
+      "contenu": {
+        "titre": "Turing",
+        "discipline": "Philosophie",
+        "auteurs": ["Turing", "Hobbes", "Descartes", "Fodor"],
+        "problematiques": [
+          "Peut-on légitimement dire d'une machine qu'elle pense ?",
+          "Le test de l'imitation est-il une condition suffisante pour attribuer la pensée à une machine ?"
+        ],
+        "enjeux": [
+          "Turing déplace la question métaphysique « les machines peuvent-elles penser ? » vers une question opérationnelle : peuvent-elles passer le jeu de l'imitation ? L'enjeu est de savoir si ce déplacement résout le problème ou s'il ne fait que l'esquiver en substituant un critère comportemental à une question sur la nature de l'esprit.",
+          "Derrière ce déplacement se joue la portée du critère cartésien de pertinence — répondre au sens de ce qui est dit — comme marqueur de la pensée, et la question de savoir si la capacité verbale épuise ce qui fait la rationalité d'un agent."
+        ],
+        "controverses": [
+          "Turing soutient que le succès au jeu de l'imitation ne laisse aucune raison de refuser à la machine la pensée. Trois objections classiques s'y opposent : l'objection théologique (l'âme n'est donnée qu'aux humains), l'objection de Jefferson (la machine doit ressentir plaisir et peine pour penser), l'objection de Lovelace (la machine ne fait que ce qu'on lui demande). Turing y répond respectivement par l'argument de la création comparable à celle d'un enfant, par la réduction au solipsisme, et par la distinction entre connaître un fait et en saisir simultanément toutes les conséquences.",
+          "Fodor objecte au test de Turing comme condition suffisante : il ne mesure qu'une capacité verbale parmi toutes celles qui constituent la rationalité d'une personne. Une machine pourrait passer le test sans pouvoir accomplir une tâche aussi simple que « veille sur le bébé pendant que je vais faire les courses », qui mobilise une variété de comportements non verbaux."
+        ],
+        "notions_cles": [
+          {
+            "terme": "Machine de Turing",
+            "definition": "Objet mathématique défini par un ruban illimité, une tête de lecture-écriture et une table d'états finis. Conçue par Turing en 1936 pour répondre à l'Entscheidungsproblem : aucune méthode effective ne permet de décider, en général, si une machine s'arrêtera sur une donnée donnée."
+          },
+          {
+            "terme": "Thèse de Church-Turing",
+            "definition": "Tout calcul effectif peut être simulé par une machine de Turing. La thèse identifie ainsi la notion intuitive de calculabilité à un modèle formel précis."
+          },
+          {
+            "terme": "Jeu de l'imitation",
+            "definition": "Dispositif proposé par Turing en 1950. Un juge communique par écrit avec deux interlocuteurs cachés, l'un humain et l'autre machine. Si la machine parvient à tromper le juge, Turing soutient qu'il n'y aurait aucune raison de ne pas dire qu'elle pense. L'écriture exclut les indices vocaux qui pourraient trahir la machine."
+          },
+          {
+            "terme": "Critère cartésien de pertinence",
+            "definition": "Critère hérité de Descartes (Discours de la méthode, 5e partie) : ce qui distingue un être pensant d'une machine, ce n'est pas la production de paroles mais la capacité à répondre au sens de tout ce qui se dit en sa présence. Turing reprend ce critère et soutient que le jeu de l'imitation l'opérationnalise."
+          }
+        ],
+        "sections": [
+          {
+            "titre": "La machine de Turing (1936)",
+            "contenu": "La machine de Turing est un objet mathématique défini par un ruban illimité, une tête de lecture-écriture et une table d'états finis. Elle est conçue pour répondre à l'Entscheidungsproblem : aucune méthode effective ne permet de décider, en général, si une machine s'arrêtera sur une donnée donnée. De cette construction se dégage la thèse dite de Church-Turing : tout calcul effectif peut être simulé par une machine de Turing.\n\nL'idée que le raisonnement est un calcul est ancienne. Hobbes utilisait déjà le terme reckoning pour décrire l'opération de l'esprit. Pour Hobbes, le langage verbal n'est pas la condition de la pensée mais de la réflexion sur les pensées : les animaux ont un discours mental sans avoir de discours verbal, donc sans réflexion. Le discours mental se conçoit comme un calcul sur des signes mentaux — des occurrences dans le cerveau."
+          },
+          {
+            "titre": "Le jeu de l'imitation (1950)",
+            "contenu": "Turing propose en 1950 un test dans lequel un juge communique par écrit avec deux interlocuteurs cachés, un humain et une machine. Si la machine parvient à tromper le juge, Turing affirme qu'il n'y a aucune raison de ne pas dire qu'elle pense. La forme écrite est essentielle : elle exclut les indices vocaux. Le critère mobilisé est celui de Descartes — répondre au sens de ce qui est dit.\n\nTrois objections classiques sont anticipées. L'objection théologique soutient que Dieu n'a donné d'âme qu'aux humains ; Turing répond qu'il ne serait pas irrévérencieux de construire une machine pouvant accueillir une âme, comme on procrée des enfants. L'objection de Jefferson exige que la machine ressente plaisir et peine pour qu'on puisse lui attribuer la pensée ; Turing montre que poussé à l'extrême, cet argument conduit au solipsisme — la seule certitude qu'autrui pense serait d'être cet autrui. L'objection de Lovelace, enfin, soutient que la machine ne fait que ce qu'on lui demande ; Turing y voit l'erreur de supposer que toutes les conséquences d'un fait sautent simultanément à l'esprit, alors qu'une machine peut produire des résultats genuinement surprenants pour son concepteur. Turing ajoute un argument d'informalité : être une machine, c'est être gouverné par des lois du comportement ; si l'homme l'est aussi, l'argument antimachiniste est un undistributed middle.\n\nFodor formule une objection d'un autre type, qui porte non sur la possibilité mais sur la suffisance du test. Une machine peut réussir le jeu de l'imitation sans pouvoir accomplir « veille sur le bébé pendant que je vais faire les courses » : tâche simple qui mobilise une variété de comportements non verbaux. Le test ne mesure qu'une capacité parmi toutes celles qui constituent la rationalité d'une personne."
+          },
+          {
+            "titre": "Le critère cartésien de pertinence",
+            "contenu": "Au cœur de l'argument de Turing se trouve un critère hérité de Descartes : ce qui distingue un être pensant d'une machine, ce n'est pas la production de paroles mais la pertinence des réponses dans tous les contextes possibles. Descartes lui-même tenait ce critère pour décisif et hors d'atteinte des machines. Turing reprend le critère et inverse la conclusion : il pense que des machines pourraient un jour le satisfaire."
+          }
+        ],
+        "tableaux": [],
+        "frises": [],
+        "citations": [
+          {
+            "texte": "Car on peut bien concevoir qu'une machine soit tellement faite qu'elle profère des paroles, et même qu'elle en profère quelques-unes à propos des actions corporelles qui causeront quelques changements en ses organes [...] mais non pas qu'elle les arrange diversement pour répondre au sens de tout ce qui se dira en sa présence, ainsi que des hommes les plus hébétés peuvent faire.",
+            "auteur": "Descartes",
+            "source": "Discours de la méthode, 5e partie"
+          }
+        ],
+        "questions_revision": [
+          "En quoi le passage de la question « les machines peuvent-elles penser ? » au jeu de l'imitation constitue-t-il un déplacement philosophique, et que perd-on ou gagne-t-on dans ce déplacement ?",
+          "L'objection de Fodor sur la non-suffisance du test révèle-t-elle une limite contingente ou une limite de principe du jeu de l'imitation ?",
+          "Comment Turing peut-il revendiquer le critère cartésien de pertinence tout en inversant la conclusion que Descartes en tirait ?",
+          "L'argument de l'informalité (« si nous sommes nous-mêmes des machines, l'objection ne tient pas ») est-il un argument philosophique ou une pétition de principe ?"
+        ]
+      }
+    },
+    {
+      "ordre": 3,
+      "titre": "Searle",
+      "discipline": "Philosophie",
+      "contenu": {
+        "titre": "Searle",
+        "discipline": "Philosophie",
+        "auteurs": ["Searle", "Hacker", "Bennett et Hacker"],
+        "problematiques": [
+          "La manipulation syntaxique de symboles suffit-elle à produire de la compréhension ?",
+          "La computation est-elle une propriété intrinsèque d'un système physique ou une propriété relative à un observateur ?"
+        ],
+        "enjeux": [
+          "Si l'argument de la Chambre chinoise est valide, le projet de l'intelligence artificielle forte — celui qui identifie la pensée à la manipulation correcte de symboles — est récusé dans son principe, et non pas seulement dans son état actuel.",
+          "La distinction entre intentionnalité intrinsèque et intentionnalité dérivée engage une thèse plus large sur la nature de l'esprit : la sémantique ne peut pas émerger de la pure syntaxe, ce qui replace l'esprit du côté du vivant biologique plutôt que du formalisme."
+        ],
+        "controverses": [
+          "Searle défend une réduction causale sans réduction ontologique : les états mentaux sont causés par et réalisés dans les microprocessus cérébraux, à la manière dont la liquidité l'est dans la structure moléculaire de l'eau, mais la conscience garde une ontologie de première personne irréductible. Bennett et Hacker objectent qu'attribuer la pensée au cerveau commet une erreur méréologique : c'est confondre une partie (le cerveau) avec le tout (la personne). Searle répond que ce critère s'appliquerait aussi bien au sourire, qui est forcément le sourire de quelqu'un, sans qu'on en conclue que parler du sourire est dépourvu de sens."
+        ],
+        "notions_cles": [
+          {
+            "terme": "Chambre chinoise",
+            "definition": "Expérience de pensée de Searle (1980). Un homme dans une pièce reçoit des idéogrammes chinois et, suivant un livret de règles syntaxiques rédigées en anglais, produit en retour d'autres idéogrammes correctement enchaînés. Il occupe la position de la machine dans le jeu de Turing. Il produit des réponses indiscernables de celles d'un locuteur chinois sans comprendre un seul mot de chinois. Morale : les machines ont une syntaxe mais pas de sémantique."
+          },
+          {
+            "terme": "Intentionnalité intrinsèque",
+            "definition": "Propriété originale de l'esprit d'être à propos de quelque chose. Elle appartient en propre aux états mentaux conscients d'un sujet."
+          },
+          {
+            "terme": "Intentionnalité dérivée",
+            "definition": "Intentionnalité que l'esprit impose à des objets physiques (mots, symboles, machines). Les ordinateurs n'ont que de l'intentionnalité dérivée : c'est nous qui interprétons leurs sorties comme des résultats. Deep Blue ne joue pas aux échecs ; nous interprétons ses sorties comme des coups."
+          },
+          {
+            "terme": "Propriété dépendante de l'observateur",
+            "definition": "Propriété qui n'existe que relativement à un agent qui l'attribue ou l'interprète : argent, mariage, syntaxe computationnelle. S'oppose aux propriétés intrinsèques au système physique : masse, photosynthèse, charge électrique."
+          },
+          {
+            "terme": "Réduction causale sans réduction ontologique",
+            "definition": "Position de Searle : les états mentaux sont causés par et réalisés dans les microprocessus cérébraux (réduction causale, comparable à la liquidité réalisée dans la structure moléculaire), mais la conscience conserve une ontologie de première personne — elle est irréductible ontologiquement à ces processus physiques décrits en troisième personne."
+          },
+          {
+            "terme": "Erreur méréologique",
+            "definition": "Terme de Bennett et Hacker : attribuer à une partie (le cerveau, un neurone) des propriétés qui n'ont de sens que pour le tout (la personne). Dire « le cerveau pense » n'est pas faux mais dépourvu de sens, comme attribuer la puissance du moteur au carburateur."
+          }
+        ],
+        "sections": [
+          {
+            "titre": "La Chambre chinoise (1980)",
+            "contenu": "L'expérience de pensée de Searle met en scène un homme enfermé dans une pièce. Il reçoit des idéogrammes chinois par une fente, et un livret de règles, rédigé en anglais, lui indique comment combiner ces idéogrammes pour produire en retour d'autres idéogrammes. Ses réponses sont indiscernables de celles d'un locuteur chinois. Pourtant, il ne comprend pas un seul mot de chinois. Il occupe la position de la machine dans le jeu de Turing. La morale est que les machines ont une syntaxe mais pas de sémantique : la manipulation correcte de symboles ne génère pas, par elle-même, de la compréhension.\n\nCet argument prend appui sur une distinction conceptuelle entre intentionnalité intrinsèque et intentionnalité dérivée. L'intentionnalité intrinsèque est la propriété originale de l'esprit d'être à propos de quelque chose. L'intentionnalité dérivée est celle que l'esprit impose à des objets physiques. Les ordinateurs n'ont que de l'intentionnalité dérivée : nous interprétons leurs sorties. Deep Blue ne joue pas aux échecs — il manipule des configurations que nous interprétons comme des coups."
+          },
+          {
+            "titre": "Le second argument : syntaxe et observateur",
+            "contenu": "Searle complète l'argument de la Chambre chinoise par un second argument plus radical : la syntaxe elle-même n'est pas intrinsèque à la physique du système. La computation n'existe que relativement à un observateur qui l'interprète. Certaines propriétés sont indépendantes de l'observateur : la masse, la photosynthèse, la charge électrique. D'autres dépendent de l'observateur : l'argent, le mariage, la syntaxe computationnelle. La conséquence est que la thèse « le cerveau est un ordinateur » n'est pas seulement fausse — elle est vide, parce qu'être un ordinateur n'est pas une propriété intrinsèque à un système physique.\n\nHacker prolonge l'argument avec l'exemple de la calculatrice. Si l'on connectait ses sorties à un piano, elle deviendrait une machine à musique. Le calcul n'est pas une propriété intrinsèque de l'appareil : il est dans notre interprétation de ses sorties. Dire qu'une calculatrice calcule est un usage dérivé, secondaire du terme."
+          },
+          {
+            "titre": "Émergence, réduction, erreur méréologique",
+            "contenu": "Searle articule sa position en termes de réduction. Il accepte une réduction causale des états mentaux aux microprocessus cérébraux : la conscience est causée par et réalisée dans le cerveau, à la manière dont la liquidité est causée et réalisée dans la structure moléculaire de l'eau. Il refuse en revanche une réduction ontologique : la conscience a une ontologie de première personne, irréductible à une description en troisième personne.\n\nBennett et Hacker, dans une perspective wittgensteinienne, formulent une critique plus radicale du discours neuroscientifique : attribuer à une partie (le cerveau, un neurone) des propriétés qui n'ont de sens que pour le tout (la personne) commet une erreur méréologique. Wittgenstein l'avait formulée : c'est seulement d'un être humain vivant qu'on peut dire il voit, pense, est conscient. Dire « le cerveau pense » n'est pas faux — c'est dépourvu de sens, comme attribuer la puissance du moteur au carburateur.\n\nSearle objecte à cette position que le critère vaudrait aussi pour le sourire, qui est forcément le sourire de quelqu'un, sans qu'on en conclue qu'on ne peut pas parler du sourire en tant que tel."
+          }
+        ],
+        "tableaux": [],
+        "frises": [],
+        "citations": [
+          {
+            "texte": "Les neurosciences n'ont pas la possibilité de prouver que le cerveau est capable de calculer quoi que ce soit. Ce sont les êtres humains qui calculent.",
+            "auteur": "Bennett et Hacker",
+            "source": "Philosophical Foundations of Neuroscience, 2022"
+          }
+        ],
+        "questions_revision": [
+          "L'argument de la Chambre chinoise réfute-t-il le programme de l'IA forte ou repose-t-il sur une intuition que ce programme contesterait précisément ?",
+          "La distinction entre propriété dépendante et indépendante de l'observateur est-elle tenable pour la syntaxe, ou exporte-t-elle au cerveau biologique le même problème qu'elle pose pour la machine ?",
+          "Comment Searle articule-t-il sa réduction causale sans réduction ontologique avec la thèse de l'irréductibilité de la conscience ?",
+          "La critique de l'erreur méréologique vise-t-elle un usage métaphorique inoffensif ou un présupposé conceptuel des neurosciences ?"
+        ]
+      }
+    },
+    {
+      "ordre": 4,
+      "titre": "Fodor et le computationnalisme",
+      "discipline": "Philosophie",
+      "contenu": {
+        "titre": "Fodor et le computationnalisme",
+        "discipline": "Philosophie",
+        "auteurs": ["Fodor", "Chomsky", "Bouveresse", "Wittgenstein", "Bennett et Hacker"],
+        "problematiques": [
+          "Comment expliquer que les processus mentaux préservent la vérité de leurs prémisses à leurs conclusions ?",
+          "Faut-il postuler un langage interne de la pensée pour rendre compte de la cognition ?"
+        ],
+        "enjeux": [
+          "Le computationnalisme propose une mécanique précise de l'esprit : si les processus mentaux sont des manipulations de symboles pilotées syntaxiquement, alors la psychologie peut prétendre au statut de science naturelle, et la pensée devient en droit reproductible par une machine.",
+          "L'enjeu critique est de savoir si l'hypothèse du mentalais explique réellement la pensée ou si elle ne fait que la redoubler à l'intérieur de l'esprit en repoussant d'un cran le problème de l'interprétation. C'est aussi la question du statut métaphysique des modèles computationnels : décrivent-ils ce qui se passe, ou redescrivent-ils ce que nous comprenons déjà autrement ?"
+        ],
+        "controverses": [
+          "Fodor soutient que seule une implémentation computationnelle peut expliquer le caractère truth-preserving des lois psychologiques, et que cela exige un langage interne de la pensée, le mentalais. Plusieurs critiques s'opposent à cette position. Bouveresse, dans une perspective wittgensteinienne, soutient que Fodor traite la relation entre langage et pensée comme externe alors qu'elle est interne — le langage est constitutif de la pensée, non un mécanisme acquis. Wittgenstein objecte que postuler un langage interne ne résout rien : cela repousse simplement d'un cran le problème de l'interprétation des signes. Bennett et Hacker soutiennent enfin que les modèles computationnels sont des redescriptions, non des explications : modéliser un phénomène computationnellement ne prouve pas qu'il résulte de computations."
+        ],
+        "notions_cles": [
+          {
+            "terme": "Lois psychologiques truth-preserving",
+            "definition": "Caractéristique selon Fodor des lois qui gouvernent les transitions entre états mentaux : elles préservent la vérité, c'est-à-dire qu'à partir de prémisses vraies elles produisent fiablement des conclusions vraies. Cette propriété appelle, selon Fodor, une explication computationnelle."
+          },
+          {
+            "terme": "Mentalais",
+            "definition": "Langage de la pensée interne, inné et universel, postulé par Fodor. L'acquisition du langage naturel le présuppose. Le langage naturel n'est que l'expression externe de processus computationnels internes formulés en mentalais."
+          },
+          {
+            "terme": "LAD (Language Acquisition Device)",
+            "definition": "Dispositif inné postulé par Chomsky pour expliquer la rapidité d'acquisition du langage chez l'enfant à partir de données parcellaires. Présuppose une grammaire universelle inscrite dans la structure cognitive."
+          },
+          {
+            "terme": "LASS (Language Acquisition Support System)",
+            "definition": "Concept de Bruner en réponse au LAD chomskyen. L'enfant apprend la grammaire comme moyen de faire des choses, non pour elle-même. L'instrument principal de l'acquisition n'est pas un dispositif interne mais l'autre être humain familier, partenaire d'interaction."
+          },
+          {
+            "terme": "Critère vs symptôme",
+            "definition": "Distinction wittgensteinienne reprise par Bouveresse. Un symptôme peut être vérifié indépendamment de ce dont il est le symptôme. Un critère est lié constitutivement à ce dont il est le critère. Bouveresse soutient que le langage est critère de la pensée, non symptôme : on ne peut pas vérifier la pensée indépendamment du discours."
+          },
+          {
+            "terme": "Redescription versus explication",
+            "definition": "Argument de Bennett et Hacker. Les modèles computationnels redécrivent un phénomène dans un vocabulaire informatique sans pour autant l'expliquer. Modéliser la météo computationnellement ne prouve pas que le temps qu'il fait résulte de computations."
+          }
+        ],
+        "sections": [
+          {
+            "titre": "La théorie représentationnelle de l'esprit (RTM)",
+            "contenu": "Fodor soutient que les lois psychologiques sont intentionnelles et truth-preserving : elles préservent la vérité dans les transitions entre états mentaux. Seule une implémentation computationnelle peut, selon lui, expliquer comment des pensées vraies produisent fiablement d'autres pensées vraies. Il cite ce qu'il appelle « ce que Turing a montré » : une machine pilotée syntaxiquement peut exploiter les parallélismes entre les propriétés sémantiques des symboles et leurs propriétés syntaxiques. Le mécanisme du raisonnement valide trouve ainsi une explication mécanique.\n\nCette thèse appelle un complément : l'hypothèse du mentalais. Il existerait un langage de la pensée interne, inné et universel — influencé par les positions de Chomsky. L'acquisition du langage naturel présupposerait la maîtrise préalable du mentalais ; le langage naturel ne serait que l'expression externe de processus computationnels internes.\n\nLe lien avec Chomsky est explicite : le Language Acquisition Device postulé par celui-ci pour expliquer la rapidité de l'acquisition à partir de données parcellaires et la thèse de la grammaire universelle s'inscrivent dans la même perspective nativiste. Cette position rencontre des critiques internes au champ : Putnam reproche à Chomsky de sous-estimer l'apprentissage ; Bruner oppose au LAD un LASS dans lequel l'enfant apprend la grammaire comme moyen de faire des choses, l'instrument principal de l'acquisition étant un autre être humain familier."
+          },
+          {
+            "titre": "Critiques du computationnalisme",
+            "contenu": "Bouveresse formule contre Fodor une critique wittgensteinienne : Fodor traite la relation entre langage et pensée comme externe, comme un mécanisme acquis. Or cette relation est interne. Le langage est critère de la pensée, non simple symptôme. On ne peut pas vérifier la pensée indépendamment du discours, comme on vérifie une pneumonie par une radiographie indépendamment des symptômes du patient.\n\nWittgenstein lui-même formule une objection plus directe à l'idée de représentations internes. Si on remplace l'image mentale supposée par une image peinte, elle perd son pouvoir apparent : les représentations internes ne semblent utiles que tant que leur nature reste occulte. Postuler un langage interne ne résout pas le problème de la signification — il le déplace, en supposant que les signes du mentalais soient à leur tour interprétés, ce qui demande une nouvelle instance d'interprétation, et ainsi de suite.\n\nBennett et Hacker proposent une critique d'un autre ordre, qui porte sur la portée explicative du computationnalisme. Les modèles computationnels sont des redescriptions, non des explications. Modéliser la météo computationnellement ne prouve pas que le temps résulte de computations. Ils ajoutent que penser désigne typiquement une disposition (la croyance) plutôt qu'un processus : les dispositions résistent aux interruptions — on peut imputer une croyance à quelqu'un qui dort, ce qui montre que la pensée n'est pas seulement un processus en cours dans le cerveau."
+          }
+        ],
+        "tableaux": [],
+        "frises": [],
+        "citations": [
+          {
+            "texte": "Lorsque je pense en mots, je n'ai pas de 'significations' dans l'esprit en plus des expressions verbales.",
+            "auteur": "Wittgenstein",
+            "source": null
+          }
+        ],
+        "questions_revision": [
+          "L'argument de Fodor selon lequel seule une implémentation computationnelle peut expliquer le caractère truth-preserving des lois psychologiques est-il un argument empirique ou conceptuel ?",
+          "L'hypothèse du mentalais explique-t-elle la pensée ou la redouble-t-elle, comme le suggère Wittgenstein ?",
+          "Quelle force la distinction critère/symptôme reprise par Bouveresse a-t-elle contre le computationnalisme ?",
+          "La distinction entre redescription et explication suffit-elle à invalider la prétention scientifique du computationnalisme ?"
+        ]
+      }
+    },
+    {
+      "ordre": 5,
+      "titre": "Putnam et l'externalisme",
+      "discipline": "Philosophie",
+      "contenu": {
+        "titre": "Putnam et l'externalisme",
+        "discipline": "Philosophie",
+        "auteurs": ["Putnam", "Fodor", "Descartes"],
+        "problematiques": [
+          "Les significations sont-elles entièrement dans la tête du locuteur ?",
+          "Une psychologie computationnelle peut-elle rendre compte des lois intentionnelles si le contenu mental est partiellement externe ?"
+        ],
+        "enjeux": [
+          "L'externalisme sémantique conteste un présupposé cartésien profond : que je sais ce que je pense parce que mes pensées sont des contenus internes. Si la signification dépend de l'environnement et de la communauté, je peux ne pas savoir ce que je pense.",
+          "L'enjeu est aussi méthodologique pour la philosophie de l'esprit computationnelle. Si le contenu mental est partiellement externe, une psychologie qui se définit par des états computationnels internes ne peut pas, en principe, rendre compte des lois intentionnelles qui font intervenir le contenu large."
+        ],
+        "controverses": [
+          "Putnam soutient, à partir de l'expérience de la Terre-Jumelle, que deux sujets avec exactement les mêmes états mentaux internes peuvent référer à des choses différentes — H2O ici, XYZ là-bas — et que par conséquent l'extension n'est pas déterminée par l'intension : meanings ain't in the head. Fodor répond que XYZ est nomologiquement impossible : la survenance du contenu large sur les computations n'est pas conceptuellement nécessaire mais l'est nomologiquement. Les cas à la Putnam et à la Frege ne prolifèrent pas dans les mondes voisins du nôtre. La sémantique, pour Fodor, est une affaire de contrefactuels et non d'épistémologie."
+        ],
+        "notions_cles": [
+          {
+            "terme": "Terre-Jumelle",
+            "definition": "Expérience de pensée de Putnam. Deux jumeaux, dans deux mondes identiques à un détail près, ont exactement les mêmes états mentaux. Mais ici l'eau est H2O et là-bas XYZ. Le terme « eau » désigne des choses différentes dans chaque monde, alors que les stéréotypes mentaux sont identiques. Conclusion : l'extension n'est pas déterminée par l'intension."
+          },
+          {
+            "terme": "Désignateur rigide",
+            "definition": "Terme qui désigne le même objet dans tous les mondes possibles où il désigne quelque chose. Les termes d'espèces naturelles (eau, or, orme) sont des désignateurs rigides selon Putnam : leur référence est fixée par l'extension réelle, non par les stéréotypes mentaux."
+          },
+          {
+            "terme": "Division du travail linguistique",
+            "definition": "Thèse de Putnam selon laquelle certains concepts sont déférentiels : le locuteur ordinaire s'en remet à des experts pour fixer la référence (le bijoutier pour l'or, le botaniste pour l'orme). La signification est co-déterminée par l'environnement et par la communauté linguistique, non par l'individu seul."
+          },
+          {
+            "terme": "Vecteur de la signification",
+            "definition": "Représentation putnamienne de la signification comme un quadruplet : marqueur syntaxique, marqueur sémantique, stéréotype, extension. Les trois premiers éléments peuvent être identiques chez deux locuteurs sans que l'extension le soit."
+          }
+        ],
+        "sections": [
+          {
+            "titre": "L'externalisme sémantique",
+            "contenu": "Putnam développe l'externalisme sémantique à partir d'une expérience de pensée célèbre, la Terre-Jumelle. Imaginons un monde identique au nôtre à un détail près : le liquide qui y joue le rôle de l'eau n'est pas composé de H2O mais d'une autre molécule, XYZ, indiscernable à l'œil nu. Mon jumeau sur la Terre-Jumelle a exactement les mêmes états mentaux que moi. Pourtant, quand je dis « eau » je réfère à H2O et lui à XYZ. L'intension (le stéréotype mental) ne détermine donc pas l'extension. Le slogan de Putnam le résume : meanings ain't in the head. Les termes d'espèces naturelles sont des désignateurs rigides : ils désignent le même objet dans tous les mondes possibles où ils désignent quelque chose.\n\nPutnam complète sa thèse par la division du travail linguistique. Certains concepts sont déférentiels : le locuteur ordinaire s'en remet à un expert — le bijoutier pour l'or, le botaniste pour l'orme. La signification est co-déterminée par l'environnement physique et par la communauté linguistique. Le vecteur de la signification s'analyse en quatre éléments : marqueur syntaxique, marqueur sémantique, stéréotype, extension. Deux locuteurs peuvent partager les trois premiers sans partager le dernier.\n\nFodor objecte que XYZ est nomologiquement impossible. La survenance du contenu large sur les computations internes n'est pas conceptuellement nécessaire mais elle est nomologiquement vraie : les cas à la Putnam ou à la Frege ne prolifèrent pas dans les mondes voisins du nôtre. La sémantique est une affaire de contrefactuels, et l'épistémologie une autre question. L'externalisme sémantique serait ainsi désamorcé par la rareté effective des cas qui le motivent."
+          },
+          {
+            "titre": "Enjeux pour la philosophie de l'esprit",
+            "contenu": "L'externalisme de Putnam renverse une thèse cartésienne profonde. Pour Descartes, je sais ce que je pense parce que les pensées sont transparentes à elles-mêmes ; ce que je peux ignorer, c'est si mes idées correspondent au réel, ce qui ouvre le besoin d'une garantie divine. Pour Putnam, je peux ne pas savoir ce que je pense : si j'ignore que l'eau est H2O, j'ignore une part du contenu de mes propres pensées sur l'eau. Le contenu mental n'est pas entièrement accessible à la réflexion introspective.\n\nUne difficulté en résulte pour le computationnalisme. Si le contenu mental est partiellement externe, comment une psychologie purement computationnelle, qui se définit par des états internes, peut-elle rendre compte des lois intentionnelles qui font intervenir le contenu large ? C'est précisément la difficulté de la conjonction entre la thèse computationnaliste interne et la thèse externaliste sur le contenu."
+          }
+        ],
+        "tableaux": [],
+        "frises": [],
+        "citations": [
+          {
+            "texte": "Meanings ain't in the head.",
+            "auteur": "Putnam",
+            "source": null
+          }
+        ],
+        "questions_revision": [
+          "L'expérience de la Terre-Jumelle constitue-t-elle un argument décisif contre l'internalisme sémantique, ou une intuition que l'internaliste peut neutraliser ?",
+          "L'objection nomologique de Fodor à Putnam désamorce-t-elle l'externalisme ou n'en fait-elle qu'une thèse contingente ?",
+          "En quoi l'externalisme putnamien renverse-t-il le paradigme cartésien de la transparence de la pensée à elle-même ?",
+          "Comment articuler une psychologie computationnelle des états internes avec des lois intentionnelles portant sur le contenu large ?"
+        ]
+      }
+    },
+    {
+      "ordre": 6,
+      "titre": "Wittgenstein et la conclusion du cours",
+      "discipline": "Philosophie",
+      "contenu": {
+        "titre": "Wittgenstein et la conclusion du cours",
+        "discipline": "Philosophie",
+        "auteurs": ["Wittgenstein", "Bennett et Hacker", "Kenny"],
+        "problematiques": [
+          "Quel statut conceptuel accorder au discours dans son rapport à la pensée ?",
+          "À quelle entité — cerveau, personne, esprit — attribuer légitimement les capacités mentales ?"
+        ],
+        "enjeux": [
+          "Le mouvement du cours culmine ici : après avoir parcouru les tentatives cybernétique, computationnelle et externaliste pour rendre compte de la pensée, la perspective wittgensteinienne soutient que le problème est mal posé tant qu'on cherche un porteur sub-personnel de la pensée. L'enjeu est de retrouver une grammaire correcte des concepts mentaux, qui les rapporte à la personne entière.",
+          "Sur ce plan, la conclusion engage une thèse positive : rejeter le dualisme n'oblige pas à dire que le cerveau pense, et rejeter le computationnalisme n'oblige pas à revenir au dualisme. L'esprit est une forme de représentation pour parler des capacités mentales d'une personne, non un objet — naturel ou immatériel — situé quelque part."
+        ],
+        "controverses": [],
+        "notions_cles": [
+          {
+            "terme": "Critère vs symptôme",
+            "definition": "Distinction wittgensteinienne. Un symptôme peut être vérifié indépendamment de ce dont il est le symptôme (la radiographie pour la pneumonie). Un critère est lié constitutivement à ce dont il est le critère : le discours est critère de la pensée, non symptôme. L'expression de la douleur fait partie de la douleur dans les cas où elle existe."
+          },
+          {
+            "terme": "Règle vs accord avec une règle",
+            "definition": "Distinction wittgensteinienne. Un comportement peut être en accord avec un nombre indéfini de règles sans avoir suivi aucune. Suivre une règle suppose la compréhension, la capacité de l'appliquer à de nouveaux cas et de l'expliquer. Les machines en accord avec des règles ne les suivent pas au sens propre."
+          },
+          {
+            "terme": "Erreur méréologique",
+            "definition": "Attribuer à une partie (le cerveau, un neurone) des propriétés qui n'ont de sens que pour le tout (la personne). Dire que le cerveau pense n'est pas faux mais absurde, dépourvu de sens grammatical."
+          },
+          {
+            "terme": "Capacités versus véhicule",
+            "definition": "Distinction de Kenny et de Bennett et Hacker. Les capacités mentales — penser, vouloir, percevoir — ne sont pas localisables : elles n'ont ni lieu ni date. Le cerveau est le véhicule de ces capacités. Attribuer la capacité au véhicule est une erreur catégoriale — comme attribuer la capacité d'une clé à ouvrir une serrure au métal lui-même."
+          },
+          {
+            "terme": "L'esprit comme forme de représentation",
+            "definition": "Position synthétique du cours : l'esprit n'est pas un objet (ni matériel comme le cerveau, ni immatériel comme l'âme cartésienne). C'est une forme de représentation pour parler des capacités mentales d'une personne entière et de leur exercice."
+          }
+        ],
+        "sections": [
+          {
+            "titre": "Critère, symptôme et grammaire",
+            "contenu": "Wittgenstein introduit une distinction décisive entre critère et symptôme. Un symptôme peut être vérifié indépendamment de ce dont il est le symptôme : on diagnostique une pneumonie par radiographie indépendamment de la toux. Un critère, en revanche, est lié constitutivement à ce dont il est le critère. Le discours est critère de la pensée, non symptôme. On ne peut pas vérifier la pensée indépendamment du discours, comme si l'on cherchait derrière ou sous lui un fait mental distinct. L'expression de la douleur fait partie de la douleur dans les cas où elle existe — elle n'en est pas un signe extérieur.\n\nWittgenstein développe une seconde distinction du même ordre, entre suivre une règle et être en accord avec une règle. Un comportement peut être en accord avec un nombre indéfini de règles sans en avoir suivi aucune. Suivre une règle au sens propre suppose la compréhension, la capacité d'application à de nouveaux cas et la capacité d'explication. Les machines en accord avec des règles ne les suivent pas au sens plein du terme. Cette distinction joue contre toutes les conceptions de la pensée qui assimilent le comportement réglé à la pensée réglée."
+          },
+          {
+            "titre": "La conclusion du cours : la personne entière",
+            "contenu": "Bennett et Hacker mobilisent Wittgenstein pour formuler une thèse synthétique sur le statut des concepts mentaux. L'erreur méréologique consiste à attribuer à une partie (le cerveau, un neurone) des propriétés qui n'ont de sens que pour le tout (la personne). Dire que le cerveau pense n'est pas faux mais absurde — c'est commettre une faute grammaticale au sens wittgensteinien.\n\nKenny et Bennett et Hacker précisent : les capacités mentales — penser, vouloir, percevoir — ne sont pas localisables. Elles n'ont ni lieu ni date. Le cerveau en est le véhicule, c'est-à-dire ce qui les rend possibles, mais attribuer la capacité au véhicule est une erreur catégoriale — comme attribuer la capacité d'une clé à ouvrir une serrure au métal lui-même.\n\nLa synthèse du cours peut alors se formuler ainsi. Rejeter le dualisme ne conduit pas à soutenir que le cerveau pense. Rejeter le computationnalisme ne conduit pas à revenir au dualisme. L'esprit n'est ni un objet matériel ni un objet immatériel : c'est une forme de représentation pour parler des capacités mentales de la personne entière et de leur exercice. Il n'y a pas d'esprit dans la machine — mais l'esprit n'est pas non plus une sorte de machine."
+          }
+        ],
+        "tableaux": [],
+        "frises": [],
+        "citations": [
+          {
+            "texte": "Dieu, s'il avait regardé dans nos âmes, n'aurait pas pu dire de quoi nous parlions.",
+            "auteur": "Wittgenstein",
+            "source": "Recherches philosophiques, II, §283-284"
+          },
+          {
+            "texte": "Lorsque je pense en mots, je n'ai pas de 'significations' dans l'esprit en plus des expressions verbales. C'est plutôt que le langage est lui-même le véhicule des pensées.",
+            "auteur": "Wittgenstein",
+            "source": "Recherches philosophiques, §329"
+          },
+          {
+            "texte": "C'est seulement d'un être humain vivant ou de ce qui lui ressemble qu'on peut dire il pense, voit, est conscient.",
+            "auteur": "Wittgenstein",
+            "source": "cité par Bennett et Hacker"
+          }
+        ],
+        "questions_revision": [
+          "La distinction critère/symptôme appliquée au couple langage/pensée règle-t-elle ou déplace-t-elle le problème du rapport entre langage et pensée ?",
+          "En quoi la distinction entre suivre une règle et être en accord avec une règle constitue-t-elle un argument contre le computationnalisme ?",
+          "L'erreur méréologique vise-t-elle un travers linguistique des neurosciences ou un présupposé conceptuel plus profond ?",
+          "Que veut-on dire en affirmant que l'esprit est une forme de représentation pour parler de la personne entière ? Cette thèse échappe-t-elle au dualisme sans tomber dans le matérialisme ?"
+        ]
+      }
+    }
+  ]
+}
