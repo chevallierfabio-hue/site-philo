@@ -1061,6 +1061,50 @@ body{background:transparent;}
 }
 .fe-modal-btn-valider:hover{background:rgba(201,169,110,0.22);}
 
+/* ── MON COMPTE ───────────────────────────────────── */
+.fe-compte-ligne{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;
+}
+.fe-compte-ligne:last-child{border-bottom:none;}
+.fe-compte-label{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;}
+.fe-compte-valeur{color:var(--soft);}
+.fe-compte-champ{margin-bottom:12px;}
+.fe-compte-label-input{display:block;font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.fe-compte-input{
+  width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:6px;
+  padding:9px 12px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;
+}
+.fe-compte-input:focus{border-color:var(--gold);}
+
+/* ── ONGLETS COURS ─────────────────────────────────── */
+.fe-onglets-tabs{
+  display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:18px;overflow-x:auto;
+}
+.fe-onglet-btn{
+  padding:8px 18px;background:transparent;border:none;border-bottom:2px solid transparent;
+  font-family:var(--mono);font-size:9px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;
+  margin-bottom:-1px;
+}
+.fe-onglet-btn:hover{color:var(--soft);}
+.fe-onglet-btn.actif{color:var(--gold);border-bottom-color:var(--gold);}
+.fe-onglets-select{
+  width:100%;margin-bottom:18px;padding:9px 12px;
+  background:var(--s2);border:1px solid var(--border2);border-radius:6px;
+  font-family:var(--mono);font-size:10px;color:var(--text);outline:none;
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236a6050'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+@media(max-width:640px){
+  .fe-onglets-tabs{display:none;}
+  .fe-onglets-select{display:block;}
+}
+@media(min-width:641px){
+  .fe-onglets-select{display:none;}
+}
+
 </style>
 </head>
 <body>
@@ -1128,15 +1172,21 @@ body{background:transparent;}
 <div class="nav-wrap">
   <div class="nav-pill">
     <span class="nav-pill-logo">L'esprit &amp; la machine</span>
-    <nav class="nav-tabs">
-      <button class="nav-tab" onclick="showPage(&#39;mesficheseclair&#39;,this)">Mes cours</button>
-      <button class="nav-tab active" onclick="showPage(&#39;quiz&#39;,this)">QCM</button>
-      <button class="nav-tab" onclick="showPage(&#39;fiches&#39;,this)">Fiches</button>
-      <button class="nav-tab" onclick="showPage(&#39;training&#39;,this)">Entraînement</button>
-      <button class="nav-tab" onclick="showPage(&#39;cartes&#39;,this)">Cartes</button>
-      <button class="nav-tab" onclick="showPage(&#39;dissert&#39;,this)">Disserter</button>
-      <button class="nav-tab" onclick="showPage(&#39;ressources&#39;,this)">Ressources</button>
-      <button class="nav-tab" onclick="showPage(&#39;jeu&#39;,this)">⚙ Jeu</button>
+    <nav class="nav-tabs" id="fe-nav-ancienne">
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;mesficheseclair&#39;,this)">Mes cours</button>
+      <button class="nav-tab nav-tab-ancien active" onclick="showPage(&#39;quiz&#39;,this)">QCM</button>
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;fiches&#39;,this)">Fiches</button>
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;training&#39;,this)">Entraînement</button>
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;cartes&#39;,this)">Cartes</button>
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;dissert&#39;,this)">Disserter</button>
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;ressources&#39;,this)">Ressources</button>
+      <button class="nav-tab nav-tab-ancien" onclick="showPage(&#39;jeu&#39;,this)">⚙ Jeu</button>
+    </nav>
+    <nav id="fe-nav-connecte" class="nav-tabs" style="display:none">
+      <button class="nav-tab" id="fe-btn-mes-cours"
+        onclick="showPage(&#39;mesficheseclair&#39;,this);feGoMesCours()">Mes cours</button>
+      <button class="nav-tab" id="fe-btn-mon-compte"
+        onclick="showPage(&#39;moncompte&#39;,this)">Mon compte</button>
     </nav>
   </div>
 </div>
@@ -1300,6 +1350,7 @@ body{background:transparent;}
   <div id="page-ressources" class="page"><div id="ressources-root"></div></div>
   <div id="page-jeu" class="page"><div id="jeu-root"></div></div>
   <div id="page-mesficheseclair" class="page"><div id="mesficheseclair-root"></div></div>
+  <div id="page-moncompte" class="page"><div id="moncompte-root"></div></div>
 </div>
 </div>
 
@@ -1327,6 +1378,7 @@ function showPage(name,btn){
       }
     }
   }
+  if(name==='moncompte') renderMonCompte();
 }
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
 function buildQ(q){const o=shuffle([...q.opts]);return{...q,shuffledOpts:o,newCorrect:o.indexOf(q.opts[q.correct])};}
@@ -1404,7 +1456,11 @@ async function signIn(email,password){
 async function signOut(){
   if(ensureSupa()) await supa.auth.signOut();
   supaUser=null; playerName='';
-  renderIntro();
+  feAfficherNavAncienne();
+  fichesEclairInited=false;
+  const qcmBtn=Array.from(document.querySelectorAll('.nav-tab-ancien')).find(b=>b.textContent.includes('QCM'));
+  showPage('quiz', qcmBtn||null);
+  await renderIntro();
 }
 
 // ── RÉPÉTITION ESPACÉE (SM-2) ──
@@ -3404,7 +3460,9 @@ async function feDeleteFiche(id,titre){
 
 function feRetourDetailCours(){
   if(!feCoursCourant) { feShowState('cours'); return; }
+  feOngletCoursCourant='fiches';
   feShowState('detail-cours');
+  feRenderOngletsCours();
   feLoadFichesDuCours(feCoursCourant.id);
 }
 
@@ -3456,6 +3514,7 @@ function feRenderListeCours(cours){
 
 function feOpenCours(id,titre,discipline){
   feCoursCourant={id,titre,discipline};
+  feOngletCoursCourant='fiches';
   const header=document.getElementById('fe-cours-header');
   if(header){
     header.innerHTML=`<div class="fe-fiche-titre">${escHTML(titre||'Cours sans titre')}</div>`;
@@ -3465,6 +3524,7 @@ function feOpenCours(id,titre,discipline){
     {label:titre||'Cours sans titre',current:true}
   ]);
   feShowState('detail-cours');
+  feRenderOngletsCours();
   feLoadFichesDuCours(id);
 }
 
@@ -3566,10 +3626,33 @@ async function feSupprimerCours(id,titre){
   }
 }
 
+function feAfficherNavConnecte(){
+  const ancien=document.getElementById('fe-nav-ancienne');
+  const connecte=document.getElementById('fe-nav-connecte');
+  if(ancien) ancien.style.display='none';
+  if(connecte) connecte.style.display='';
+}
+
+function feAfficherNavAncienne(){
+  const ancien=document.getElementById('fe-nav-ancienne');
+  const connecte=document.getElementById('fe-nav-connecte');
+  if(ancien) ancien.style.display='';
+  if(connecte) connecte.style.display='none';
+}
+
+function feGoMesCours(){
+  feCoursCourant=null;
+  if(fichesEclairInited){
+    feShowState('cours');
+    feLoadCours();
+  }
+}
+
 function gotoMesCoursIfConnected(){
   if(!supaUser) return;
   fichesEclairInited=false;
-  const btn=Array.from(document.querySelectorAll('.nav-tab')).find(b=>b.textContent.trim()==='Mes cours');
+  feAfficherNavConnecte();
+  const btn=document.getElementById('fe-btn-mes-cours');
   showPage('mesficheseclair', btn||null);
 }
 
@@ -3601,8 +3684,8 @@ function renderFichesEclair(){
     <div id="fe-zone-detail-cours" style="display:none;">
       <div id="fe-ariane-detail-cours" class="fe-ariane"></div>
       <div id="fe-cours-header" style="margin-bottom:18px;"></div>
-      <button class="fe-bouton-nouvelle" onclick="feResetUpload();feShowState('upload')">+ Nouvelle fiche</button>
-      <div id="fe-liste-fiches-container"><div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement des fiches…</div></div>
+      <div id="fe-onglets-bar"></div>
+      <div id="fe-contenu-onglet"></div>
     </div>
 
     <!-- Zone 3 : upload -->
@@ -3654,6 +3737,171 @@ function renderFichesEclair(){
   area.addEventListener('drop',e=>{e.preventDefault();area.classList.remove('fe-drag-over');feHandleFiles(e.dataTransfer.files);});
   feShowState('cours');
   feLoadCours();
+}
+
+// ── ONGLETS COURS ────────────────────────────────────
+const FE_ONGLETS_COURS=[
+  {id:'fiches',      label:'Fiches',       actif:true },
+  {id:'cartes',      label:'Cartes',       actif:false},
+  {id:'s-entrainer', label:"S'entraîner",  actif:false},
+  {id:'disserter',   label:'Disserter',    actif:false},
+  {id:'ressources',  label:'Ressources',   actif:false},
+  {id:'jeux',        label:'Jeux',         actif:false},
+];
+let feOngletCoursCourant='fiches';
+
+function feRenderOngletsCours(){
+  const bar=document.getElementById('fe-onglets-bar');
+  if(!bar) return;
+  const actifs=FE_ONGLETS_COURS.filter(o=>o.actif);
+  const mobile=window.matchMedia('(max-width:640px)').matches;
+  if(mobile){
+    bar.innerHTML=`<select class="fe-onglets-select" onchange="feSelectOngletCours(this.value)">${
+      actifs.map(o=>`<option value="${escHTML(o.id)}"${o.id===feOngletCoursCourant?' selected':''}>${escHTML(o.label)}</option>`).join('')
+    }</select>`;
+  } else {
+    bar.innerHTML=`<div class="fe-onglets-tabs">${
+      actifs.map(o=>`<button class="fe-onglet-btn${o.id===feOngletCoursCourant?' actif':''}" onclick="feSelectOngletCours('${escHTML(o.id)}')">${escHTML(o.label)}</button>`).join('')
+    }</div>`;
+  }
+  feRenderContenuOnglet(feOngletCoursCourant);
+}
+
+function feSelectOngletCours(id){
+  feOngletCoursCourant=id;
+  feRenderOngletsCours();
+}
+
+function feRenderContenuOnglet(id){
+  const zone=document.getElementById('fe-contenu-onglet');
+  if(!zone) return;
+  if(id==='fiches'){
+    zone.innerHTML=`
+      <button class="fe-bouton-nouvelle" onclick="feResetUpload();feShowState('upload')">+ Nouvelle fiche</button>
+      <div id="fe-liste-fiches-container"><div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement des fiches…</div></div>
+    `;
+  } else {
+    zone.innerHTML='';
+  }
+}
+
+// ── MON COMPTE ───────────────────────────────────────
+function renderMonCompte(){
+  const root=document.getElementById('moncompte-root');
+  if(!root) return;
+  if(!supaUser){
+    root.innerHTML='<div class="fe-liste-vide">Tu n\'es pas connecté.</div>';
+    return;
+  }
+  root.innerHTML='<div style="text-align:center;padding:40px;color:var(--dim);font-size:13px;">Chargement…</div>';
+  _renderMonCompteAsync(root);
+}
+
+async function _renderMonCompteAsync(root){
+  try{
+    const dateCreation=supaUser.created_at
+      ? new Date(supaUser.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})
+      : '—';
+
+    const [{count:nbCours},{count:nbFiches},{count:nbFichesAujourdhui}]=await Promise.all([
+      supa.from('cours').select('*',{count:'exact',head:true}),
+      supa.from('fiches').select('*',{count:'exact',head:true}),
+      supa.from('fiches').select('*',{count:'exact',head:true})
+        .gte('created_at', new Date(new Date().toISOString().slice(0,10)+'T00:00:00Z').toISOString()),
+    ]);
+
+    root.innerHTML=`
+      <div style="max-width:500px;margin:0 auto;padding:0 0 40px;">
+
+        <div class="section-title">Mon compte</div>
+
+        <div class="panel" style="padding:20px 22px;margin-bottom:16px;">
+          <div class="fe-compte-ligne"><span class="fe-compte-label">Email</span><span class="fe-compte-valeur">${escHTML(supaUser.email||'—')}</span></div>
+          <div class="fe-compte-ligne"><span class="fe-compte-label">Membre depuis</span><span class="fe-compte-valeur">${escHTML(dateCreation)}</span></div>
+          <div class="fe-compte-ligne"><span class="fe-compte-label">Cours</span><span class="fe-compte-valeur">${nbCours??0}</span></div>
+          <div class="fe-compte-ligne"><span class="fe-compte-label">Fiches au total</span><span class="fe-compte-valeur">${nbFiches??0}</span></div>
+        </div>
+
+        <div class="section-title">Aujourd'hui</div>
+
+        <div class="panel" style="padding:20px 22px;margin-bottom:16px;">
+          <div class="fe-compte-ligne">
+            <span class="fe-compte-label">Fiches générées</span>
+            <span class="fe-compte-valeur">${nbFichesAujourdhui??0} / 10</span>
+          </div>
+          <div style="margin-top:10px;height:4px;background:var(--s3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:${Math.min(100,((nbFichesAujourdhui??0)/10)*100)}%;background:var(--gold);border-radius:2px;transition:width .4s;"></div>
+          </div>
+          <div style="margin-top:6px;font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em;">Quota remis à zéro à minuit UTC</div>
+        </div>
+
+        <div class="section-title">Sécurité</div>
+
+        <div class="panel" style="padding:20px 22px;margin-bottom:16px;">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;">Changer le mot de passe</div>
+          <div class="fe-compte-champ">
+            <label class="fe-compte-label-input">Mot de passe actuel</label>
+            <input type="password" id="fe-mdp-actuel" class="fe-compte-input" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <div class="fe-compte-champ">
+            <label class="fe-compte-label-input">Nouveau mot de passe</label>
+            <input type="password" id="fe-mdp-nouveau" class="fe-compte-input" placeholder="8 caractères minimum" autocomplete="new-password">
+          </div>
+          <div class="fe-compte-champ">
+            <label class="fe-compte-label-input">Confirmer le nouveau mot de passe</label>
+            <input type="password" id="fe-mdp-confirm" class="fe-compte-input" placeholder="••••••••" autocomplete="new-password">
+          </div>
+          <div id="fe-mdp-msg" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:5px;"></div>
+          <div style="margin-top:16px;">
+            <button onclick="doChangerMotDePasse()"
+              style="padding:9px 22px;background:var(--gold-d);border:1px solid var(--gold-b);border-radius:6px;font-family:var(--serif);font-size:15px;color:var(--gold);cursor:pointer;transition:background .15s;"
+              onmouseover="this.style.background='rgba(201,169,110,0.22)'"
+              onmouseout="this.style.background='var(--gold-d)'">Changer le mot de passe</button>
+          </div>
+        </div>
+
+        <div style="margin-top:8px;text-align:center;">
+          <button onclick="signOut()"
+            style="background:transparent;border:none;font-family:var(--mono);font-size:9px;color:var(--dim);cursor:pointer;letter-spacing:.1em;text-decoration:underline;text-underline-offset:3px;">
+            Se déconnecter
+          </button>
+        </div>
+
+      </div>
+    `;
+  }catch(e){
+    console.error('Erreur Mon compte :',e);
+    root.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:13px;">Erreur lors du chargement.</div>';
+  }
+}
+
+async function doChangerMotDePasse(){
+  const actuel=document.getElementById('fe-mdp-actuel')?.value;
+  const nouveau=document.getElementById('fe-mdp-nouveau')?.value;
+  const confirm=document.getElementById('fe-mdp-confirm')?.value;
+  const msg=document.getElementById('fe-mdp-msg');
+  function affMsg(texte,ok){
+    msg.textContent=texte;
+    msg.style.display='block';
+    msg.style.background=ok?'var(--green-d)':'var(--red-d)';
+    msg.style.color=ok?'var(--green)':'var(--red)';
+  }
+  if(!actuel||!nouveau||!confirm){affMsg('Tous les champs sont requis.',false);return;}
+  if(nouveau.length<8){affMsg('Le nouveau mot de passe doit faire au moins 8 caractères.',false);return;}
+  if(nouveau!==confirm){affMsg('La confirmation ne correspond pas au nouveau mot de passe.',false);return;}
+  affMsg('Vérification en cours…',true);
+  try{
+    const {error:errVerif}=await supa.auth.signInWithPassword({email:supaUser.email,password:actuel});
+    if(errVerif){affMsg('Mot de passe actuel incorrect.',false);return;}
+    const {error:errMaj}=await supa.auth.updateUser({password:nouveau});
+    if(errMaj) throw errMaj;
+    affMsg('Mot de passe modifié avec succès.',true);
+    document.getElementById('fe-mdp-actuel').value='';
+    document.getElementById('fe-mdp-nouveau').value='';
+    document.getElementById('fe-mdp-confirm').value='';
+  }catch(e){
+    affMsg('Erreur : '+e.message,false);
+  }
 }
 
 function feHandleFiles(fileList){

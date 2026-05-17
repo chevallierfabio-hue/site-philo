@@ -1,5 +1,4 @@
-Parfait. Voici la nouvelle version de CLAUDE.md, structurée comme convenu.
-markdown# FicheÉclair — Document de projet
+# FicheÉclair — Document de projet
 
 > **Note pour Claude** : ce document est lu automatiquement par Claude Code à
 > chaque session, et fourni en tête de chaque nouvelle conversation
@@ -58,7 +57,9 @@ récemment Git, VS Code, Cursor/Claude Code, déploiement Cloudflare.
   - `scores` : classements QCM et Pong (avec RLS)
   - `sr_data` : données de répétition espacée pour l'entraînement
   - `fiches` : fiches générées (avec RLS, colonnes id/user_id/created_at/
-    titre/discipline/contenu jsonb)
+    titre/discipline/contenu jsonb/cours_id)
+  - `cours` : cours regroupant les fiches (avec RLS, colonnes id/user_id/
+    titre/discipline/niveau/description/created_at/updated_at)
 - **API IA** : API Anthropic. Modèle Sonnet 4.6 (`claude-sonnet-4-6`) pour
   les fiches et les dissertations. Clés API distinctes par Worker pour
   suivre les coûts par fonctionnalité. Limite de dépense configurée.
@@ -118,6 +119,11 @@ prêt, il est invisible (pas grisé).
   (pas la clé service_role), pour bénéficier des politiques RLS
 - Prompt système calibré pour privilégier **fidélité** sur exhaustivité
   formelle : préférer un tableau vide à un contenu inventé
+- INSERT dans `cours` exige `user_id` explicite côté frontend
+  (la politique RLS ne le remplit pas automatiquement)
+- Les modales (et autres éléments en `position:fixed`) doivent être
+  enfants directs de `<body>` pour ne pas être cassées par les `transform`
+  des ancêtres
 
 ## Méthodologie
 
@@ -179,29 +185,23 @@ prêt, il est invisible (pas grisé).
   `feCoursCourant.discipline`.
 - Après génération de fiche, retour automatique au détail du cours.
 
-**Décisions techniques actées pendant R2 et R2-bis** :
-- INSERT dans `cours` exige `user_id` explicite côté frontend
-  (la politique RLS ne le remplit pas automatiquement). Le bug RLS
-  rencontré au début de R2 et corrigé sur ce point.
-- Les modales (et autres éléments en `position:fixed`) doivent être
-  enfants directs de `<body>` pour ne pas être cassés par les `transform`
-  des ancêtres. Convention à appliquer pour toute future modale.
+## Roadmap
 
-## Roadmap mise à jour
+### Refonte vers la nouvelle architecture (séquentiel)
 
-### Refonte vers la nouvelle architecture (suite)
-
-- ~~R1~~ table `cours` + Worker adapté (fait)
-- ~~R2~~ "Mes cours" comme écran principal + CRUD cours (fait)
-- ~~R2-bis~~ discipline et niveau au niveau du cours, modale d'édition (fait)
+- ~~**R1**~~ ✓ — table `cours` + adaptation du Worker.
+- ~~**R2**~~ ✓ — "Mes cours" comme écran principal + CRUD cours.
+- ~~**R2-bis**~~ ✓ — discipline et niveau au niveau du cours, modale d'édition.
 - **R3** — nav interne au cours avec les onglets prévus, mais seul
-  "Fiches" est visible. Nav globale minimaliste (Mes cours / Mon compte).
+  "Fiches" est visible (les autres restent invisibles tant qu'ils ne sont
+  pas rebranchés). Nav globale minimaliste (Mes cours / Mon compte).
 - **R4** — migration du contenu de l'ancien cours (philo de l'esprit) en
   cours dans la base, accessible comme démo aux non-connectés et comme
   cours dans le compte de l'auteur.
 - **R5** — rebrancher l'outil QCM sur les fiches du cours courant.
 - **R6+** — rebrancher les autres outils un par un : Cartes, Entraînement,
-  Disserter, Ressources, Pong.
+  Disserter, Ressources, Pong. Ordre à décider au fil de l'eau selon
+  l'utilité ressentie.
 
 ### Pool de missions annexes
 
@@ -219,6 +219,9 @@ prêt, il est invisible (pas grisé).
 - **Nettoyage branches distantes** — supprimer `origin/mission-3a-1-*`
   et `origin/mission-3a-2-*` sur GitHub si on veut un repo distant
   propre. Aucune urgence.
+- **Partage de cours entre utilisateurs** — à terme : table
+  `cours_membres` avec rôles (propriétaire/contributeur/lecteur),
+  adapter les RLS en conséquence. Refonte non triviale.
 
 ## Prochaine mission
 
@@ -239,133 +242,3 @@ le QCM sur les fiches du cours).
   côté frontend doit envoyer explicitement `user_id` (et tout autre champ
   filtré par RLS).
 - **Modales et `position:fixed`** : enfant direct de `<body>` toujours.
-
-## État au [17/05]
-
-**Backend "cours" en place** (mission R1, déployée) :
-- Table `cours` (id, user_id, titre, discipline, description, niveau,
-  created_at, updated_at) avec RLS (4 politiques `auth.uid() = user_id`)
-  et index sur `user_id`.
-- Trigger `cours_set_updated_at` (BEFORE UPDATE) qui met à jour
-  `cours.updated_at` automatiquement.
-- Trigger `fiches_propager_cours_updated_at` (AFTER INSERT/UPDATE/DELETE)
-  qui propage les modifications de fiches vers `cours.updated_at`.
-- Colonne `cours_id uuid NOT NULL REFERENCES cours(id) ON DELETE CASCADE`
-  ajoutée à `fiches`, avec index `fiches_cours_id_idx`.
-
-**Worker `ficheeclair-api` adapté** (déployé sur Cloudflare) :
-- `POST /generate-fiche` exige désormais un `cours_id` dans le body
-  (400 si absent).
-- Vérification explicite que le `cours_id` appartient à l'utilisateur via
-  une requête Supabase avec son JWT (RLS fait le filtrage, 403 si KO).
-- L'INSERT en base inclut le `cours_id`.
-- Quota inchangé (10 fiches/jour/utilisateur, UTC).
-
-**Frontend** : inchangé depuis l'état précédent. Le site ne peut plus
-générer de fiches tel quel (le Worker exige un `cours_id` qu'il n'envoie
-pas), c'est volontaire : la refonte UI vient en R2.
-
-**Supabase** : table `fiches` vidée des données de test au passage. Pas de
-fiches en base à l'heure actuelle.
-
-## Roadmap
-
-### Refonte vers la nouvelle architecture (séquentiel)
-
-- ~~**R1**~~ ✓ — fait : table `cours` + adaptation du Worker.
-- **R2** — refonte UI : "Mes cours" remplace "Mes fiches" comme écran
-  principal. Navigation Mes cours → Cours → Fiches. Pour l'instant un
-  cours ne contient que l'onglet "Fiches". Le frontend devra :
-  - permettre la création / liste / suppression de cours (CRUD direct
-    sur Supabase via le SDK, sans passer par un Worker, grâce à la RLS) ;
-  - adapter la page de génération de fiches pour qu'elle envoie le
-    `cours_id` du cours actuellement ouvert.
-- **R3** — nav interne au cours avec les onglets prévus, mais seul
-  "Fiches" est visible (les autres restent invisibles tant qu'ils ne sont
-  pas rebranchés). Nav globale minimaliste (Mes cours / Mon compte).
-- **R4** — migration du contenu de l'ancien cours (philo de l'esprit) en
-  cours dans la base, accessible comme démo aux non-connectés et comme
-  cours dans le compte de l'auteur.
-- **R5** — rebrancher l'outil QCM sur les fiches du cours courant.
-- **R6+** — rebrancher les autres outils un par un : Cartes, Entraînement,
-  Disserter, Ressources, Pong. Ordre à décider au fil de l'eau selon
-  l'utilité ressentie.
-
-### Pool de missions annexes (à piocher quand le besoin se fait sentir)
-
-- **3b** — amélioration UX d'affichage des fiches (design, gestion fine
-  des erreurs, indicateur de progression plus poussé)
-- **3c** — prise photo directement depuis téléphone (permissions, PWA)
-- **3d** — extraction PDF côté client avec PDF.js
-- **2B** — recherche web pour générer un "Pour aller plus loin"
-  (vidéos YouTube, podcasts, lectures) sans hallucinations
-- **PWA** — manifest.json, sw.js, balises iOS pour installation comme app
-- **Partage de cours entre utilisateurs** — à terme : table
-  `cours_membres` avec rôles (propriétaire/contributeur/lecteur),
-  adapter les RLS en conséquence. Refonte non triviale.
-
-## Prochaine mission
-
-**R2** : refonte UI pour faire émerger "Mes cours" comme écran principal,
-avec CRUD des cours côté frontend (Supabase JS direct, RLS faisant le
-filtrage), et adaptation de la page de génération de fiches pour qu'elle
-envoie le `cours_id` du cours ouvert. Pas de branche Git créée pour
-l'instant — la discussion stratégique sur le périmètre exact de R2 reste
-à faire avant de lancer la mission dans Claude Code.
-## État au [17/05]
-
-**Worker `ficheeclair-api`** déployé et opérationnel :
-- Authentification JWT Supabase, quota 10 fiches/jour/utilisateur (UTC)
-- Appel Claude Sonnet 4.6 Vision avec prompt système calibré
-- Insertion automatique en base, retour de la fiche au client
-- Code dans le repo (sous-dossier `ficheeclair-api/`)
-
-**Frontend** dans `index.html`, onglet "Mes fiches" :
-- Upload de 1 à 5 images avec redimensionnement côté client
-- État liste / upload / generation / detail, géré par `feShowState()`
-- Liste persistante des fiches passées (lecture Supabase, ordre
-  antichronologique, date relative)
-- Suppression avec confirmation native
-- Affichage en accordéons dépliés par défaut, un par grand champ
-- Bascule auto vers "Mes fiches" pour les connectés (chargement + login)
-
-**Supabase** :
-- Table `fiches` avec RLS (lecture/écriture/suppression : auth.uid() = user_id)
-- Données : quelques fiches de test générées sur cours de philo
-
-## Roadmap
-
-### Refonte vers la nouvelle architecture (séquentiel)
-
-- **R1** — ajouter la notion de "cours" dans Supabase + adapter le Worker
-  `ficheeclair-api` pour qu'il accepte un `cours_id`. Migration douce des
-  fiches existantes (rattachement à un cours par défaut). Backend pur,
-  pas de changement d'UI.
-- **R2** — refonte UI : "Mes cours" remplace "Mes fiches" comme écran
-  principal. Navigation Mes cours → Cours → Fiches. Pour l'instant un
-  cours ne contient que l'onglet "Fiches".
-- **R3** — nav interne au cours avec les onglets prévus, mais seul
-  "Fiches" est visible (les autres restent invisibles tant qu'ils ne sont
-  pas rebranchés). Nav globale minimaliste (Mes cours / Mon compte).
-- **R4** — migration du contenu de l'ancien cours (philo de l'esprit) en
-  cours dans la base, accessible comme démo aux non-connectés et comme
-  cours dans le compte de l'auteur.
-- **R5** — rebrancher l'outil QCM sur les fiches du cours courant.
-- **R6+** — rebrancher les autres outils un par un : Cartes, Entraînement,
-  Disserter, Ressources, Pong. Ordre à décider au fil de l'eau selon
-  l'utilité ressentie.
-
-### Pool de missions annexes (à piocher quand le besoin se fait sentir)
-
-- **3b** — amélioration UX d'affichage des fiches (design, gestion fine
-  des erreurs, indicateur de progression plus poussé)
-- **3c** — prise photo directement depuis téléphone (permissions, PWA)
-- **3d** — extraction PDF côté client avec PDF.js
-- **2B** — recherche web pour générer un "Pour aller plus loin"
-  (vidéos YouTube, podcasts, lectures) sans hallucinations
-- **PWA** — manifest.json, sw.js, balises iOS pour installation comme app
-
-## Prochaine mission
-
-**R1** : ajouter la notion de "cours" dans Supabase + adapter le Worker
-`ficheeclair-api`. Branche Git locale `mission-r1-cours` déjà créée.
