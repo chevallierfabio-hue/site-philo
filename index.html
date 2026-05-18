@@ -1122,6 +1122,40 @@ body{background:transparent;}
   color:var(--gold);text-transform:uppercase;
 }
 
+/* ── JEU QCM ──────────────────────────────────────── */
+.fe-qcm-accueil{text-align:center;padding:32px 16px;}
+.fe-qcm-accueil-titre{font-family:var(--serif);font-size:26px;color:var(--text);margin-bottom:10px;}
+.fe-qcm-accueil-desc{font-size:13px;color:var(--soft);margin-bottom:14px;line-height:1.7;}
+.fe-qcm-accueil-count{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:22px;}
+.fe-qcm-reprise-btns{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:8px;}
+.fe-qcm-btn-abandonner{background:transparent;border:none;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);cursor:pointer;padding:6px 12px;border-radius:4px;transition:color .15s;}
+.fe-qcm-btn-abandonner:hover{color:var(--soft);}
+.fe-qcm-etat-vide{text-align:center;padding:40px 16px;}
+.fe-qcm-etat-vide-texte{font-family:var(--serif);font-size:18px;color:var(--text);margin-bottom:10px;}
+.fe-qcm-etat-vide-hint{font-size:13px;color:var(--dim);line-height:1.7;max-width:360px;margin:0 auto;}
+.fe-qcm-jeu{max-width:600px;margin:0 auto;padding:8px 0 24px;}
+.fe-qcm-compteur{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:18px;}
+.fe-qcm-question{font-family:var(--serif);font-size:20px;color:var(--text);line-height:1.4;margin-bottom:22px;}
+.fe-qcm-options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.fe-qcm-option{text-align:left;padding:12px 16px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;font-family:var(--body);font-size:14px;color:var(--text);cursor:pointer;transition:background .12s,border-color .12s;line-height:1.5;width:100%;}
+.fe-qcm-option:hover:not(:disabled){background:var(--s3);border-color:rgba(255,220,120,0.25);}
+.fe-qcm-option:disabled{cursor:default;}
+.fe-qcm-option--correct{background:var(--green-d)!important;border-color:var(--green)!important;color:var(--green)!important;}
+.fe-qcm-option--faux{background:var(--red-d)!important;border-color:var(--red)!important;color:var(--red)!important;}
+.fe-qcm-explication{font-size:13px;color:var(--soft);line-height:1.7;padding:12px 16px;background:var(--s2);border-left:2px solid var(--gold-b);border-radius:0 4px 4px 0;margin-top:4px;}
+.fe-qcm-recap{max-width:600px;margin:0 auto;padding:8px 0 24px;}
+.fe-qcm-recap-score{font-family:var(--serif);font-size:48px;color:var(--text);text-align:center;line-height:1;margin-bottom:6px;}
+.fe-qcm-recap-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:24px;}
+.fe-qcm-recap-bravo{font-family:var(--serif);font-size:16px;color:var(--green);text-align:center;margin-bottom:20px;}
+.fe-qcm-revision-tip{font-size:12px;color:var(--soft);background:var(--gold-d);border:1px solid var(--gold-b);border-radius:5px;padding:8px 12px;margin-bottom:8px;}
+.fe-qcm-recap-echecs{margin-top:16px;display:flex;flex-direction:column;gap:14px;}
+.fe-qcm-recap-echec{padding:14px 16px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;}
+.fe-qcm-recap-echec-question{font-family:var(--serif);font-size:15px;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.fe-qcm-recap-echec-fiche{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.fe-qcm-recap-echec-reponses{display:flex;flex-direction:column;gap:4px;}
+.fe-qcm-recap-faux{font-size:12px;color:var(--red);}
+.fe-qcm-recap-bon{font-size:12px;color:var(--green);}
+
 /* ── BANDEAU DÉMO ─────────────────────────────────── */
 .fe-bandeau-demo{
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
@@ -3734,6 +3768,8 @@ function feOpenCours(id,titre,discipline){
     {label:labelAccueil,onclick:'feGoAccueil()'},
     {label:titre||'Cours sans titre',current:true}
   ]);
+  feQCMPool=[];
+  feQCMSession=null;
   feShowState('detail-cours');
   feRenderOngletsCours();
   feLoadFichesDuCours(id);
@@ -4017,12 +4053,14 @@ function feOuvrirConnexion(){
 const FE_ONGLETS_COURS=[
   {id:'fiches',      label:'Fiches',       actif:true },
   {id:'cartes',      label:'Cartes',       actif:false},
-  {id:'s-entrainer', label:"S'entraîner",  actif:false},
+  {id:'s-entrainer', label:"S'entraîner",  actif:true },
   {id:'disserter',   label:'Disserter',    actif:false},
   {id:'ressources',  label:'Ressources',   actif:false},
   {id:'jeux',        label:'Jeux',         actif:false},
 ];
 let feOngletCoursCourant='fiches';
+let feQCMPool=[];      // exercices du cours courant, rechargé à chaque ouverture de l'onglet
+let feQCMSession=null; // null | {questions,index,score,resultats,repondueCourante,terminee}
 
 function feRenderOngletsCours(){
   const bar=document.getElementById('fe-onglets-bar');
@@ -4054,9 +4092,253 @@ function feRenderContenuOnglet(id){
       ${!feModeDemo?`<button class="fe-bouton-nouvelle" onclick="feResetUpload();feShowState('upload')">+ Nouvelle fiche</button>`:''}
       <div id="fe-liste-fiches-container"><div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement des fiches…</div></div>
     `;
+  } else if(id==='s-entrainer'){
+    zone.innerHTML=`<div id="fe-entrainement-container" style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement…</div>`;
+    feInitEntrainement();
   } else {
     zone.innerHTML='';
   }
+}
+
+// ── JEU QCM ──────────────────────────────────────────
+
+async function feInitEntrainement(){
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone||!feCoursCourant) return;
+
+  // Ajustement 1 : rechargement systématique du pool
+  feQCMPool=[];
+  zone.innerHTML=`<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement…</div>`;
+
+  // Ajustement 2 : tentative jointure, fallback deux requêtes
+  let exercices=[];
+  try{
+    const {data,error}=await supa
+      .from('exercices')
+      .select('id,contenu,fiche_id,fiches(titre)')
+      .eq('cours_id',feCoursCourant.id)
+      .eq('type','qcm');
+    if(error) throw error;
+    // Jointure absente si data non-vide mais fiches=undefined sur le premier item
+    const jointureOK=!data||data.length===0||data[0].fiches!==undefined;
+    if(!jointureOK) throw new Error('jointure retourne undefined');
+    console.log('[feInitEntrainement] stratégie : jointure directe');
+    exercices=data||[];
+  } catch(e){
+    console.log('[feInitEntrainement] stratégie : deux requêtes séparées (raison :',e.message,')');
+    try{
+      const {data:exData,error:exErr}=await supa
+        .from('exercices')
+        .select('id,contenu,fiche_id')
+        .eq('cours_id',feCoursCourant.id)
+        .eq('type','qcm');
+      if(exErr) throw exErr;
+      const ficheIds=[...new Set((exData||[]).map(ex=>ex.fiche_id).filter(Boolean))];
+      let fichesMap={};
+      if(ficheIds.length>0){
+        const {data:fData}=await supa.from('fiches').select('id,titre').in('id',ficheIds);
+        (fData||[]).forEach(f=>{fichesMap[f.id]=f;});
+      }
+      exercices=(exData||[]).map(ex=>({...ex,fiches:fichesMap[ex.fiche_id]||null}));
+    } catch(e2){
+      if(document.getElementById('fe-entrainement-container'))
+        document.getElementById('fe-entrainement-container').innerHTML=
+          `<div class="fe-liste-vide">Erreur lors du chargement des QCM. Réessaie.</div>`;
+      return;
+    }
+  }
+
+  feQCMPool=exercices;
+  const z=document.getElementById('fe-entrainement-container');
+  if(!z) return;
+
+  // Ajustement 3 : session en cours → écran intermédiaire
+  if(feQCMSession&&!feQCMSession.terminee){
+    feRenderRepriseSession(z);
+    return;
+  }
+  if(feQCMPool.length===0){
+    feRenderEtatVideEntrainement(z);
+  } else {
+    feRenderAccueilEntrainement(z);
+  }
+}
+
+function feRenderEtatVideEntrainement(zone){
+  zone.innerHTML=`
+    <div class="fe-qcm-etat-vide">
+      <div class="fe-qcm-etat-vide-texte">Aucun QCM disponible pour ce cours.</div>
+      <div class="fe-qcm-etat-vide-hint">Ouvre une de tes fiches et clique sur « Générer un QCM » pour commencer.</div>
+    </div>`;
+}
+
+function feRenderAccueilEntrainement(zone){
+  const n=feQCMPool.length;
+  zone.innerHTML=`
+    <div class="fe-qcm-accueil">
+      <div class="fe-qcm-accueil-titre">S'entraîner</div>
+      <div class="fe-qcm-accueil-desc">Questions tirées aléatoirement parmi les QCM de ce cours.</div>
+      <div class="fe-qcm-accueil-count">${n} question${n>1?'s':''} disponible${n>1?'s':''}</div>
+      <button class="fe-bouton-nouvelle" onclick="feLancerSessionQCM()">Commencer la session</button>
+    </div>`;
+}
+
+function feRenderRepriseSession(zone){
+  const {questions,index}=feQCMSession;
+  zone.innerHTML=`
+    <div class="fe-qcm-accueil">
+      <div class="fe-qcm-accueil-titre">Session en cours</div>
+      <div class="fe-qcm-accueil-count">${index} question${index>1?'s':''} répondue${index>1?'s':''} sur ${questions.length}</div>
+      <div class="fe-qcm-reprise-btns">
+        <button class="fe-bouton-nouvelle" onclick="feReprendreSessionQCM()">Reprendre</button>
+        <button class="fe-qcm-btn-abandonner" onclick="feAbandonnerSessionQCM()">Abandonner et recommencer</button>
+      </div>
+    </div>`;
+}
+
+function feLancerSessionQCM(){
+  const pool=[...feQCMPool];
+  // Fisher-Yates via Web Crypto (cohérent avec le Worker)
+  for(let i=pool.length-1;i>0;i--){
+    const arr=new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const j=arr[0]%(i+1);
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+  feQCMSession={
+    questions:pool.slice(0,Math.min(10,pool.length)),
+    index:0,
+    score:0,
+    resultats:[],
+    repondueCourante:false,
+    terminee:false,
+  };
+  const zone=document.getElementById('fe-entrainement-container');
+  if(zone) feAfficherQuestionQCM(zone);
+}
+
+function feReprendreSessionQCM(){
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone||!feQCMSession) return;
+  feAfficherQuestionQCM(zone);
+}
+
+function feAbandonnerSessionQCM(){
+  feQCMSession=null;
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone) return;
+  feRenderAccueilEntrainement(zone);
+}
+
+function feAfficherQuestionQCM(zone){
+  const {questions,index}=feQCMSession;
+  const q=questions[index];
+  const {question,options}=q.contenu;
+  const total=questions.length;
+  zone.innerHTML=`
+    <div class="fe-qcm-jeu">
+      <div class="fe-qcm-compteur">Question ${index+1} / ${total}</div>
+      <div class="fe-qcm-question">${escHTML(question)}</div>
+      <div class="fe-qcm-options">
+        ${options.map((opt,i)=>`<button class="fe-qcm-option" onclick="feRepondreQCM(${i})">${escHTML(opt)}</button>`).join('')}
+      </div>
+      <div id="fe-qcm-explication" class="fe-qcm-explication" style="display:none;"></div>
+      <div id="fe-qcm-nav" style="display:none;text-align:right;margin-top:16px;">
+        <button class="fe-bouton-nouvelle" onclick="feQuestionSuivanteQCM()">
+          ${index+1<total?'Question suivante →':'Voir le récapitulatif →'}
+        </button>
+      </div>
+    </div>`;
+  feQCMSession.repondueCourante=false;
+}
+
+function feRepondreQCM(choixIndex){
+  if(!feQCMSession||feQCMSession.repondueCourante) return;
+  feQCMSession.repondueCourante=true;
+  const {questions,index}=feQCMSession;
+  const q=questions[index];
+  const {bonne_reponse,explication,options}=q.contenu;
+  const correct=choixIndex===bonne_reponse;
+  if(correct) feQCMSession.score++;
+  feQCMSession.resultats.push({
+    question:q.contenu.question,
+    options,
+    bonne_reponse,
+    explication,
+    fiche_titre:q.fiches?.titre||null,
+    fiche_id:q.fiche_id,
+    choixIndex,
+    correct,
+  });
+  document.querySelectorAll('.fe-qcm-option').forEach((btn,i)=>{
+    btn.disabled=true;
+    if(i===bonne_reponse) btn.classList.add('fe-qcm-option--correct');
+    if(i===choixIndex&&!correct) btn.classList.add('fe-qcm-option--faux');
+  });
+  const expZone=document.getElementById('fe-qcm-explication');
+  if(expZone){expZone.style.display='block';expZone.textContent=explication;}
+  const nav=document.getElementById('fe-qcm-nav');
+  if(nav) nav.style.display='block';
+}
+
+function feQuestionSuivanteQCM(){
+  if(!feQCMSession) return;
+  feQCMSession.index++;
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone) return;
+  if(feQCMSession.index>=feQCMSession.questions.length){
+    feAfficherRecapQCM(zone);
+  } else {
+    feAfficherQuestionQCM(zone);
+  }
+}
+
+function feAfficherRecapQCM(zone){
+  feQCMSession.terminee=true;
+  const {score,questions,resultats}=feQCMSession;
+  const total=questions.length;
+  const echecs=resultats.filter(r=>!r.correct);
+
+  // Message de révision ciblée (≥2 échecs sur la même fiche)
+  let msgRevision='';
+  if(echecs.length>=2){
+    const parFiche={};
+    echecs.forEach(r=>{if(r.fiche_titre) parFiche[r.fiche_titre]=(parFiche[r.fiche_titre]||0)+1;});
+    msgRevision=Object.entries(parFiche)
+      .filter(([,n])=>n>=2)
+      .map(([titre,n])=>`<div class="fe-qcm-revision-tip">Tu as raté ${n} questions de la fiche « ${escHTML(titre)} » — peut-être à retravailler.</div>`)
+      .join('');
+  }
+
+  const listeEchecs=echecs.length===0?'':
+    `<div class="fe-qcm-recap-echecs">${
+      echecs.map(r=>`
+        <div class="fe-qcm-recap-echec">
+          <div class="fe-qcm-recap-echec-question">${escHTML(r.question)}</div>
+          ${r.fiche_titre?`<div class="fe-qcm-recap-echec-fiche">${escHTML(r.fiche_titre)}</div>`:''}
+          <div class="fe-qcm-recap-echec-reponses">
+            <span class="fe-qcm-recap-faux">Ta réponse : ${escHTML(r.options[r.choixIndex])}</span>
+            <span class="fe-qcm-recap-bon">Bonne réponse : ${escHTML(r.options[r.bonne_reponse])}</span>
+          </div>
+        </div>`).join('')
+    }</div>`;
+
+  zone.innerHTML=`
+    <div class="fe-qcm-recap">
+      <div class="fe-qcm-recap-score">${score} / ${total}</div>
+      <div class="fe-qcm-recap-label">bonne${score!==1?'s':''} réponse${score!==1?'s':''}</div>
+      ${echecs.length===0?`<div class="fe-qcm-recap-bravo">Excellent ! Tu n'as raté aucune question.</div>`:''}
+      ${msgRevision}
+      ${listeEchecs}
+      <div style="text-align:center;margin-top:24px;">
+        <button class="fe-bouton-nouvelle" onclick="feRelancerSessionQCM()">Refaire une session</button>
+      </div>
+    </div>`;
+}
+
+function feRelancerSessionQCM(){
+  feQCMSession=null;
+  feInitEntrainement();
 }
 
 // ── MON COMPTE ───────────────────────────────────────

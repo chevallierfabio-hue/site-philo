@@ -149,96 +149,84 @@ prêt, il est invisible (pas grisé).
 > section et seulement celle-ci. La date est utile pour situer la dernière
 > mise à jour.
 
-## État au [17/05] — après R2 et R2-bis
+## État au [date du jour] — après R5.1
 
 **Côté base Supabase** :
-- Table `cours` créée avec RLS et 4 politiques (select/insert/update/delete
-  filtrées par `auth.uid() = user_id`). Trigger `updated_at` automatique.
-  Colonnes : id, user_id, titre, discipline, niveau, description,
-  created_at, updated_at.
-- Table `fiches` enrichie d'un `cours_id` (FK cours.id).
-- Base nettoyée avant R2 puis re-peuplée en testant : quelques cours
-  et fiches de test en prod, qu'on pourra purger plus tard.
+- Table `exercices` créée avec schéma polymorphe (colonne `type` 
+  discriminante, valeurs autorisées 'qcm', 'flashcard', 'auteur'). 
+  RLS activée, 4 politiques filtrées par auth.uid() = user_id.
+- Colonnes : id, user_id, cours_id (FK), fiche_id (FK), type, 
+  contenu jsonb, created_at.
 
-**Côté Worker `ficheeclair-api`** (inchangé depuis R1) :
-- Exige `cours_id` dans `POST /generate-fiche`, refuse 400 si absent.
-- Vérifie que le cours appartient à l'utilisateur via RLS (403 sinon).
+**Côté Worker `ficheeclair-api`** :
+- Nouvel endpoint POST /generate-qcm. Reçoit { fiche_id, n } 
+  (n entre 1 et 20, défaut 10). Génère N questions de QCM via 
+  Claude Sonnet 4.6, les insère dans `exercices` (type='qcm').
+- Quota partagé avec /generate-fiche : total fiches + exercices 
+  QCM du jour ≤ 10 (UTC).
+- Filtre anti-biais de longueur : rejette une question si la 
+  bonne réponse est plus longue que la 2e plus longue de plus 
+  de 10 caractères, ou plus courte que la 2e plus courte de plus 
+  de 10 caractères.
+- Shuffle des options avec Web Crypto (Fisher-Yates), tracking 
+  par flag pour éviter l'ambiguïté de indexOf.
+- CORS localhost ajouté en passant (mission annexe résolue).
 
 **Côté frontend (`index.html`)** :
-- L'onglet "Mes cours" est l'écran principal pour les connectés.
-- CRUD complet des cours : création, modification (titre + discipline +
-  niveau via modale unique), suppression. Listing en cartes avec compte
-  de fiches par cours.
-- Détail d'un cours = liste des fiches du cours, depuis laquelle on
-  peut ajouter une nouvelle fiche.
-- Fil d'Ariane cliquable : `Mes cours > [Cours] > [Fiche]`.
-  Cours courant mémorisé via `feCoursCourant` (id, titre, discipline).
-- Modale d'édition de cours, placée **directement comme enfant de
-  `<body>`** pour éviter le bug `position:fixed` cassé par un ancêtre
-  ayant `transform`/`filter`/`perspective`. Mode création (modale vide)
-  ou édition (pré-remplie) selon que `feModaleCoursCourant` est null ou
-  non.
-- Discipline obligatoire à la création, niveau optionnel. Datalist HTML
-  avec 8 valeurs suggérées (Philosophie en premier), saisie libre.
-- Le formulaire d'upload de fiche n'a plus de champ "Discipline" :
-  la discipline envoyée au Worker vient automatiquement de
-  `feCoursCourant.discipline`.
-- Après génération de fiche, retour automatique au détail du cours.
+- Bouton "Générer un QCM pour cette fiche" sur la vue de détail 
+  d'une fiche. Visible seulement si connecté et hors mode démo. 
+  Désactivé après une génération réussie (passe à "QCM généré") 
+  pour éviter les doubles clics et les doublons.
+- Système de toast créé (feAfficherToast), enfant direct de body, 
+  4s pour succès / 7s pour erreurs.
 
 ## Roadmap
 
-### Refonte vers la nouvelle architecture (séquentiel)
-
-- ~~**R1**~~ ✓ — table `cours` + adaptation du Worker.
-- ~~**R2**~~ ✓ — "Mes cours" comme écran principal + CRUD cours.
-- ~~**R2-bis**~~ ✓ — discipline et niveau au niveau du cours, modale d'édition.
-- **R3** — nav interne au cours avec les onglets prévus, mais seul
-  "Fiches" est visible (les autres restent invisibles tant qu'ils ne sont
-  pas rebranchés). Nav globale minimaliste (Mes cours / Mon compte).
-- **R4** — migration du contenu de l'ancien cours (philo de l'esprit) en
-  cours dans la base, accessible comme démo aux non-connectés et comme
-  cours dans le compte de l'auteur.
-- **R5** — rebrancher l'outil QCM sur les fiches du cours courant.
-- **R6+** — rebrancher les autres outils un par un : Cartes, Entraînement,
-  Disserter, Ressources, Pong. Ordre à décider au fil de l'eau selon
-  l'utilité ressentie.
-
-### Pool de missions annexes
-
-- **3b** — amélioration UX d'affichage des fiches (design, gestion fine
-  des erreurs, indicateur de progression plus poussé)
-- **3c** — prise photo directement depuis téléphone (permissions, PWA)
-- **3d** — extraction PDF côté client avec PDF.js
-- **2B** — recherche web pour générer un "Pour aller plus loin"
-  (vidéos YouTube, podcasts, lectures) sans hallucinations
-- **PWA** — manifest.json, sw.js, balises iOS pour installation comme app
-- **CORS dev** — autoriser localhost dans le Worker `ficheeclair-api`
-  pour pouvoir tester en local toute la chaîne (frontend → Worker).
-  Reporté pendant R2, à faire avant la prochaine mission qui touchera
-  le Worker.
-- **Nettoyage branches distantes** — supprimer `origin/mission-3a-1-*`
-  et `origin/mission-3a-2-*` sur GitHub si on veut un repo distant
-  propre. Aucune urgence.
-- **Partage de cours entre utilisateurs** — à terme : table
-  `cours_membres` avec rôles (propriétaire/contributeur/lecteur),
-  adapter les RLS en conséquence. Refonte non triviale.
+### Refonte vers la nouvelle architecture
+- ~~R1, R2, R2-bis~~ ✓
+- R3 — nav interne au cours (en attente)
+- R4 — migration du cours philo de l'esprit (en attente)
+- ~~R5.1~~ ✓ — table exercices + endpoint /generate-qcm + bouton 
+  générer
+- R5.2 — UI de jeu QCM (mode test : N questions tirées, score, 
+  correction avec explications)
+- R5.3 — type flashcard dérivé de notions_cles sans IA
+- R5.4 — type auteur généré par IA
+- R6+ — autres outils à rebrancher (Cartes, Disserter, Pong…)
 
 ## Prochaine mission
 
-À débattre en début de prochaine session : **R3** (nav interne au cours,
-préparer la place des futurs onglets) ou directement **R5** (rebrancher
-le QCM sur les fiches du cours).
+R5.2 — UI de jeu QCM, à cadrer en début de prochaine session.
 
-## Leçons retenues à appliquer
+## Leçons retenues (R5.1)
 
-- **Toujours travailler sur la branche dédiée** jusqu'à ce que la mission
-  soit complètement terminée et testée en prod. Ne jamais commiter
-  directement sur `main` un fix de bug même petit — revenir sur la
-  branche, fixer, re-merger. Cas vu en R2-bis : un fix commité
-  directement sur `main` au lieu de la branche, qui a créé un historique
-  un peu confus. Sans gravité ici parce que la branche a été supprimée
-  juste après, mais à ne pas refaire sur des missions plus longues.
-- **RLS Supabase ne remplit pas les valeurs, elle vérifie.** Tout INSERT
-  côté frontend doit envoyer explicitement `user_id` (et tout autre champ
-  filtré par RLS).
-- **Modales et `position:fixed`** : enfant direct de `<body>` toujours.
+- Le filtre "ni la plus longue ni la plus courte" est trop strict : 
+  rejette ~50% des questions par pur hasard, même quand Claude 
+  équilibre bien. Le bon filtre est "écart > 10 caractères avec la 
+  2e valeur la plus proche".
+- Quand on assouplit un filtre, il faut renforcer le prompt 
+  système en amont (sinon Claude se laisse aller). Combinaison 
+  prompt renforcé + filtre raisonnable = ratio 3/3 en test.
+- `wrangler dev` peut basculer silencieusement sur un autre port 
+  (8788 au lieu de 8787) si le port est occupé par un Worker 
+  zombie. Toujours vérifier la ligne "Ready on http://localhost:..."
+  avant de lancer un curl. `lsof -i :8787` + `kill <PID>` pour 
+  nettoyer.
+- Ne jamais coller un JWT (ni quoi que ce soit commençant par `eyJ...`)
+  dans une conversation Claude ou ailleurs hors de son terminal local. 
+  Si fait par erreur : déconnexion + reconnexion sur Supabase pour 
+  invalider le JWT.
+
+## Pool de missions annexes mis à jour
+
+- ~~CORS dev~~ ✓ (intégré dans R5.1)
+- (autres missions inchangées : 3b UX fiches, 3c photo mobile, 
+  3d PDF, 2B web search, PWA, partage de cours)
+- **Nouveau — Refactoriser FICHEECLAIR_API en détection localhost** : 
+  les constantes sont en dur sur la prod, ce qui empêche de tester 
+  le frontend en local contre le Worker local. À faire avant la 
+  prochaine mission qui ajouterait un endpoint au Worker.
+- **Nouveau — Page de visualisation des QCM par fiche** : permettre 
+  à l'utilisateur de voir combien de QCM existent sur une fiche et 
+  régénérer ou supprimer si besoin. Pas critique tant que R5.2 ne 
+  pose pas le problème de la régénération.
