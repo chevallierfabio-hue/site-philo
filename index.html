@@ -1001,6 +1001,15 @@ body{background:transparent;}
   font-family:var(--serif);font-size:14px;color:var(--gold);cursor:pointer;transition:all 0.15s;
 }
 .fe-bouton-nouvelle:hover{background:rgba(201,169,110,0.22);}
+.fe-toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  padding:10px 20px;border-radius:6px;
+  background:var(--s3);border:1px solid var(--border2);
+  font-family:var(--mono);font-size:12px;color:var(--text);
+  opacity:0;transition:opacity 0.25s;pointer-events:none;
+  z-index:9999;max-width:90vw;text-align:center;white-space:normal;
+}
+.fe-toast-erreur{border-color:rgba(176,96,80,0.4);color:var(--red);}
 .fe-ariane{
   font-family:var(--mono);font-size:9px;letter-spacing:.08em;
   color:var(--dim);padding:0 2px 14px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;
@@ -1465,6 +1474,7 @@ function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+M
 const SUPA_URL='https://lmngoemfxodfjztydvuu.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbmdvZW1meG9kZmp6dHlkdnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzY2MjEsImV4cCI6MjA5MzkxMjYyMX0.0Jt1E1vKvqCjB2uJ2MAAtjpmDACkuUxPeGZCpjhKEhQ';
 const FICHEECLAIR_API='https://ficheeclair-api.chevallierfabio.workers.dev/generate-fiche';
+const FICHEECLAIR_API_QCM='https://ficheeclair-api.chevallierfabio.workers.dev/generate-qcm';
 
 let supa = null;
 function ensureSupa(){
@@ -3423,6 +3433,7 @@ let feSelectedImages=[];
 let feCoursCourant=null;      // {id, titre, discipline} ou null
 let feModeDemo=false;          // true quand non-connecté explore un cours public
 let feTitreFicheCourante=''; // pour le fil d'Ariane dans la zone fiche
+let feIdFicheCourante=null;   // UUID de la fiche ouverte, null hors vue fiche
 
 function feShowState(state){
   ['cours','detail-cours','upload','generation','fiche'].forEach(s=>{
@@ -3529,6 +3540,7 @@ function feRenderListe(fiches){
 }
 
 async function feOpenFiche(id,titre){
+  feIdFicheCourante=id||null;
   feTitreFicheCourante=titre||'Fiche';
   feShowState('generation');
   try{
@@ -3549,6 +3561,17 @@ async function feOpenFiche(id,titre){
       {label:feCoursCourant?.titre||'Cours',onclick:'feRetourDetailCours()'},
       {label:feTitreFicheCourante,current:true}
     ]);
+    // Bouton QCM : visible seulement pour les connectés sur une fiche réelle
+    const qcmZone=document.getElementById('fe-zone-qcm-action');
+    if(qcmZone){
+      if(!feModeDemo && feCoursCourant && feIdFicheCourante){
+        const btn=document.getElementById('fe-btn-generer-qcm');
+        if(btn){ btn.disabled=false; btn.textContent='Générer un QCM pour cette fiche'; }
+        qcmZone.style.display='block';
+      } else {
+        qcmZone.style.display='none';
+      }
+    }
     feShowState('fiche');
   }catch(e){
     console.error('Erreur ouverture fiche :',e);
@@ -3575,6 +3598,78 @@ function feRetourDetailCours(){
   feShowState('detail-cours');
   feRenderOngletsCours();
   feLoadFichesDuCours(feCoursCourant.id);
+}
+
+// ── TOAST ────────────────────────────────────────────
+function feAfficherToast(msg, isError){
+  let toast=document.getElementById('fe-toast');
+  if(!toast){
+    toast=document.createElement('div');
+    toast.id='fe-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent=msg;
+  toast.className='fe-toast'+(isError?' fe-toast-erreur':'');
+  toast.style.opacity='1';
+  clearTimeout(toast._timer);
+  toast._timer=setTimeout(()=>{ toast.style.opacity='0'; }, isError?7000:4000);
+}
+
+// ── GÉNÉRATION QCM ────────────────────────────────────
+async function feGenererQCM(){
+  if(!feIdFicheCourante||!feCoursCourant) return;
+  const btn=document.getElementById('fe-btn-generer-qcm');
+  if(!btn) return;
+
+  const {data:{session}}=await supa.auth.getSession();
+  const jwt=session?.access_token;
+  if(!jwt){
+    feAfficherToast('Session expirée, reconnectez-vous.',true);
+    setTimeout(()=>feOuvrirConnexion(),3000);
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Génération en cours…';
+
+  try{
+    const r=await fetch(FICHEECLAIR_API_QCM,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwt},
+      body:JSON.stringify({fiche_id:feIdFicheCourante,n:10})
+    });
+    if(r.status===200){
+      const d=await r.json();
+      const inserted=d.inserted??0;
+      const rejected=d.rejected??0;
+      const msg=rejected>0
+        ?`${inserted+rejected} questions générées, ${inserted} conservées (${rejected} écartées pour qualité).`
+        :`${inserted} questions générées.`;
+      feAfficherToast(msg,false);
+      btn.textContent='QCM généré';
+      // Bouton reste désactivé jusqu'à navigation hors de la fiche
+    } else if(r.status===401){
+      feAfficherToast('Session expirée, reconnectez-vous.',true);
+      setTimeout(()=>feOuvrirConnexion(),3000);
+      btn.disabled=false;
+      btn.textContent='Générer un QCM pour cette fiche';
+    } else if(r.status===429){
+      feAfficherToast('Quota journalier atteint, réessayez demain.',true);
+      btn.disabled=false;
+      btn.textContent='Générer un QCM pour cette fiche';
+    } else {
+      const detail=await r.text().catch(()=>'');
+      console.error('feGenererQCM : erreur HTTP',r.status,detail);
+      feAfficherToast('Erreur lors de la génération du QCM, réessayez.',true);
+      btn.disabled=false;
+      btn.textContent='Générer un QCM pour cette fiche';
+    }
+  }catch(e){
+    console.error('feGenererQCM : erreur réseau',e);
+    feAfficherToast('Erreur lors de la génération du QCM, réessayez.',true);
+    btn.disabled=false;
+    btn.textContent='Générer un QCM pour cette fiche';
+  }
 }
 
 // ── FONCTIONS COURS ──────────────────────────────────
@@ -3832,6 +3927,9 @@ function renderFichesEclair(){
     <div id="fe-zone-fiche" style="display:none;">
       <div id="fe-ariane-fiche" class="fe-ariane"></div>
       <div id="fe-zone-fiche-contenu"></div>
+      <div id="fe-zone-qcm-action" style="display:none;text-align:center;padding:24px 0 8px;">
+        <button id="fe-btn-generer-qcm" class="fe-bouton-nouvelle" onclick="feGenererQCM()">Générer un QCM pour cette fiche</button>
+      </div>
     </div>
 
   `;
