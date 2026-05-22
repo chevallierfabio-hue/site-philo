@@ -1156,6 +1156,41 @@ body{background:transparent;}
 .fe-qcm-recap-faux{font-size:12px;color:var(--red);}
 .fe-qcm-recap-bon{font-size:12px;color:var(--green);}
 
+/* ── MENU S'ENTRAÎNER ─────────────────────────────── */
+.fe-entrainement-titre{font-family:var(--serif);font-size:26px;color:var(--text);text-align:center;margin-bottom:24px;}
+.fe-entrainement-menu{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;padding:8px 0 24px;}
+.fe-entrainement-carte{flex:0 0 180px;max-width:220px;background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:24px 16px;text-align:center;cursor:pointer;transition:background .12s,border-color .12s;}
+.fe-entrainement-carte:hover{background:var(--s3);border-color:rgba(255,220,120,0.25);}
+.fe-entrainement-carte--disabled{opacity:.4;cursor:default;pointer-events:none;}
+.fe-entrainement-carte-titre{font-family:var(--serif);font-size:20px;color:var(--text);margin-bottom:10px;}
+.fe-entrainement-carte-count{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+
+/* ── JEU FLASHCARDS ───────────────────────────────── */
+.fe-flash-jeu{max-width:600px;margin:0 auto;padding:8px 0 24px;}
+.fe-flash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.fe-flash-compteur{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);}
+.fe-flash-terminer{font-family:var(--mono);font-size:9px;color:var(--dim);background:none;border:none;cursor:pointer;letter-spacing:.05em;padding:4px 8px;border-radius:4px;transition:color .12s;}
+.fe-flash-terminer:hover{color:var(--soft);}
+.fe-flash-carte{background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:40px 28px;text-align:center;min-height:180px;display:flex;flex-direction:column;justify-content:center;gap:16px;}
+.fe-flash-recto{font-family:var(--serif);font-size:28px;color:var(--text);line-height:1.3;}
+.fe-flash-verso{font-size:15px;color:var(--soft);line-height:1.6;}
+.fe-flash-fiche{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+.fe-flash-actions{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.fe-flash-btn-sue{padding:10px 24px;background:var(--green-d);border:1px solid var(--green);border-radius:6px;font-size:14px;color:var(--green);cursor:pointer;transition:all .12s;}
+.fe-flash-btn-sue:hover{background:rgba(106,170,94,0.15);}
+.fe-flash-btn-passu{padding:10px 24px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;font-size:14px;color:var(--soft);cursor:pointer;transition:all .12s;}
+.fe-flash-btn-passu:hover{background:var(--s3);border-color:rgba(255,220,120,0.25);}
+.fe-flash-recap{max-width:600px;margin:0 auto;padding:8px 0 24px;}
+.fe-flash-recap-score{font-family:var(--serif);font-size:48px;color:var(--text);text-align:center;line-height:1;margin-bottom:6px;}
+.fe-flash-recap-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:24px;}
+.fe-flash-recap-bravo{font-family:var(--serif);font-size:16px;color:var(--green);text-align:center;margin-bottom:20px;}
+.fe-flash-recap-nonsu{margin-top:16px;display:flex;flex-direction:column;gap:14px;}
+.fe-flash-recap-item{padding:14px 16px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;}
+.fe-flash-recap-item-recto{font-family:var(--serif);font-size:15px;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.fe-flash-recap-item-verso{font-size:13px;color:var(--soft);line-height:1.5;margin-bottom:6px;}
+.fe-flash-recap-item-fiche{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+.fe-flash-recap-btns{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap;}
+
 /* ── BANDEAU DÉMO ─────────────────────────────────── */
 .fe-bandeau-demo{
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
@@ -1507,8 +1542,11 @@ function getUID(){try{let u=localStorage.getItem('machine2_uid');if(!u){u='u_'+M
 // ── SUPABASE ──────────────────────────────────────────
 const SUPA_URL='https://lmngoemfxodfjztydvuu.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtbmdvZW1meG9kZmp6dHlkdnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzY2MjEsImV4cCI6MjA5MzkxMjYyMX0.0Jt1E1vKvqCjB2uJ2MAAtjpmDACkuUxPeGZCpjhKEhQ';
-const FICHEECLAIR_API='https://ficheeclair-api.chevallierfabio.workers.dev/generate-fiche';
-const FICHEECLAIR_API_QCM='https://ficheeclair-api.chevallierfabio.workers.dev/generate-qcm';
+const FICHEECLAIR_BASE=(['localhost','127.0.0.1'].includes(location.hostname))
+  ?'http://localhost:8787'
+  :'https://ficheeclair-api.chevallierfabio.workers.dev';
+const FICHEECLAIR_API=FICHEECLAIR_BASE+'/generate-fiche';
+const FICHEECLAIR_API_QCM=FICHEECLAIR_BASE+'/generate-qcm';
 
 let supa = null;
 function ensureSupa(){
@@ -3468,6 +3506,7 @@ let feCoursCourant=null;      // {id, titre, discipline} ou null
 let feModeDemo=false;          // true quand non-connecté explore un cours public
 let feTitreFicheCourante=''; // pour le fil d'Ariane dans la zone fiche
 let feIdFicheCourante=null;   // UUID de la fiche ouverte, null hors vue fiche
+let feContenuFicheCourante=null; // contenu JSON de la fiche ouverte
 
 function feShowState(state){
   ['cours','detail-cours','upload','generation','fiche'].forEach(s=>{
@@ -3580,6 +3619,7 @@ async function feOpenFiche(id,titre){
   try{
     const {data,error}=await supa.from('fiches').select('contenu').eq('id',id).single();
     if(error) throw error;
+    feContenuFicheCourante=data.contenu;
     renderFicheEclair(data.contenu);
     if(feModeDemo){
       const ficheZone=document.getElementById('fe-zone-fiche-contenu');
@@ -3601,7 +3641,9 @@ async function feOpenFiche(id,titre){
       if(!feModeDemo && feCoursCourant && feIdFicheCourante){
         const btn=document.getElementById('fe-btn-generer-qcm');
         if(btn){ btn.disabled=false; btn.textContent='Générer un QCM pour cette fiche'; }
-        qcmZone.style.display='block';
+        const btnSF=document.getElementById('fe-btn-synchro-flashcards');
+        if(btnSF){ btnSF.disabled=false; btnSF.textContent='Synchroniser les flashcards'; }
+        qcmZone.style.display='flex';
       } else {
         qcmZone.style.display='none';
       }
@@ -3706,6 +3748,93 @@ async function feGenererQCM(){
   }
 }
 
+// ── SYNCHRONISATION FLASHCARDS ───────────────────────
+
+async function feSynchroniserFlashcards(){
+  if(!feIdFicheCourante||!feCoursCourant||!supaUser) return;
+
+  // Garde-fou : pas de notions clés = pas de synchronisation
+  const notions=(feContenuFicheCourante?.notions_cles||[]);
+  if(notions.length===0){
+    feAfficherToast('Cette fiche n\'a pas de notions clés — synchronisation ignorée.',false);
+    return;
+  }
+
+  const btn=document.getElementById('fe-btn-synchro-flashcards');
+  if(btn){ btn.disabled=true; btn.textContent='Synchronisation…'; }
+
+  try{
+    // Lire les flashcards existantes pour cette fiche
+    const {data:existantes,error:selErr}=await supa
+      .from('exercices')
+      .select('id,contenu')
+      .eq('fiche_id',feIdFicheCourante)
+      .eq('type','flashcard');
+    if(selErr) throw selErr;
+
+    const flash=existantes||[];
+
+    // Construire les listes de diff
+    const toInsert=[];
+    const toUpdate=[];
+    const toDelete=[];
+
+    // Cartes à insérer ou mettre à jour
+    for(const n of notions){
+      const match=flash.find(f=>f.contenu?.recto===n.terme);
+      if(!match){
+        toInsert.push({
+          user_id:supaUser.id,
+          cours_id:feCoursCourant.id,
+          fiche_id:feIdFicheCourante,
+          type:'flashcard',
+          contenu:{recto:n.terme,verso:n.definition},
+        });
+      } else if(match.contenu?.verso!==n.definition){
+        toUpdate.push({id:match.id,match,verso:n.definition});
+      }
+    }
+
+    // Cartes à supprimer (recto absent des notions actuelles)
+    const termesActuels=new Set(notions.map(n=>n.terme));
+    for(const f of flash){
+      if(!termesActuels.has(f.contenu?.recto)) toDelete.push(f.id);
+    }
+
+    // Exécuter en parallèle
+    const ops=[];
+    if(toInsert.length) ops.push(supa.from('exercices').insert(toInsert));
+    if(toDelete.length) ops.push(supa.from('exercices').delete().in('id',toDelete));
+    // Updates séquentiels regroupés dans un Promise.all interne
+    if(toUpdate.length){
+      ops.push(Promise.all(
+        // Spread préserve les champs futurs (ex. données de répétition espacée)
+        toUpdate.map(u=>supa.from('exercices').update({contenu:{...u.match.contenu,verso:u.verso}}).eq('id',u.id))
+      ));
+    }
+
+    const results=await Promise.all(ops);
+    // Vérifier qu'aucune opération n'a retourné d'erreur
+    for(const r of results){
+      const err=Array.isArray(r)?r.find(x=>x?.error)?.error:r?.error;
+      if(err) throw err;
+    }
+
+    // Toast récap
+    const parties=[];
+    if(toInsert.length) parties.push(`${toInsert.length} créée${toInsert.length!==1?'s':''}`);
+    if(toUpdate.length) parties.push(`${toUpdate.length} mise${toUpdate.length!==1?'s':''} à jour`);
+    if(toDelete.length) parties.push(`${toDelete.length} supprimée${toDelete.length!==1?'s':''}`);
+    feAfficherToast(parties.length?`Flashcards : ${parties.join(', ')}.`:'Flashcards à jour.',false);
+
+  }catch(e){
+    console.error('feSynchroniserFlashcards :',e);
+    feAfficherToast('Erreur lors de la synchronisation, réessayez.',true);
+  }finally{
+    if(btn){ btn.disabled=false; btn.textContent='Synchroniser les flashcards'; }
+  }
+}
+
 // ── FONCTIONS COURS ──────────────────────────────────
 
 async function feLoadCours(){
@@ -3770,6 +3899,9 @@ function feOpenCours(id,titre,discipline){
   ]);
   feQCMPool=[];
   feQCMSession=null;
+  feFlashcardsPool=[];
+  feFlashcardsSession=null;
+  feContenuFicheCourante=null;
   feShowState('detail-cours');
   feRenderOngletsCours();
   feLoadFichesDuCours(id);
@@ -3963,8 +4095,9 @@ function renderFichesEclair(){
     <div id="fe-zone-fiche" style="display:none;">
       <div id="fe-ariane-fiche" class="fe-ariane"></div>
       <div id="fe-zone-fiche-contenu"></div>
-      <div id="fe-zone-qcm-action" style="display:none;text-align:center;padding:24px 0 8px;">
+      <div id="fe-zone-qcm-action" style="display:none;padding:24px 0 8px;justify-content:center;gap:12px;flex-wrap:wrap;">
         <button id="fe-btn-generer-qcm" class="fe-bouton-nouvelle" onclick="feGenererQCM()">Générer un QCM pour cette fiche</button>
+        <button id="fe-btn-synchro-flashcards" class="fe-bouton-nouvelle" onclick="feSynchroniserFlashcards()">Synchroniser les flashcards</button>
       </div>
     </div>
 
@@ -4061,6 +4194,8 @@ const FE_ONGLETS_COURS=[
 let feOngletCoursCourant='fiches';
 let feQCMPool=[];      // exercices du cours courant, rechargé à chaque ouverture de l'onglet
 let feQCMSession=null; // null | {questions,index,score,resultats,repondueCourante,terminee}
+let feFlashcardsPool=[];      // flashcards du cours courant
+let feFlashcardsSession=null; // null | {cartes,index,retournee,resultats,terminee}
 
 function feRenderOngletsCours(){
   const bar=document.getElementById('fe-onglets-bar');
@@ -4100,38 +4235,29 @@ function feRenderContenuOnglet(id){
   }
 }
 
-// ── JEU QCM ──────────────────────────────────────────
+// ── JEU QCM + FLASHCARDS ─────────────────────────────
 
-async function feInitEntrainement(){
-  const zone=document.getElementById('fe-entrainement-container');
-  if(!zone||!feCoursCourant) return;
-
-  // Ajustement 1 : rechargement systématique du pool
-  feQCMPool=[];
-  zone.innerHTML=`<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement…</div>`;
-
-  // Ajustement 2 : tentative jointure, fallback deux requêtes
-  let exercices=[];
+// Helper partagé : charge un pool d'exercices (qcm ou flashcard)
+// avec jointure sur fiches, fallback deux requêtes si la jointure échoue.
+async function feChargerPoolExercices(coursId,type){
   try{
     const {data,error}=await supa
       .from('exercices')
       .select('id,contenu,fiche_id,fiches(titre)')
-      .eq('cours_id',feCoursCourant.id)
-      .eq('type','qcm');
+      .eq('cours_id',coursId)
+      .eq('type',type);
     if(error) throw error;
-    // Jointure absente si data non-vide mais fiches=undefined sur le premier item
     const jointureOK=!data||data.length===0||data[0].fiches!==undefined;
     if(!jointureOK) throw new Error('jointure retourne undefined');
-    console.log('[feInitEntrainement] stratégie : jointure directe');
-    exercices=data||[];
-  } catch(e){
-    console.log('[feInitEntrainement] stratégie : deux requêtes séparées (raison :',e.message,')');
+    return data||[];
+  }catch(e){
+    console.log(`[feChargerPoolExercices] ${type} fallback deux requêtes :`,e.message);
     try{
       const {data:exData,error:exErr}=await supa
         .from('exercices')
         .select('id,contenu,fiche_id')
-        .eq('cours_id',feCoursCourant.id)
-        .eq('type','qcm');
+        .eq('cours_id',coursId)
+        .eq('type',type);
       if(exErr) throw exErr;
       const ficheIds=[...new Set((exData||[]).map(ex=>ex.fiche_id).filter(Boolean))];
       let fichesMap={};
@@ -4139,47 +4265,86 @@ async function feInitEntrainement(){
         const {data:fData}=await supa.from('fiches').select('id,titre').in('id',ficheIds);
         (fData||[]).forEach(f=>{fichesMap[f.id]=f;});
       }
-      exercices=(exData||[]).map(ex=>({...ex,fiches:fichesMap[ex.fiche_id]||null}));
-    } catch(e2){
-      if(document.getElementById('fe-entrainement-container'))
-        document.getElementById('fe-entrainement-container').innerHTML=
-          `<div class="fe-liste-vide">Erreur lors du chargement des QCM. Réessaie.</div>`;
-      return;
+      return (exData||[]).map(ex=>({...ex,fiches:fichesMap[ex.fiche_id]||null}));
+    }catch(e2){
+      console.error(`[feChargerPoolExercices] ${type} erreur définitive :`,e2);
+      return [];
     }
   }
+}
 
-  feQCMPool=exercices;
+async function feInitEntrainement(){
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone||!feCoursCourant) return;
+
+  feQCMPool=[];
+  feFlashcardsPool=[];
+  zone.innerHTML=`<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px;">Chargement…</div>`;
+
+  // Rechargement parallèle des deux pools à chaque entrée dans l'onglet
+  const [qcm,flash]=await Promise.all([
+    feChargerPoolExercices(feCoursCourant.id,'qcm'),
+    feChargerPoolExercices(feCoursCourant.id,'flashcard'),
+  ]);
+  feQCMPool=qcm;
+  feFlashcardsPool=flash;
+
   const z=document.getElementById('fe-entrainement-container');
   if(!z) return;
 
-  // Ajustement 3 : session en cours → écran intermédiaire
-  if(feQCMSession&&!feQCMSession.terminee){
-    feRenderRepriseSession(z);
-    return;
-  }
-  if(feQCMPool.length===0){
+  // Session en cours → écran intermédiaire (QCM prioritaire si les deux étaient actives, impossible en pratique)
+  if(feQCMSession&&!feQCMSession.terminee){ feRenderRepriseSession(z); return; }
+  if(feFlashcardsSession&&!feFlashcardsSession.terminee){ feRenderRepriseSessionFlashcards(z); return; }
+
+  if(feQCMPool.length===0&&feFlashcardsPool.length===0){
     feRenderEtatVideEntrainement(z);
   } else {
-    feRenderAccueilEntrainement(z);
+    feRenderMenuEntrainement(z);
   }
 }
 
 function feRenderEtatVideEntrainement(zone){
   zone.innerHTML=`
     <div class="fe-qcm-etat-vide">
-      <div class="fe-qcm-etat-vide-texte">Aucun QCM disponible pour ce cours.</div>
-      <div class="fe-qcm-etat-vide-hint">Ouvre une de tes fiches et clique sur « Générer un QCM » pour commencer.</div>
+      <div class="fe-qcm-etat-vide-texte">Aucun exercice disponible pour ce cours.</div>
+      <div class="fe-qcm-etat-vide-hint">Ouvre une de tes fiches pour générer des QCM ou créer des flashcards.</div>
     </div>`;
+}
+
+function feRenderMenuEntrainement(zone){
+  const nQCM=feQCMPool.length;
+  const nFlash=feFlashcardsPool.length;
+  zone.innerHTML=`
+    <div class="fe-entrainement-titre">S'entraîner</div>
+    <div class="fe-entrainement-menu">
+      <div class="fe-entrainement-carte${nQCM===0?' fe-entrainement-carte--disabled':''}" onclick="feRenderAccueilQCM()">
+        <div class="fe-entrainement-carte-titre">QCM</div>
+        <div class="fe-entrainement-carte-count">${nQCM} question${nQCM!==1?'s':''} disponible${nQCM!==1?'s':''}</div>
+      </div>
+      <div class="fe-entrainement-carte${nFlash===0?' fe-entrainement-carte--disabled':''}" onclick="feLancerSessionFlashcards()">
+        <div class="fe-entrainement-carte-titre">Flashcards</div>
+        <div class="fe-entrainement-carte-count">${nFlash} carte${nFlash!==1?'s':''} disponible${nFlash!==1?'s':''}</div>
+      </div>
+    </div>`;
+}
+
+function feRenderAccueilQCM(){
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone) return;
+  feRenderAccueilEntrainement(zone);
 }
 
 function feRenderAccueilEntrainement(zone){
   const n=feQCMPool.length;
   zone.innerHTML=`
     <div class="fe-qcm-accueil">
-      <div class="fe-qcm-accueil-titre">S'entraîner</div>
+      <div class="fe-qcm-accueil-titre">QCM</div>
       <div class="fe-qcm-accueil-desc">Questions tirées aléatoirement parmi les QCM de ce cours.</div>
-      <div class="fe-qcm-accueil-count">${n} question${n>1?'s':''} disponible${n>1?'s':''}</div>
+      <div class="fe-qcm-accueil-count">${n} question${n!==1?'s':''} disponible${n!==1?'s':''}</div>
       <button class="fe-bouton-nouvelle" onclick="feLancerSessionQCM()">Commencer la session</button>
+      <div style="margin-top:16px;">
+        <button class="fe-qcm-btn-abandonner" onclick="feRetourMenuEntrainement()">← Retour au menu</button>
+      </div>
     </div>`;
 }
 
@@ -4197,6 +4362,10 @@ function feRenderRepriseSession(zone){
 }
 
 function feLancerSessionQCM(){
+  if(feFlashcardsSession&&!feFlashcardsSession.terminee){
+    feAfficherToast('Termine d\'abord ta session de flashcards.',false);
+    return;
+  }
   const pool=[...feQCMPool];
   // Fisher-Yates via Web Crypto (cohérent avec le Worker)
   for(let i=pool.length-1;i>0;i--){
@@ -4223,11 +4392,15 @@ function feReprendreSessionQCM(){
   feAfficherQuestionQCM(zone);
 }
 
-function feAbandonnerSessionQCM(){
-  feQCMSession=null;
+function feRetourMenuEntrainement(){
   const zone=document.getElementById('fe-entrainement-container');
   if(!zone) return;
-  feRenderAccueilEntrainement(zone);
+  feRenderMenuEntrainement(zone);
+}
+
+function feAbandonnerSessionQCM(){
+  feQCMSession=null;
+  feInitEntrainement();
 }
 
 function feAfficherQuestionQCM(zone){
@@ -4339,6 +4512,179 @@ function feAfficherRecapQCM(zone){
 function feRelancerSessionQCM(){
   feQCMSession=null;
   feInitEntrainement();
+}
+
+// ── JEU FLASHCARDS ───────────────────────────────────
+
+function feLancerSessionFlashcards(){
+  if(feQCMSession&&!feQCMSession.terminee){
+    feAfficherToast('Termine d\'abord ta session de QCM.',false);
+    return;
+  }
+  const pool=[...feFlashcardsPool];
+  for(let i=pool.length-1;i>0;i--){
+    const arr=new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const j=arr[0]%(i+1);
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+  feFlashcardsSession={
+    cartes:pool,
+    index:0,
+    retournee:false,
+    resultats:[],
+    terminee:false,
+  };
+  const zone=document.getElementById('fe-entrainement-container');
+  if(zone) feAfficherCarteFlashcard(zone);
+}
+
+function feAfficherCarteFlashcard(zone){
+  if(!feFlashcardsSession) return;
+  const {cartes,index,retournee}=feFlashcardsSession;
+  const carte=cartes[index];
+  const total=cartes.length;
+  const recto=escHTML(carte.contenu?.recto||'');
+  const verso=escHTML(carte.contenu?.verso||'');
+  const ficheTitre=carte.fiches?.titre?escHTML(carte.fiches.titre):'';
+
+  const contenuCarte=retournee
+    ?`<div class="fe-flash-recto">${recto}</div>
+       <div class="fe-flash-verso">${verso}</div>
+       ${ficheTitre?`<div class="fe-flash-fiche">Fiche : ${ficheTitre}</div>`:''}`
+    :`<div class="fe-flash-recto">${recto}</div>`;
+
+  zone.innerHTML=`
+    <div class="fe-flash-jeu">
+      <div class="fe-flash-header">
+        <span class="fe-flash-compteur">Carte ${index+1} / ${total}</span>
+        <button class="fe-flash-terminer" onclick="feTerminerFlashcards()">Terminer la session</button>
+      </div>
+      <div class="fe-flash-carte" onclick="${retournee?'':'feRetournerCarteFlashcard()'}">
+        ${contenuCarte}
+        ${!retournee?`<div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.05em;">Cliquer pour retourner</div>`:''}
+      </div>
+      ${retournee?`
+      <div class="fe-flash-actions">
+        <button class="fe-flash-btn-passu" onclick="feEvaluerFlashcard(false)">À revoir</button>
+        <button class="fe-flash-btn-sue" onclick="feEvaluerFlashcard(true)">Je savais</button>
+      </div>`:`
+      <div class="fe-flash-actions">
+        <button class="fe-bouton-nouvelle" onclick="feRetournerCarteFlashcard()">Retourner</button>
+      </div>`}
+    </div>`;
+}
+
+function feRetournerCarteFlashcard(){
+  if(!feFlashcardsSession) return;
+  feFlashcardsSession.retournee=true;
+  const zone=document.getElementById('fe-entrainement-container');
+  if(zone) feAfficherCarteFlashcard(zone);
+}
+
+function feEvaluerFlashcard(sue){
+  if(!feFlashcardsSession) return;
+  const {cartes,index}=feFlashcardsSession;
+  const carte=cartes[index];
+  feFlashcardsSession.resultats.push({
+    recto:carte.contenu?.recto||'',
+    verso:carte.contenu?.verso||'',
+    fiche_titre:carte.fiches?.titre||null,
+    fiche_id:carte.fiche_id,
+    sue,
+  });
+  feFlashcardsSession.retournee=false;
+  feFlashcardsSession.index++;
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone) return;
+  if(feFlashcardsSession.index>=feFlashcardsSession.cartes.length){
+    feAfficherRecapFlashcards(zone);
+  } else {
+    feAfficherCarteFlashcard(zone);
+  }
+}
+
+function feTerminerFlashcards(){
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone||!feFlashcardsSession) return;
+  feAfficherRecapFlashcards(zone);
+}
+
+function feAfficherRecapFlashcards(zone){
+  feFlashcardsSession.terminee=true;
+  const {resultats}=feFlashcardsSession;
+  const nEval=resultats.length;
+  const nSues=resultats.filter(r=>r.sue).length;
+  const nonSues=resultats.filter(r=>!r.sue);
+
+  // Message de révision ciblée (≥2 non-sues d'une même fiche)
+  let msgRevision='';
+  if(nonSues.length>=2){
+    const parFiche={};
+    nonSues.forEach(r=>{if(r.fiche_titre) parFiche[r.fiche_titre]=(parFiche[r.fiche_titre]||0)+1;});
+    msgRevision=Object.entries(parFiche)
+      .filter(([,n])=>n>=2)
+      .map(([titre,n])=>`<div class="fe-qcm-revision-tip">Tu n'as pas su ${n} notion${n!==1?'s':''} de la fiche « ${escHTML(titre)} » — peut-être à retravailler.</div>`)
+      .join('');
+  }
+
+  const listeNonSues=nonSues.length===0?'':
+    `<div class="fe-flash-recap-nonsu">${
+      nonSues.map(r=>`
+        <div class="fe-flash-recap-item">
+          <div class="fe-flash-recap-item-recto">${escHTML(r.recto)}</div>
+          <div class="fe-flash-recap-item-verso">${escHTML(r.verso)}</div>
+          ${r.fiche_titre?`<div class="fe-flash-recap-item-fiche">Fiche : ${escHTML(r.fiche_titre)}</div>`:''}
+        </div>`).join('')
+    }</div>`;
+
+  zone.innerHTML=`
+    <div class="fe-flash-recap">
+      <div class="fe-flash-recap-score">${nSues} / ${nEval}</div>
+      <div class="fe-flash-recap-label">carte${nSues!==1?'s':''} sue${nSues!==1?'s':''} sur ${nEval} évaluée${nEval!==1?'s':''}</div>
+      ${nonSues.length===0?`<div class="fe-flash-recap-bravo">Excellent ! Tu maîtrisais toutes les notions évaluées.</div>`:''}
+      ${msgRevision}
+      ${listeNonSues}
+      <div class="fe-flash-recap-btns">
+        <button class="fe-bouton-nouvelle" onclick="feRelancerSessionFlashcards()">Refaire une session</button>
+        <button class="fe-qcm-btn-abandonner" onclick="feRetourMenuDepuisRecapFlashcards()">Retour au menu</button>
+      </div>
+    </div>`;
+}
+
+function feRelancerSessionFlashcards(){
+  feFlashcardsSession=null;
+  feInitEntrainement();
+}
+
+function feRetourMenuDepuisRecapFlashcards(){
+  feFlashcardsSession=null;
+  feInitEntrainement();
+}
+
+function feReprendreSessionFlashcards(){
+  const zone=document.getElementById('fe-entrainement-container');
+  if(!zone||!feFlashcardsSession) return;
+  feAfficherCarteFlashcard(zone);
+}
+
+function feAbandonnerSessionFlashcards(){
+  feFlashcardsSession=null;
+  feInitEntrainement();
+}
+
+function feRenderRepriseSessionFlashcards(zone){
+  const {cartes,resultats}=feFlashcardsSession;
+  const nEval=resultats.length;
+  zone.innerHTML=`
+    <div class="fe-qcm-accueil">
+      <div class="fe-qcm-accueil-titre">Session de flashcards en cours</div>
+      <div class="fe-qcm-accueil-count">${nEval} carte${nEval!==1?'s':''} évaluée${nEval!==1?'s':''} sur ${cartes.length}</div>
+      <div class="fe-qcm-reprise-btns">
+        <button class="fe-bouton-nouvelle" onclick="feReprendreSessionFlashcards()">Reprendre</button>
+        <button class="fe-qcm-btn-abandonner" onclick="feAbandonnerSessionFlashcards()">Abandonner et recommencer</button>
+      </div>
+    </div>`;
 }
 
 // ── MON COMPTE ───────────────────────────────────────

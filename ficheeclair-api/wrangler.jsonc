@@ -5,6 +5,9 @@
   "observability": {
     "enabled": true
   },
+  "dev": {
+    "port": 8787
+  },
   "vars": {
     "SUPABASE_URL": "https://lmngoemfxodfjztydvuu.supabase.co",
     "ALLOWED_ORIGIN": "https://site-philo.chevallierfabio.workers.dev",
